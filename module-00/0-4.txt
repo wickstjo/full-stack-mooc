@@ -1,0 +1,25 @@
+# https://www.websequencediagrams.com/
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+Server-->Browser: HTML Code
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Browser: Stylesheet
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Server-->Browser: JavaScript Code
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->Browser: JSON Data
+
+note over Browser:
+Done fetching files.
+end note
+
+Browser-->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+Server-->Browser: HTTP Redirect
+
+note over Browser:
+All files are re-fetched and
+the page is reloaded.
+end note
