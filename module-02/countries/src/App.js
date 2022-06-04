@@ -19,8 +19,6 @@ const App = () => {
         })
     }, [])
 
-    // process.env.REACT_APP_API_KEY
-
     // INPUT STATES
     const [filter, set_filter] = useState('')
 

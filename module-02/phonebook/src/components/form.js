@@ -1,4 +1,4 @@
-import { Field, Submit } from './Input';
+import { Field, Submit } from './input';
 
 const Form = ({ trigger, update, fields }) => { return (
     <form onSubmit={ trigger }>

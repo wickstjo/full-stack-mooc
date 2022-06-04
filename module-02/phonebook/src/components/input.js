@@ -16,7 +16,13 @@ const Submit = ({ label }) => { return (
     </div>
 )}
 
+// SUBMIT BUTTON
+const Button = ({ label, func }) => { return (
+    <span onClick={ func }>{ label }</span>
+)}
+
 export {
     Field,
-    Submit
+    Submit,
+    Button
 }
