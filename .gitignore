@@ -1,5 +1,0 @@
-*.ipynb
-*.env
-
-*node_modules/*
-*/build
