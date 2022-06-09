@@ -1,5 +1,6 @@
-*.ipynb
-*.env
-
 */node_modules/*
 */build
+
+*.ipynb
+*.ipynb_checkpoints
+*.env
