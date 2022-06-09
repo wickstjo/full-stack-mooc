@@ -1,5 +1,5 @@
-const Header = ({ text }) => { return (
-    <h1>{ text }</h1>
-)}
+const Header = ({ text }) => {
+    return <div className={ 'header' }>{ text }</div>    
+}
 
 export default Header;

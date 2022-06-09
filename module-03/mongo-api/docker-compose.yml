@@ -8,8 +8,6 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: example
-        volumes:
-            - ./database/:/etc/mongo
         ports:
             - 8081:27017
 

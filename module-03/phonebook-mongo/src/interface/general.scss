@@ -1,0 +1,161 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../interface/main.woff');
+}
+
+// SHARED BG COLORS
+$shared_bg: #cecece9a;
+
+*, body, h1, div, table, tr, td, input, li, button, span, form {
+    margin: 0px;
+    padding: 0px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font: 13px 'Open Sans', verdana;
+    color: #2b2b2b;
+    outline: none;
+    border: 0px solid black;
+}
+
+body {
+    background: #F1F1F1;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    text-shadow: 1px 1px #F1F1F1;
+    max-width: 700px;
+    width: 100%;
+    margin: auto;
+
+    > div {
+        flex: 1;
+        padding: 10px;
+
+        .wrapper {
+            background: white;
+            padding: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.171);
+            margin-bottom: 10px;
+
+            .header {
+                font-size: 15px;
+                text-transform: uppercase;
+                background: #2b2b2bb6;
+                padding: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+                color: #F1F1F1;
+                text-shadow: 1px 1px #242424;
+            }
+    
+            .content {
+                background: $shared_bg;
+                border-top: 2px solid white;
+                border-bottom: 2px solid #00000010;
+                padding: 8px;
+                padding-bottom: 0px;
+    
+                form {
+                    >div {
+                        border-bottom: 2px solid #9999996b;
+                        margin-bottom: 8px;
+    
+                        input {
+                            padding: 4px;
+                            padding-left: 6px;
+                            width: 100%;
+                            border: 2px solid white;
+                        }
+    
+                        .submit {
+                            background: white;
+                            border: 0px solid white;
+                            text-transform: uppercase;
+                            cursor: pointer;
+                            text-shadow: 1px 1px #f1f1f1a6;
+                            color: rgba(0, 0, 0, 0.678);
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+    
+            .notifications {
+                background: $shared_bg;
+    
+                .notif {
+                    color: rgba(0, 0, 0, 0.925);
+                    text-shadow: 1px 1px #F1F1F1;
+                    background: $shared_bg;
+                    border-top: 2px solid white;
+                    display: flex;
+
+                    .positive, .negative {
+                        background: rgba(0, 209, 0, 0.137);
+                        border-right: 2px solid white;
+                        width: 20px;
+                    }
+        
+                    .negative {
+                        background: rgba(214, 1, 1, 0.171);
+                    }
+
+                    .foob {
+                        flex: 1;
+                        padding: 6px;
+                        padding-left: 8px;
+                        padding-right: 8px;
+                        border-bottom: 2px solid #00000010;
+                    }
+                }
+                
+                .default {
+                    flex: 1;
+                    padding: 6px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    border-bottom: 2px solid #00000010;
+                }
+            }
+    
+            .list {
+                background: $shared_bg;
+    
+                .item {
+                    display: flex;
+                    padding: 6px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    text-shadow: 1px 1px #F1F1F1;
+                    border-top: 2px solid white;
+                    border-bottom: 2px solid #00000010;
+    
+                    > div {
+                        flex: 1;
+                        text-align: right;
+                    }
+    
+                    div:first-child {
+                        text-align: left;
+                    }
+                }
+    
+                .item:nth-child(even) {
+                    background: #0000000a;
+                }
+            }
+        }
+
+    }
+
+    > div:nth-child(1) {
+        border-right: 2px solid rgba(0, 0, 0, 0.178);
+    }
+    
+    > div:nth-child(2) {
+        border-left: 2px solid rgba(0, 0, 0, 0.178);
+    }
+}
