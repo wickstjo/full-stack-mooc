@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const funcs = require('./funcs.js');
+const env = require('dotenv').config().parsed;
 
 // EXPRESS INSTANCE
 const app = express()
@@ -41,23 +42,38 @@ app.post('/api/persons', (request, response) => {
     // CREATE THE PERSON IN DB
     funcs.create_person(person).then(result => {
         response.status(201).json(result)
+    }).catch(error => {
+        response.status(500).end()
     })
 })
 
-// DELETE PERSON
+// DELETE PERSON FROM DB
 app.delete('/api/persons/:id', (request, response) => {
-
-    // FILTER OUT PERSON FROM DB
-    const id = Number(request.params.id)
-    db = db.filter(person => person.id !== id)
-
-    // RESPOND WITH 204
-    response.status(204).end()
+    funcs.remove_person(request.params.id).then(result => {
+        response.status(204).end()
+    }).catch(error => {
+        response.status(500).end()
+    })
 })
 
+// UPDATE EXISTING PERSON IN DB
+app.put('/api/persons/:id', (request, response) => {
+
+    // CONSTRUCT PERSON
+    const person = {
+        name: request.body.name,
+        number: request.body.number
+    }
+
+    // UPDATE PERSON
+    funcs.update_person(request.params.id, person).then(result => {
+        response.status(200).end()
+    }).catch(error => {
+        response.status(500).end()
+    })
+})
 
 // RUN SERVER
-const PORT = 3001
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+app.listen(env.API_PORT, () => {
+    console.log(`Server running on port ${ env.API_PORT }`)
 })

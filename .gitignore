@@ -1,6 +1,11 @@
-*/node_modules/*
+# REACT & NODEJS STUFF
+*node_modules
+*package-lock.json
 */build
 
+# PYTHON STUFF
 *.ipynb
 *.ipynb_checkpoints
+
+# SECRETS
 *.env

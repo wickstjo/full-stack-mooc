@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from './header.js'
 
-const Phonebook = ({ header, data, keyword }) => {
+const Phonebook = ({ header, data, keyword, remove }) => {
 
     // FILTERED RESULTS
     const [filtered, set_filtered] = useState([])
@@ -17,13 +17,16 @@ const Phonebook = ({ header, data, keyword }) => {
         <div className={ 'wrapper' }>
             <Header text={ header } />
             <div className={ 'list' }>
-                <Content data={ filtered } />
+                <Content
+                    data={ filtered }
+                    remove={ remove }
+                />
             </div>
         </div>
     )
 }
 
-const Content = ({ data }) => {
+const Content = ({ data, remove }) => {
     switch (data.length) {
 
         // NO CONTENT FOUND, RENDER NOTHING
@@ -37,11 +40,20 @@ const Content = ({ data }) => {
                 <div className={ 'item' } key={ entry._id }>
                     <div>{ entry.name }</div>
                     <div>{ entry.number }</div>
-                    <div>Remove</div>
+                    <div>
+                        <Trigger
+                            label={ 'Remove' }
+                            func={ () => remove(entry._id) }
+                        />
+                    </div>
                 </div>
             )
         )}
     }
 }
+
+const Trigger = ({ label, func }) => { return (
+    <span className={ 'trigger' } onClick={ func }>{ label }</span>
+)}
 
 export default Phonebook;

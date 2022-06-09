@@ -39,7 +39,37 @@ const create_person = async(entry) => {
     return person
 }
 
+// REMOVE EXISTING PERSON
+const remove_person = async(id) => {
+
+    // CONNECT TO DB & DELETE BY ID
+    await connect()
+    const data = await Person.deleteOne({
+        _id: id
+    })
+
+    // CLOSE THE CONNECTION & RETURN DATA
+    mongoose.connection.close()
+    return data
+}
+
+// REMOVE EXISTING PERSON
+const update_person = async(id, person) => {
+
+    // CONNECT TO DB & DELETE BY ID
+    await connect()
+    const data = await Person.updateOne({
+        _id: id
+    }, person)
+
+    // CLOSE THE CONNECTION & RETURN DATA
+    mongoose.connection.close()
+    return data
+}
+
 module.exports = {
     fetch_people,
-    create_person
+    create_person,
+    remove_person,
+    update_person
 }

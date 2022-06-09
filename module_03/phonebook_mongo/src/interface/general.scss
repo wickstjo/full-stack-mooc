@@ -97,7 +97,7 @@ body {
                     .positive, .negative {
                         background: rgba(0, 209, 0, 0.137);
                         border-right: 2px solid white;
-                        width: 20px;
+                        padding: $paddings;
                     }
         
                     .negative {
@@ -140,6 +140,14 @@ body {
     
                     div:first-child {
                         text-align: left;
+                    }
+
+                    .trigger {
+                        cursor: pointer;
+                    }
+
+                    .trigger:hover {
+                        text-decoration: underline;
                     }
                 }
     
