@@ -4,7 +4,9 @@
 }
 
 // SHARED BG COLORS
-$shared_bg: #cecece9a;
+$shared_bg: #cececea9;
+$alt_bg: rgba(222, 237, 255, 0.534);
+$paddings: 6px 8px;
 
 *, body, h1, div, table, tr, td, input, li, button, span, form {
     margin: 0px;
@@ -43,7 +45,8 @@ body {
             .header {
                 font-size: 15px;
                 text-transform: uppercase;
-                background: #2b2b2bb6;
+                background: #414141c5;
+                border-bottom: 2px solid #2c2c2c5e;
                 padding: 6px;
                 padding-left: 10px;
                 padding-right: 10px;
@@ -54,31 +57,29 @@ body {
             .content {
                 background: $shared_bg;
                 border-top: 2px solid white;
-                border-bottom: 2px solid #00000010;
-                padding: 8px;
+                padding: 6px;
                 padding-bottom: 0px;
     
                 form {
-                    >div {
-                        border-bottom: 2px solid #9999996b;
-                        margin-bottom: 8px;
-    
-                        input {
-                            padding: 4px;
-                            padding-left: 6px;
-                            width: 100%;
-                            border: 2px solid white;
-                        }
-    
-                        .submit {
-                            background: white;
-                            border: 0px solid white;
-                            text-transform: uppercase;
-                            cursor: pointer;
-                            text-shadow: 1px 1px #f1f1f1a6;
-                            color: rgba(0, 0, 0, 0.678);
-                            font-weight: bold;
-                        }
+                    input {
+                        padding: $paddings;
+                        width: 100%;
+                        border-bottom: 2px solid #3636364b;
+                        margin-bottom: 6px;
+                        transition: border 0.2s;
+                    }
+                    
+                    input:focus {
+                        border-bottom: 2px solid rgba(0, 112, 0, 0.452);
+                    }
+
+                    .submit {
+                        background: white;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        text-shadow: 1px 1px #f1f1f1a6;
+                        color: rgba(0, 0, 0, 0.678);
+                        font-weight: bold;
                     }
                 }
             }
@@ -103,21 +104,22 @@ body {
                         background: rgba(214, 1, 1, 0.171);
                     }
 
-                    .foob {
+                    .message {
                         flex: 1;
-                        padding: 6px;
-                        padding-left: 8px;
-                        padding-right: 8px;
+                        padding: $paddings;
                         border-bottom: 2px solid #00000010;
                     }
+                }
+
+                .notif:nth-child(even) .message {
+                    background: $alt_bg;
                 }
                 
                 .default {
                     flex: 1;
-                    padding: 6px;
-                    padding-left: 8px;
-                    padding-right: 8px;
+                    padding: $paddings;
                     border-bottom: 2px solid #00000010;
+                    border-top: 2px solid white;
                 }
             }
     
@@ -126,9 +128,7 @@ body {
     
                 .item {
                     display: flex;
-                    padding: 6px;
-                    padding-left: 8px;
-                    padding-right: 8px;
+                    padding: $paddings;
                     text-shadow: 1px 1px #F1F1F1;
                     border-top: 2px solid white;
                     border-bottom: 2px solid #00000010;
@@ -144,7 +144,7 @@ body {
                 }
     
                 .item:nth-child(even) {
-                    background: #0000000a;
+                    background: $alt_bg;
                 }
             }
         }

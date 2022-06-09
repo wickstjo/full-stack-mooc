@@ -12,35 +12,29 @@ const Form = ({ header, children, func }) => { return (
 )}
 
 const Text = ({ label, value, func }) => { return (
-    <div>
-        <input
-            value={ value }
-            placeholder={ label }
-            onChange={ func }
-            type={ 'text' }
-        />
-    </div>
+    <input
+        value={ value }
+        placeholder={ label }
+        onChange={ func }
+        type={ 'text' }
+    />
 )}
 
 const Number = ({ label, value, func }) => { return (
-    <div>
-        <input
-            value={ value }
-            placeholder={ label }
-            onChange={ func }
-            type={ 'number' }
-        />
-    </div>
+    <input
+        value={ value }
+        placeholder={ label }
+        onChange={ func }
+        type={ 'number' }
+    />
 )}
 
 const Button = ({ label }) => { return (
-    <div>
-        <input
-            value={ label }
-            type={ 'submit' }
-            className={ 'submit' }
-        />
-    </div>
+    <input
+        value={ label }
+        type={ 'submit' }
+        className={ 'submit' }
+    />
 )}
 
 export {

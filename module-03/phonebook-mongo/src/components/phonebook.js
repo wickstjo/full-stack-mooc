@@ -37,6 +37,7 @@ const Content = ({ data }) => {
                 <div className={ 'item' } key={ entry._id }>
                     <div>{ entry.name }</div>
                     <div>{ entry.number }</div>
+                    <div>Remove</div>
                 </div>
             )
         )}

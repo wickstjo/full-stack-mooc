@@ -40,7 +40,7 @@ app.post('/api/persons', (request, response) => {
 
     // CREATE THE PERSON IN DB
     funcs.create_person(person).then(result => {
-        response.json(result)
+        response.status(201).json(result)
     })
 })
 

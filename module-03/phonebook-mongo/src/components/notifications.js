@@ -22,7 +22,7 @@ const Content = ({ data }) => {
             data.map(entry =>
                 <div className={ 'notif' } key={ entry.id }>
                     <div className={ entry.type } />
-                    <div className={ 'foob' }>{ entry.message }</div>
+                    <div className={ 'message' }>{ entry.message }</div>
                 </div>
             )
         )}

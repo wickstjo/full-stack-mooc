@@ -25,7 +25,7 @@ const App = () => {
     useEffect(() => {
         fetch_people().then(response => {
             if (response.status === 200) {
-                set_people(response.payload)
+                set_people(response.data)
             } else {
                 console.log(response)
             }
@@ -86,16 +86,19 @@ const App = () => {
                         type: 'positive',
                         message: 'Created new user.',
                     })
-                }
-            })
+                
+                // LOG ODD STATUSES
+                } else { console.log(response) }
 
-        // OTHERWISE, CREATE ERROR NOTIFICATION
-        } else {
-            notify({
-                type: 'negative',
-                message: 'Could not create user.',
+                return
             })
         }
+
+        // OTHERWISE, PRESENT ERROR
+        notify({
+            type: 'negative',
+            message: 'Could not create user.',
+        })
     }
 
     return (
@@ -119,14 +122,14 @@ const App = () => {
             <div>
                 <Form header={ 'add person' } func={ create_user }>
                     <Text
-                        label={ 'What is the persons name?' }
+                        label={ 'What is their name?' }
                         value={ input.name }
                         func={
                             event => update_field('name', event.target.value)
                         }
                     />
                     <Number
-                        label={ 'What is the persons\'s number?' }
+                        label={ 'What is their number?' }
                         value={ input.number }
                         func={
                             event => update_field('number', event.target.value)
