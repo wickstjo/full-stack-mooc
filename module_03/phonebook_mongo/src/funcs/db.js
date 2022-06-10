@@ -3,44 +3,35 @@ import axios from 'axios'
 // BASE URL FOR REQUESTS
 const base_url = 'http://localhost:3001/api/persons';
 
-// FETCH EXISTING PEOPLE FROM DB
-const fetch_people = () => {
-    return axios.get(base_url).then(response => {
+// SHARED WRAPPER FUNC
+const wrapper = (query) => {
+    return query.then(response => {
         return response
     }).catch(error => {
-        return {
-            status: 500,
-            data: error
-        }
+        return error.response
     })
+}
+
+// FETCH EXISTING PEOPLE FROM DB
+const fetch_people = () => {
+    const query = axios.get(base_url)
+    return wrapper(query)
 }
 
 // CREATE NEW PERSON IN DB
 const create_person = (person) => {
-    return axios.post(base_url, person).then(response => {
-        return response
-    }).catch(error => {
-        return {
-            status: 500,
-            data: error
-        }
-    })
+    const query = axios.post(base_url, person)
+    return wrapper(query)
 }
 
 // REMOVE PERSON FROM DB
-const remove_person = async(person_id) => {
+const remove_person = (person_id) => {
 
     // CONCAT THE BASE URL
     const url = `${ base_url }/${ person_id }`
-    
-    return axios.delete(url).then(response => {
-        return response
-    }).catch(error => {
-        return {
-            status: 500,
-            data: error
-        }
-    })
+    const query = axios.delete(url)
+
+    return wrapper(query)
 }
 
 // UPDATE EXISTING PERSON
@@ -48,15 +39,9 @@ const update_person = (person_id, person) => {
 
     // CONCAT THE BASE URL
     const url = `${ base_url }/${ person_id }`
-
-    return axios.put(url, person).then(response => {
-        return response
-    }).catch(error => {
-        return {
-            status: 500,
-            data: error
-        }
-    })
+    const query = axios.put(url, person)
+    
+    return wrapper(query)
 }
 
 export {

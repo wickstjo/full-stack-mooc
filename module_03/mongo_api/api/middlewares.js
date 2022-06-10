@@ -1,19 +1,23 @@
 const error_handler = (error, request, response, next) => {
+    switch (error.name) {
 
-    // HANDLE CAST ERRORS
-    if (error.name === 'CastError') {
-        return response.status(400).send({
-            status: 400,
-            error: 'Malformatted ID'
-        })
-    }
+        // CORRUPT IDS
+        case 'CastError':
+            return response.status(400).send({
+                error: 'Malformatted ID'
+            })
 
-    // SERVER 
-    if (error.name === 'MongooseServerSelectionError') {
-        return response.status(500).send({
-            status: 500,
-            error: 'MongoDB server unreachable'
-        })
+        // SCHEMA VALIDATION ERRORS
+        case 'ValidationError':
+            return response.status(400).send({
+                error: error.message
+            })
+
+        // DB SERVER OFFLINE
+        case 'MongooseServerSelectionError':
+            return response.status(500).send({
+                error: 'MongoDB server is unreachable'
+            })
     }
     
     next(error)

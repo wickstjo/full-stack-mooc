@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Form, Text, Number, Button } from './components/form'
+import { Form, Text, Button } from './components/form'
 import Phonebook from './components/phonebook'
 import Notifications from './components/notifications'
 
@@ -60,6 +60,7 @@ const App = () => {
 
     // CREATE NOTIFICATION
     const notify = (params) => {
+        console.log(`called with ${ params.message }`)
         set_notifications([
             ...notifications, {
                 type: params.type,
@@ -93,6 +94,26 @@ const App = () => {
             notify({
                 type: 'negative',
                 message: 'Could not delete user.',
+            })
+        })
+    }
+
+    const validate = (response) => {
+
+        // EXTRACT & CLEAN UP THE ERRORS
+        const target = response.data.error
+        const breakpoint = target.indexOf('validation failed:') + 'validation failed:'.length + 1
+        const filtered = target.slice(breakpoint).split(', ')
+        const errors = filtered.map(error => error.split(': ')[1])
+
+        console.log(errors)
+
+        // CREATE NOTIFICATION FOR EACH ERROR
+        errors.forEach(async(error) => {
+            console.log(error)
+            notify({
+                type: 'negative',
+                message: 'foo'
             })
         })
     }
@@ -144,7 +165,10 @@ const App = () => {
                         return
                     
                     // LOG ODD STATUSES
-                    } else { console.log(response) }
+                    } else {
+                        console.log('foo')
+                        console.log(response)
+                    }
                 })
 
             // NEW USER, CREATE
@@ -174,16 +198,19 @@ const App = () => {
                         return
                     
                     // LOG ODD STATUSES
-                    } else { console.log(response) }
+                    } else {
+                        validate(response)
+                        return
+                    }
                 })
             }
         }
 
         // OTHERWISE, PRESENT ERROR
-        notify({
-            type: 'negative',
-            message: 'Could not create user.',
-        })
+        // notify({
+        //     type: 'negative',
+        //     message: 'Could not create user.',
+        // })
     }
 
     return (
@@ -214,7 +241,7 @@ const App = () => {
                             event => update_field('name', event.target.value)
                         }
                     />
-                    <Number
+                    <Text
                         label={ 'What is their number?' }
                         value={ input.number }
                         func={

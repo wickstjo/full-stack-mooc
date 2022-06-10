@@ -1,94 +1,80 @@
 const mongoose = require('mongoose');
 const env = require('dotenv').config().parsed;
-const schemas = require('./schemas.js');
-
-// CONSTRUCT MODEL FOR NOTE
-const Person = mongoose.model('Person', schemas.person)
+const { Person } = require('./schemas.js');
 
 // CONNECT TO MONGO DB
-const connect = () => {
-    return mongoose.connect(`mongodb://${ env.MONGO_USER }:${ env.MONGO_PASS }@localhost:${ env.MONGO_PORT }`)
-}
+mongoose.connect(`mongodb://${ env.MONGO_USER }:${ env.MONGO_PASS }@localhost:${ env.MONGO_PORT }`)
 
 // COUNT RECORDS
-const records = async(query={}) => {
-
-    // CONNECT TO DB & PERFORM QUERY
-    await connect()
-    const data = await Person.count(query)
-
-    // CLOSE THE CONNECTION & RETURN DATA
-    mongoose.connection.close()
-    return data
+const records = (request, response, next) => {
+    return Person.count({}).then(count => {
+        response.status(200).send(
+            `Phonebook has info of ${ count } people.<br><br>${ Date() }`
+        )
+    }).catch(error => next(error))
 }
 
 // FETCH ALL PEOPLE
-const fetch_people = async(query={}) => {
+const fetch_people = (request, response, next) => {
+    Person.find({}).then(people => {
+        response.status(200).send(people)
 
-    // CONNECT TO DB & PERFORM QUERY
-    await connect()
-    const data = await Person.find(query)
-
-    // CLOSE THE CONNECTION & RETURN DATA
-    mongoose.connection.close()
-    return data
+    }).catch(error => next(error))
 }
 
 // FETCH SINGLE PERSON
-const fetch_person = async(id) => {
+const fetch_person = (request, response, next) => {
+    Person.findById(request.params.id).then(person => {
 
-    // CONNECT TO DB & PERFORM QUERY
-    await connect()
-    const data = await Person.findById(id)
+        // PERSON FOUND
+        if (person) {
+            response.status(200).send(person)
 
-    // CLOSE THE CONNECTION & RETURN DATA
-    mongoose.connection.close()
-    return data
+        // OTHERWISE, 404
+        } else {
+            response.status(404).end()
+        }
+
+    }).catch(error => next(error))
 }
 
 // CREATE A NEW PERSON
-const create_person = async(entry) => {
+const create_person = (request, response, next) => {
 
-    // CONNECT TO DB
-    await connect()
-    
-    // CREATE PERSON & PUSH TO DB
-    const person = await new Person({
-        name: entry.name,
-        number: entry.number
+    // CREATE BLUEPRINT QUERY
+    const query = new Person({
+        name: request.body.name,
+        number: request.body.number
     }).save()
 
-    // CLOSE THE CONNECTION & RETURN NOTE
-    mongoose.connection.close()
-    return person
+    // EXECUTE IT
+    query.then(result => {
+        response.status(201).json(result)
+
+    }).catch(error => next(error))
 }
 
 // REMOVE EXISTING PERSON
-const remove_person = async(id) => {
+const remove_person = (request, response, next) => {
+    Person.deleteOne({ _id: request.params.id }).then(result => {
+        response.status(204).end()
 
-    // CONNECT TO DB & DELETE BY ID
-    await connect()
-    const data = await Person.deleteOne({
-        _id: id
-    })
-
-    // CLOSE THE CONNECTION & RETURN DATA
-    mongoose.connection.close()
-    return data
+    }).catch(error => next(error))
 }
 
 // REMOVE EXISTING PERSON
-const update_person = async(id, person) => {
+const update_person = (request, response, next) => {
+    
+    // CONSTRUCT PERSON
+    const person = {
+        name: request.body.name,
+        number: request.body.number
+    }
+    
+    return Person.updateOne({ _id: request.params.id }, person).then(result => {
+        response.status(200).end()
 
-    // CONNECT TO DB & DELETE BY ID
-    await connect()
-    const data = await Person.updateOne({
-        _id: id
-    }, person)
-
-    // CLOSE THE CONNECTION & RETURN DATA
-    mongoose.connection.close()
-    return data
+    }).catch(error => next(error))
 }
 
 module.exports = {
