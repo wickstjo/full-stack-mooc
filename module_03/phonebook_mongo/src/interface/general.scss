@@ -4,8 +4,7 @@
 }
 
 // SHARED BG COLORS
-$shared_bg: #cececea9;
-$alt_bg: rgba(222, 237, 255, 0.534);
+$shared_bg: rgb(228, 228, 228);
 $paddings: 6px 8px;
 
 *, body, h1, div, table, tr, td, input, li, button, span, form {
@@ -15,7 +14,7 @@ $paddings: 6px 8px;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     font: 13px 'Open Sans', verdana;
-    color: #2b2b2b;
+    color: rgb(34, 34, 34);
     outline: none;
     border: 0px solid black;
 }
@@ -27,7 +26,6 @@ body {
 .container {
     display: flex;
     height: 100vh;
-    text-shadow: 1px 1px #F1F1F1;
     max-width: 700px;
     width: 100%;
     margin: auto;
@@ -41,6 +39,7 @@ body {
             padding: 4px;
             border: 1px solid rgba(0, 0, 0, 0.171);
             margin-bottom: 10px;
+            text-shadow: 1px 1px white;
 
             .header {
                 font-size: 15px;
@@ -54,7 +53,7 @@ body {
                 text-shadow: 1px 1px #242424;
             }
     
-            .content {
+            .form {
                 background: $shared_bg;
                 border-top: 2px solid white;
                 padding: 6px;
@@ -64,7 +63,7 @@ body {
                     input {
                         padding: $paddings;
                         width: 100%;
-                        border-bottom: 2px solid #3636364b;
+                        border-bottom: 2px solid #3636363d;
                         margin-bottom: 6px;
                         transition: border 0.2s;
                     }
@@ -74,64 +73,39 @@ body {
                     }
 
                     .submit {
-                        background: white;
+                        background: rgba(235, 255, 59, 0.61);
+                        background: rgb(244, 255, 145);
+                        border-bottom: 2px solid #36363625;
                         text-transform: uppercase;
                         cursor: pointer;
-                        text-shadow: 1px 1px #f1f1f1a6;
-                        color: rgba(0, 0, 0, 0.678);
-                        font-weight: bold;
                     }
                 }
             }
     
             .notifications {
-                background: $shared_bg;
-    
-                .notif {
-                    color: rgba(0, 0, 0, 0.925);
-                    text-shadow: 1px 1px #F1F1F1;
-                    background: $shared_bg;
-                    border-top: 2px solid white;
-                    display: flex;
-
-                    .positive, .negative {
-                        background: rgba(0, 209, 0, 0.137);
-                        border-right: 2px solid white;
-                        padding: $paddings;
-                    }
-        
-                    .negative {
-                        background: rgba(214, 1, 1, 0.171);
-                    }
-
-                    .message {
-                        flex: 1;
-                        padding: $paddings;
-                        border-bottom: 2px solid #00000010;
-                    }
+                .positive, .negative, .default {
+                    background: rgba(6, 136, 6, 0.26);
+                    border-bottom: 2px solid #00000010;
+                    padding: $paddings;
+                    margin-top: 2px;
                 }
-
-                .notif:nth-child(even) .message {
-                    background: $alt_bg;
+    
+                .negative {
+                    background: rgba(214, 1, 1, 0.171);
                 }
                 
                 .default {
-                    flex: 1;
-                    padding: $paddings;
-                    border-bottom: 2px solid #00000010;
-                    border-top: 2px solid white;
+                    background: $shared_bg;
                 }
             }
     
-            .list {
-                background: $shared_bg;
-    
+            .phonebook {
                 .item {
+                    background: rgba(8, 85, 179, 0.199);
                     display: flex;
                     padding: $paddings;
-                    text-shadow: 1px 1px #F1F1F1;
-                    border-top: 2px solid white;
                     border-bottom: 2px solid #00000010;
+                    margin-top: 2px;
     
                     > div {
                         flex: 1;
@@ -150,20 +124,16 @@ body {
                         text-decoration: underline;
                     }
                 }
-    
-                .item:nth-child(even) {
-                    background: $alt_bg;
-                }
             }
         }
 
     }
 
     > div:nth-child(1) {
-        border-right: 2px solid rgba(0, 0, 0, 0.178);
+        padding-right: 5px;
     }
     
     > div:nth-child(2) {
-        border-left: 2px solid rgba(0, 0, 0, 0.178);
+        padding-left: 5px;
     }
 }

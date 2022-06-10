@@ -8,10 +8,10 @@ import './interface/general.scss'
 
 const App = () => {
 
-    // LIST OF PEOPLE
+    // PEOPLE STATE
     const [people, set_people] = useState([])
 
-    // LIST OF NOTIFICATIONS
+    // NOTIFICATIONS STATE
     const [notifications, set_notifications] = useState([])
 
     // INPUT STATES
@@ -32,7 +32,7 @@ const App = () => {
                 // NOTIFY SUCCESS
                 notify({
                     type: 'positive',
-                    message: 'Fetches people from db.',
+                    message: 'Obtained people from db.',
                 })
 
             // ERROR

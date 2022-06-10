@@ -16,7 +16,7 @@ const Phonebook = ({ header, data, keyword, remove }) => {
     return (
         <div className={ 'wrapper' }>
             <Header text={ header } />
-            <div className={ 'list' }>
+            <div className={ 'phonebook' }>
                 <Content
                     data={ filtered }
                     remove={ remove }

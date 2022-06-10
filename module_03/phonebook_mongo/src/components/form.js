@@ -3,7 +3,7 @@ import Header from './header.js'
 const Form = ({ header, children, func }) => { return (
     <div className={ 'wrapper' }>
         <Header text={ header } />
-        <div className={ 'content' }>
+        <div className={ 'form' }>
             <form onSubmit={ func }>
                 { children }
             </form>

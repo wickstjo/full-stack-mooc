@@ -20,9 +20,8 @@ const Content = ({ data }) => {
         // OTHERWISE, RENDER NORMALLY
         default: { return (
             data.map(entry =>
-                <div className={ 'notif' } key={ entry.id }>
-                    <div className={ entry.type } />
-                    <div className={ 'message' }>{ entry.message }</div>
+                <div className={ entry.type } key={ entry.id }>
+                    { entry.message }
                 </div>
             )
         )}
