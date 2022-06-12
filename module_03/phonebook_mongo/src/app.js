@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useReducer } from 'react'
 import { Form, Text, Button } from './components/form'
 import Phonebook from './components/phonebook'
 import Notifications from './components/notifications'
+
+import people_reducer from './reducers/people';
+import notif_reducer from './reducers/notifications';
+import input_reducer from './reducers/input';
 
 import { fetch_people, create_person, remove_person, update_person } from './funcs/db'
 import './interface/general.scss'
@@ -9,13 +13,13 @@ import './interface/general.scss'
 const App = () => {
 
     // PEOPLE STATE
-    const [people, set_people] = useState([])
+    const [people, set_people] = useReducer(people_reducer, [])
 
     // NOTIFICATIONS STATE
-    const [notifications, set_notifications] = useState([])
+    const [notifications, notify] = useReducer(notif_reducer, [])
 
     // INPUT STATES
-    const [input, set_input] = useState({
+    const [input, set_input] = useReducer(input_reducer, {
         filter: '',
         name: '',
         number: ''
@@ -27,47 +31,45 @@ const App = () => {
 
             // SUCCESS
             if (response.status === 200) {
-                set_people(response.data)
-                
-                // NOTIFY SUCCESS
+
+                // UPDATE STATE
+                set_people({
+                    type: 'overwrite',
+                    payload: response.data
+                })
+
+                // CREATE NOTIFICATION
                 notify({
                     type: 'positive',
                     message: 'Obtained people from db.',
                 })
 
-            // ERROR
-            } else {
-                console.log(response)
-
-                // NOTIFY SUCCESS
-                notify({
-                    type: 'negative',
-                    message: 'Could not fetch people from db.',
-                })
-            }
+            // PARSE UNEXPECTED RESPONSES
+            } else { parse_errors(response); }
         })
-
-    // eslint-disable-next-line
     }, [])
 
-    // UPDATE INPUT STATES
-    const update_field = (category, value) => {
-        set_input({
-            ...input,
-            [category]: value
-        })
-    }
+    // PARSE VALIDATION ERRORS
+    const parse_errors = (response) => {
+        console.log(response)
 
-    // CREATE NOTIFICATION
-    const notify = (params) => {
-        console.log(`called with ${ params.message }`)
-        set_notifications([
-            ...notifications, {
-                type: params.type,
-                message: params.message,
-                id: Date.now() * Math.random()
-            }
-        ])
+        // API UNAVAILABLE
+        if (response.status === 0) {
+            notify({
+                type: 'negative',
+                message: 'API is unavailable'
+            })
+
+        // OTHERWISE, RENDER ERRORS
+        } else {
+            response.data.errors.forEach(error => {
+                notify({
+                    type: 'negative',
+                    message: error
+                })
+            })
+        }
+
     }
 
     // ATTEMPT TO REMOVE PERSON
@@ -76,8 +78,10 @@ const App = () => {
             if (response.status === 204) {
 
                 // REDUCE & UPDATE STATE
-                const temp = people.filter(entry => entry._id !== id)
-                set_people(temp)
+                set_people({
+                    type: 'reduce',
+                    payload: id
+                })
 
                 // RENDER ERROR
                 notify({
@@ -85,36 +89,8 @@ const App = () => {
                     message: 'Removed user.',
                 })
 
-                return
-
-            // LOG ODD STATUSES
-            } else { console.log(response) }
-
-            // RENDER ERROR
-            notify({
-                type: 'negative',
-                message: 'Could not delete user.',
-            })
-        })
-    }
-
-    const validate = (response) => {
-
-        // EXTRACT & CLEAN UP THE ERRORS
-        const target = response.data.error
-        const breakpoint = target.indexOf('validation failed:') + 'validation failed:'.length + 1
-        const filtered = target.slice(breakpoint).split(', ')
-        const errors = filtered.map(error => error.split(': ')[1])
-
-        console.log(errors)
-
-        // CREATE NOTIFICATION FOR EACH ERROR
-        errors.forEach(async(error) => {
-            console.log(error)
-            notify({
-                type: 'negative',
-                message: 'foo'
-            })
+            // PARSE UNEXPECTED RESPONSES
+            } else { parse_errors(response); }
         })
     }
 
@@ -124,93 +100,86 @@ const App = () => {
         
         // IF BOTH FIELDS ARE FILLED
         if (input.name.length !== '' && input.number !== '') {
-
+    
             // CREATE THE PERSON
             const person = {
                 name: input.name,
                 number: input.number
             }
-
+    
             // CHECK IF THE PERSON OR NUMBER ALREADY EXISTS
             const target = people.find(
                 entry => entry.name === person.name
             )
-
+    
             // USER EXISTS, UPDATE
             if (target) {
                 update_person(target._id, person).then(response => {
                     if (response.status === 200) {
-
-                        // FIND THE OLD INDEX
-                        const index = people.indexOf(target)
-
-                        // UPDATE PEOPLE STATE
-                        const temp = people;
-                        temp[index].number = person.number
-                        set_people(temp)
+    
+                        // UPDATE TARGET DATA
+                        set_people({
+                            type: 'update',
+                            target: target,
+                            mods: {
+                                number: person.number
+                            }
+                        })
         
                         // RESET INPUT STATES
-                        set_input({
-                            ...input,
-                            name: '',
-                            number: ''
-                        })
+                        set_input({ type: 'reset' })
             
                         // PUSH POSITIVE NOTIFICATION
                         notify({
                             type: 'positive',
                             message: 'Updated existing user.',
                         })
-
-                        return
                     
-                    // LOG ODD STATUSES
-                    } else {
-                        console.log('foo')
-                        console.log(response)
-                    }
+                    // PARSE UNEXPECTED RESPONSES
+                    } else { parse_errors(response); }
                 })
-
+    
             // NEW USER, CREATE
             } else {
                 create_person(person).then(response => {
                     if (response.status === 201) {
-
-                        // UPDATE PEOPLE STATE
-                        set_people([
-                            ...people,
-                            response.data
-                        ])
+    
+                        // ADD PERSON TO STATE
+                        set_people({
+                            type: 'add',
+                            payload: response.data
+                        })
         
                         // RESET INPUT STATES
-                        set_input({
-                            ...input,
-                            name: '',
-                            number: ''
-                        })
+                        set_input({ type: 'reset' })
             
                         // PUSH POSITIVE NOTIFICATION
                         notify({
                             type: 'positive',
                             message: 'Created new user.',
                         })
-
-                        return
                     
-                    // LOG ODD STATUSES
-                    } else {
-                        validate(response)
-                        return
-                    }
+                    // PARSE UNEXPECTED RESPONSES
+                    } else { parse_errors(response); }
                 })
             }
+        
+        // MISSING INPUT
+        } else {
+            notify({
+                type: 'negative',
+                message: 'Missing input.',
+            })
         }
+    }
 
-        // OTHERWISE, PRESENT ERROR
-        // notify({
-        //     type: 'negative',
-        //     message: 'Could not create user.',
-        // })
+    // UPDATE INPUT FIELDS
+    const update_input = (event, target) => {
+        set_input({
+            type: 'update',
+            target: target,
+            payload: event.target.value
+        })
     }
 
     return (
@@ -220,9 +189,7 @@ const App = () => {
                     <Text
                         label={ 'Filter people by name' }
                         value={ input.filter }
-                        func={
-                            event => update_field('filter', event.target.value)
-                        }
+                        func={ event => update_input(event, 'filter') }
                     />
                 </Form>
                 <Phonebook
@@ -237,16 +204,12 @@ const App = () => {
                     <Text
                         label={ 'What is their name?' }
                         value={ input.name }
-                        func={
-                            event => update_field('name', event.target.value)
-                        }
+                        func={ event => update_input(event, 'name') }
                     />
                     <Text
                         label={ 'What is their number?' }
                         value={ input.number }
-                        func={
-                            event => update_field('number', event.target.value)
-                        }
+                        func={ event => update_input(event, 'number') }
                     />
                     <Button label={ 'Create User' } />
                 </Form>

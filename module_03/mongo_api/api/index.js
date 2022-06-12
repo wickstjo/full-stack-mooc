@@ -1,8 +1,8 @@
 const express = require('express')
 const cors = require('cors')
-const env = require('dotenv').config().parsed;
-const funcs = require('./funcs.js');
-const middlewares = require('./middlewares.js');
+const env = require('dotenv').config().parsed
+const funcs = require('./funcs.js')
+const middlewares = require('./middlewares.js')
 
 // EXPRESS INSTANCE
 const app = express()

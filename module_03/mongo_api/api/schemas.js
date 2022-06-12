@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 // PERSON SCHEMA
 const Person = mongoose.model('Person', new mongoose.Schema({

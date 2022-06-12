@@ -48,5 +48,5 @@ export {
     fetch_people,
     create_person,
     remove_person,
-    update_person
+    update_person,
 }

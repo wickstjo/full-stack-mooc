@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const env = require('dotenv').config().parsed;
-const { Person } = require('./schemas.js');
+const mongoose = require('mongoose')
+const env = require('dotenv').config().parsed
+const { Person } = require('./schemas.js')
 
 // CONNECT TO MONGO DB
 mongoose.connect(`mongodb://${ env.MONGO_USER }:${ env.MONGO_PASS }@localhost:${ env.MONGO_PORT }`)
@@ -57,8 +57,17 @@ const create_person = (request, response, next) => {
 // REMOVE EXISTING PERSON
 const remove_person = (request, response, next) => {
     Person.deleteOne({ _id: request.params.id }).then(result => {
-        response.status(204).end()
 
+        // SOMETHING WAS ACTUALLY DELETED
+        if (result.deletedCount > 0) {
+            response.status(204).end()
+        
+        // OTHERWISE, SEND ERROR
+        } else {
+            response.status(404).send({
+                errors: ['This ID does not exist.']
+            })
+        }
     }).catch(error => next(error))
 }
 
@@ -71,7 +80,7 @@ const update_person = (request, response, next) => {
         number: request.body.number
     }
     
-    return Person.updateOne({ _id: request.params.id }, person).then(result => {
+    return Person.updateOne({ _id: request.params.id }, person).then(() => {
         response.status(200).end()
 
     }).catch(error => next(error))
