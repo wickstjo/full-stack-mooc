@@ -9,3 +9,4 @@
 
 # SECRETS
 *.env
+config.js

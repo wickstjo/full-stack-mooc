@@ -1,0 +1,110 @@
+const Person = require('./schema.js')
+
+// WRAPPER FOR QUERY FUNCS
+const wrapper = (query, next, success) => {
+    query.then(response => {
+        success(response)
+
+    }).catch(error => next(error))
+}
+
+// FETCH ALL ENTRIES
+const fetch_all = (request, response, next) => {
+
+    // BLUEPRINT QUERY
+    const query = Person.find({})
+
+    // PROCESS IT
+    wrapper(query, next, result => {
+        response.status(200).send(result)
+    })
+}
+
+// FETCH ONE ENTRY BY ID
+const fetch_one = (request, response, next) => {
+
+    // BLUEPRINT QUERY
+    const query = Person.findById(request.params.id)
+
+    // PROCESS IT
+    wrapper(query, next, entry => {
+        
+        // PERSON FOUND
+        if (entry) {
+            response.status(200).send(entry)
+
+        // OTHERWISE, 404
+        } else {
+            response.status(404).send({
+                errors: ['ID does not exist.']
+            })
+        }
+    })
+}
+
+// CREATE ENTRY
+const create = (request, response, next) => {
+    
+    // BLUEPRINT QUERY
+    const query = new Person({
+        name: request.body.name,
+        number: request.body.number
+    }).save()
+
+    // PROCESS IT
+    wrapper(query, next, entry => {
+        response.status(201).json(entry)
+    })
+}
+
+// REMOVE ENTRY
+const remove = (request, response, next) => {
+
+    // BLUEPRINT QUERY
+    const query = Person.deleteOne({
+        _id: request.params.id
+    })
+
+    // PROCESS IT
+    wrapper(query, next, result => {
+        
+        // SOMETHING WAS ACTUALLY DELETED
+        if (result.deletedCount > 0) {
+            response.status(204).end()
+        
+        // OTHERWISE, SEND ERROR
+        } else {
+            response.status(404).send({
+                errors: ['ID does not exist.']
+            })
+        }
+    })
+}
+
+// UPDATE ENTRY
+const update = (request, response, next) => {
+
+    // CONSTRUCT PERSON
+    const person = {
+        name: request.body.name,
+        number: request.body.number
+    }
+
+    // BLUEPRINT QUERY
+    const query = Person.updateOne({
+        _id: request.params.id
+    }, person)
+
+    // PROCESS IT
+    wrapper(query, next, () => {
+        response.status(200).end()
+    })
+}
+
+module.exports = {
+    fetch_all,
+    fetch_one,
+    create,
+    remove,
+    update
+}

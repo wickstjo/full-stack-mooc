@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+
+    # MONGODB
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+        ports:
+            - 8081:27017
+
+    # RT MANAGER
+    # rt_manager:
+    #     build:
+    #         dockerfile: worker.dockerfile
+    #         context: .
+    #     environment:
+    #         - WORKER_TYPE=rt_manager
+    #     restart: always
+    #     volumes:
+    #         - ./tenant-profiles/:/tenant-profiles
+    #         - ./tenant-programs/:/tenant-programs
+    #         - ./workers/:/workers

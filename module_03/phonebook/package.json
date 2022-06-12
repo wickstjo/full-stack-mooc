@@ -1,5 +1,5 @@
 {
-    "name": "phonebook_mongo",
+    "name": "phonebook",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
