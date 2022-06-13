@@ -3,10 +3,10 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "test": "clear && NODE_ENV=test jest --verbose --runInBand"
     },
     "dependencies": {
         "cors": "^2.8.5",
@@ -16,6 +16,11 @@
         "nodemon": "^2.0.16"
     },
     "devDependencies": {
-        "eslint": "^8.17.0"
+        "eslint": "^8.17.0",
+        "jest": "^28.1.1",
+        "supertest": "^6.2.3"
+    },
+    "jest": {
+        "testEnvironment": "node"
     }
 }

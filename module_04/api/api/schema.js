@@ -1,22 +1,30 @@
 const mongoose = require('mongoose')
 
-// PERSON SCHEMA
-const person_schema = new mongoose.Schema({
-    name: {
+// BLOG SCHEMA
+const blog_schema = new mongoose.Schema({
+    title: {
         type: String,
-        minlength: [3, 'A name must be at least 3 characters.'],
-        required: [true, 'A name is required.']
+        minlength: [3, 'A title must be at least 3 characters.'],
+        required: [true, 'A title is required.']
     },
-    number: {
+    author: {
         type: String,
-        minlength: [8, 'A phone number is at least 8 characters.'],
-        match: [/^\d{2,3}-(\d+)$/, 'Phone number does not match a valid pattern.'],
-        required: [true, 'A valid phone number is required.']
+        minlength: [3, 'An author must be at least 3 characters.'],
+        required: [true, 'An author is required.']
     },
+    url: {
+        type: String,
+        minlength: [3, 'An url must be at least 3 characters.'],
+        required: [true, 'An url is required.']
+    },
+    likes: {
+        type: Number,
+        default: 0
+    }
 })
 
 // SANITIZE JSON ENTRIES
-person_schema.set('toJSON', {
+blog_schema.set('toJSON', {
     transform: (document, entry) => {
         entry.id = entry._id
         delete entry._id
@@ -25,4 +33,4 @@ person_schema.set('toJSON', {
 })
 
 // CONSTRUCT MODEL FROM SCHEMA
-module.exports = mongoose.model('Person', person_schema)
+module.exports = mongoose.model('Blog', blog_schema)

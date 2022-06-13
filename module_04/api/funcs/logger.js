@@ -1,3 +1,7 @@
+// HIDE LOGS FOR UNIT TESTS
+require('dotenv').config()
+const unit_testing = process.env.NODE_ENV === 'test'
+
 // CREATE TIMESTAMP
 const create_timestamp = () => {
     const base = new Date()
@@ -13,8 +17,10 @@ const create_timestamp = () => {
 
 // BASIC LOGGING
 const info = (...params) => {
-    const timestamp = create_timestamp()
-    console.log(timestamp, ...params)
+    if (!unit_testing) {
+        const timestamp = create_timestamp()
+        console.log(timestamp, ...params)
+    }
 }
 
 // THREAT LOGGING

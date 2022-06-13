@@ -1,18 +1,21 @@
-const Person = require('./schema.js')
+const Blog = require('./schema.js')
 
 // WRAPPER FOR QUERY FUNCS
-const wrapper = (query, next, success) => {
-    query.then(response => {
+const wrapper = async (query, next, success) => {
+    try {
+        const response = await query
         success(response)
 
-    }).catch(error => next(error))
+    } catch (error) {
+        next(error)
+    }
 }
 
 // FETCH ALL ENTRIES
 const fetch_all = (request, response, next) => {
 
     // BLUEPRINT QUERY
-    const query = Person.find({})
+    const query = Blog.find({})
 
     // PROCESS IT
     wrapper(query, next, result => {
@@ -24,7 +27,7 @@ const fetch_all = (request, response, next) => {
 const fetch_one = (request, response, next) => {
 
     // BLUEPRINT QUERY
-    const query = Person.findById(request.params.id)
+    const query = Blog.findById(request.params.id)
 
     // PROCESS IT
     wrapper(query, next, entry => {
@@ -46,10 +49,7 @@ const fetch_one = (request, response, next) => {
 const create = (request, response, next) => {
     
     // BLUEPRINT QUERY
-    const query = new Person({
-        name: request.body.name,
-        number: request.body.number
-    }).save()
+    const query = new Blog(request.body).save()
 
     // PROCESS IT
     wrapper(query, next, entry => {
@@ -61,7 +61,7 @@ const create = (request, response, next) => {
 const remove = (request, response, next) => {
 
     // BLUEPRINT QUERY
-    const query = Person.deleteOne({
+    const query = Blog.deleteOne({
         _id: request.params.id
     })
 
@@ -91,7 +91,7 @@ const update = (request, response, next) => {
     }
 
     // BLUEPRINT QUERY
-    const query = Person.updateOne({
+    const query = Blog.updateOne({
         _id: request.params.id
     }, person)
 
