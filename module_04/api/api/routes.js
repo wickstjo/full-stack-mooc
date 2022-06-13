@@ -1,4 +1,4 @@
-const Blog = require('./schema.js')
+const Blog = require('../models/blog.js')
 
 // WRAPPER FOR QUERY FUNCS
 const wrapper = async (query, next, success) => {
@@ -84,20 +84,24 @@ const remove = (request, response, next) => {
 // UPDATE ENTRY
 const update = (request, response, next) => {
 
-    // CONSTRUCT PERSON
-    const person = {
-        name: request.body.name,
-        number: request.body.number
-    }
-
     // BLUEPRINT QUERY
     const query = Blog.updateOne({
         _id: request.params.id
-    }, person)
+    }, request.body)
 
     // PROCESS IT
-    wrapper(query, next, () => {
-        response.status(200).end()
+    wrapper(query, next, result => {
+
+        // ENTRY FOUND & MODIFIED
+        if (result.modifiedCount === 1) {
+            response.status(200).end()
+
+        // OTHERWISE, THROW ERROR
+        } else {
+            response.status(400).send({
+                errors: ['ID does not exist.']
+            })
+        }
     })
 }
 
