@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
 const cors = require('cors')
 const express = require('express')
+require('express-async-errors')
 const config = require('./config.js')
 const middlewares = require('./funcs/middlewares.js')
-const router = require('./api/router.js')
 const log = require('./funcs/logger.js')
+
+// API ENDPOINTS
+const blog_router = require('./endpoints/blog_router.js')
+const user_router = require('./endpoints/user_router.js')
+const login_router = require('./endpoints/login_router.js')
 
 // EXPRESS INSTANCE
 const app = express()
@@ -19,7 +24,9 @@ mongoose.connect(config.mongo.uri).then(() => {
     app.use(middlewares.request_tracker)
 
     // API ENDPOINTS
-    app.use('/api/blogs', router)
+    app.use('/api/blogs', middlewares.token_extractor, blog_router)
+    app.use('/api/users', user_router)
+    app.use('/api/login', login_router)
 
     // ERROR HANDLER MIDDLEWARE
     app.use(middlewares.unknown_endpoint)
