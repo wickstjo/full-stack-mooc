@@ -1,31 +1,39 @@
-import Header from './header.js'
+import { useEffect, useState } from 'react'
 
-const Notifications = ({ header, data }) => { return (
+const Notifications = ({ data }) => { return (
     <div className={ 'wrapper' }>
-        <Header text={ header } />
         <div className={ 'notifications' }>
-            <Content data={ data } />
+            { data.map(entry =>
+                <Entry
+                    key={ entry.id }
+                    data={ entry }
+                />
+            )}
         </div>
     </div>
 )}
 
-const Content = ({ data }) => {
-    switch (data.length) {
+const Entry = ({ data }) => {
 
-        // NO CONTENT FOUND, RENDER NOTHING
-        case 0: { return (
-            <div className={ 'default' }>No notifications yet.</div>
-        )}
+    // STYLE STATE
+    const [style, set_style] = useState({})
+    
+    // AFTER 2 SECONDS, HIDE NOTIFICATION WITH CSS
+    useEffect(() => {
+        setTimeout(() => {
+            set_style({
+                display: 'none'
+            })
+        }, 2000)
+    }, [])
 
-        // OTHERWISE, RENDER NORMALLY
-        default: { return (
-            data.map(entry =>
-                <div className={ entry.type } key={ entry.id }>
-                    { entry.message }
-                </div>
-            )
-        )}
-    }
+    return (
+        <div style={ style }>
+            <div className={ data.type }>
+                { data.message }
+            </div>
+        </div>
+    )
 }
 
 export default Notifications;

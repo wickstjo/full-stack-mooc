@@ -8,12 +8,17 @@ const input = (state, action) => {
             [action.target]: action.payload
         }}
 
-        // RESET NON-FILTER STATES
-        case 'reset': { return {
-            ...state,
-            name: '',
-            number: ''
-        }}
+        // RESET KEYSTATES
+        case 'reset': {
+            const temp = { ...state }
+
+            // RESET EACH KEY VALUE
+            Object.keys(temp).forEach(key => {
+                temp[key] = ''
+            })
+
+            return temp
+        }
 
         // FALLBACK
         default: {

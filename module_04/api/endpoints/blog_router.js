@@ -23,10 +23,11 @@ const validate_token = (request, response) => {
 router.get('/', async (request, response) => {
 
     // FETCH & POPULATE USERS PROP
-    const result = await Blog.find({}).populate('user', {
-        username: 1,
-        id: 1
-    })
+    const result = await Blog.find({})
+        .populate('user', {
+            username: 1,
+            id: 1
+        })
 
     response.status(200).send(result)
 })
@@ -35,10 +36,11 @@ router.get('/', async (request, response) => {
 router.get('/:id', async (request, response) => {
 
     // FETCH & POPULATE
-    const entry = await Blog.findById(request.params.id).populate('user', {
-        username: 1,
-        id: 1
-    })
+    const entry = await Blog.findById(request.params.id)
+        .populate('user', {
+            username: 1,
+            id: 1
+        })
 
     // PERSON FOUND
     if (entry) {
@@ -102,17 +104,23 @@ router.put('/:id', async (request, response) => {
     // VERIFY BEARER TOKEN
     const user_id = validate_token(request, response)
 
-    // BLUEPRINT QUERY
-    const result = await Blog.updateOne({
+    // USER IDENTIFIER
+    const identifier = {
         _id: request.params.id,
         user: {
             _id: user_id
         }
-    }, request.body)
+    }
+
+    // BLUEPRINT QUERY
+    const result = await Blog.updateOne(identifier, request.body)
 
     // ENTRY FOUND & MODIFIED
     if (result.modifiedCount === 1) {
-        return response.status(200).end()
+
+        // FETCH & RETURN THE UPDATED USER
+        const user = await Blog.findOne(identifier)
+        return response.status(200).send(user)
     }
 
     // OTHERWISE, THROW ERROR

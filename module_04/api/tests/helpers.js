@@ -48,6 +48,24 @@ const create_blog = async (entry, token, verify) => {
         .expect(verify)
 }
 
+// REMOVE BLOG SHORTHAND
+const remove_blog = async (id, token, verify) => {
+    return await api
+        .delete(`/api/blogs/${ id }`)
+        .set({ Authorization: `Bearer ${ token }` })
+        .expect(verify)
+}
+
+// UPDATE BLOG SHORTHAND
+const update_blog = async (id, entry, token, verify) => {
+    return await api
+        .put(`/api/blogs/${ id }`)
+        .send(entry)
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .set({ Authorization: `Bearer ${ token }` })
+        .expect(verify)
+}
+
 // FETCH BLOG BY ID
 const fetch_blog = async (id, verify) => {
     return await api
@@ -108,5 +126,7 @@ module.exports = {
     create_blog,
     fetch_blog,
     fetch_all_blogs,
-    create_and_login
+    create_and_login,
+    remove_blog,
+    update_blog
 }

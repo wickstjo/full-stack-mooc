@@ -6,9 +6,10 @@ const User = require('../models/user.js')
 router.get('/', async (request, response) => {
 
     // FETCH & POPULATE
-    const result = await User.find({}).populate('blogs', {
-        user: 0,
-    })
+    const result = await User.find({})
+        .populate('blogs', {
+            user: 0,
+        })
 
     response.status(200).send(result)
 })
@@ -17,9 +18,10 @@ router.get('/', async (request, response) => {
 router.get('/:id', async (request, response) => {
 
     // FETCH & POPULATE
-    const entry = await User.findById(request.params.id).populate('blogs', {
-        user: 0,
-    })
+    const entry = await User.findById(request.params.id)
+        .populate('blogs', {
+            user: 0,
+        })
 
     // PERSON FOUND
     if (entry) {

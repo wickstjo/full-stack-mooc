@@ -1,224 +1,92 @@
-import { useEffect, useReducer } from 'react'
-import { Form, Text, Button } from './components/form'
-import Phonebook from './components/phonebook'
-import Notifications from './components/notifications'
-
-import people_reducer from './reducers/people';
-import notif_reducer from './reducers/notifications';
-import input_reducer from './reducers/input';
-
-import { fetch_people, create_person, remove_person, update_person } from './funcs/db'
 import './interface/general.scss'
+import { useEffect, useState, useReducer, Fragment } from 'react'
+import notif_reducer from './reducers/notifications';
+import Notifications from './components/notifications'
+import Auth from './auth'
+import Blog from './blog'
 
 const App = () => {
 
-    // PEOPLE STATE
-    const [people, set_people] = useReducer(people_reducer, [])
+    // USER AUTH TOKEN & LOCAL STORAGE PROP
+    const [credentials, set_credentials] = useState(null)
+    const [storage_item] = useState('blog_token')
 
     // NOTIFICATIONS STATE
-    const [notifications, notify] = useReducer(notif_reducer, [])
+    const [notifications, set_notifications] = useReducer(notif_reducer, [])
 
-    // INPUT STATES
-    const [input, set_input] = useReducer(input_reducer, {
-        filter: '',
-        name: '',
-        number: ''
-    })
-
-    // ON LOAD, FETCH ALL PEOPLE
+    // CHECK LOCALSTORAGE FOR CREDENTIALS
     useEffect(() => {
-        fetch_people().then(response => {
 
-            // SUCCESS
-            if (response.status === 200) {
+        // FETCH ITEM FROM STORAGE
+        const item = localStorage.getItem(storage_item);
 
-                // UPDATE STATE
-                set_people({
-                    type: 'overwrite',
-                    payload: response.data
-                })
-
-                // CREATE NOTIFICATION
-                notify({
-                    type: 'positive',
-                    message: 'Obtained people from db.',
-                })
-
-            // PARSE UNEXPECTED RESPONSES
-            } else { parse_errors(response); }
-        })
+        // IF ITS DEFINED, PARSE & SET DATA IN STATE
+        if (item) {
+            const parsed = JSON.parse(item)
+            update_credentials(parsed)
+        }
     }, [])
 
-    // PARSE VALIDATION ERRORS
-    const parse_errors = (response) => {
-        console.log(response)
+    // SAVE TOKEN APPROPRIATELY
+    const update_credentials = (data) => {
 
-        // API UNAVAILABLE
-        if (response.status === 0) {
-            notify({
-                type: 'negative',
-                message: 'API is unavailable'
-            })
+        // SAVE CREDENTIALS IN LOCALSTORAGE
+        const stringified = JSON.stringify(data)
+        localStorage.setItem(storage_item, stringified);
 
-        // OTHERWISE, RENDER ERRORS
-        } else {
-            response.data.errors.forEach(error => {
-                notify({
-                    type: 'negative',
-                    message: error
-                })
-            })
-        }
-
+        // SAVE CREDENTIALS IN STATE
+        set_credentials(data)
     }
 
-    // ATTEMPT TO REMOVE PERSON
-    const remove_user = (id) => {
-        remove_person(id).then(response => {
-            if (response.status === 204) {
-
-                // REDUCE & UPDATE STATE
-                set_people({
-                    type: 'reduce',
-                    payload: id
-                })
-
-                // RENDER ERROR
-                notify({
-                    type: 'positive',
-                    message: 'Removed user.',
-                })
-
-            // PARSE UNEXPECTED RESPONSES
-            } else { parse_errors(response); }
-        })
+    // REVOKE CREDENTIALS
+    const revoke_credentials = () => {
+        localStorage.clear();
+        set_credentials(null)
     }
 
-    // ATTEMPT TO CREATE A NEW USER
-    const process_user = (event) => {
-        event.preventDefault();
-        
-        // IF BOTH FIELDS ARE FILLED
-        if (input.name.length !== '' && input.number !== '') {
-    
-            // CREATE THE PERSON
-            const person = {
-                name: input.name,
-                number: input.number
-            }
-    
-            // CHECK IF THE PERSON OR NUMBER ALREADY EXISTS
-            const target = people.find(
-                entry => entry.name === person.name
-            )
-    
-            // USER EXISTS, UPDATE
-            if (target) {
-                update_person(target._id, person).then(response => {
-                    if (response.status === 200) {
-    
-                        // UPDATE TARGET DATA
-                        set_people({
-                            type: 'update',
-                            target: target,
-                            mods: {
-                                number: person.number
-                            }
-                        })
-        
-                        // RESET INPUT STATES
-                        set_input({ type: 'reset' })
-            
-                        // PUSH POSITIVE NOTIFICATION
-                        notify({
-                            type: 'positive',
-                            message: 'Updated existing user.',
-                        })
-                    
-                    // PARSE UNEXPECTED RESPONSES
-                    } else { parse_errors(response); }
+    // PROCESS NOTIFICATIONS
+    const notify = ({ type, message }) => {
+
+        // CHECK MESSAGE TYPE
+        const msg_type = typeof(message)
+
+        // STRINGS
+        if (msg_type === 'string') {
+            set_notifications({
+                type: type,
+                message: message
+            })
+
+        // ARRAYS
+        } else if (msg_type === 'object') {
+            message.forEach(msg => {
+                set_notifications({
+                    type: type,
+                    message: msg
                 })
-    
-            // NEW USER, CREATE
-            } else {
-                create_person(person).then(response => {
-                    if (response.status === 201) {
-    
-                        // ADD PERSON TO STATE
-                        set_people({
-                            type: 'add',
-                            payload: response.data
-                        })
-        
-                        // RESET INPUT STATES
-                        set_input({ type: 'reset' })
-            
-                        // PUSH POSITIVE NOTIFICATION
-                        notify({
-                            type: 'positive',
-                            message: 'Created new user.',
-                        })
-                    
-                    // PARSE UNEXPECTED RESPONSES
-                    } else { parse_errors(response); }
-                })
-            }
-        
-        // MISSING INPUT
-        } else {
-            notify({
-                type: 'negative',
-                message: 'Missing input.',
             })
         }
-    }
-
-    // UPDATE INPUT FIELDS
-    const update_input = (event, target) => {
-        set_input({
-            type: 'update',
-            target: target,
-            payload: event.target.value
-        })
     }
 
     return (
-        <div className={ 'container' }>
-            <div>
-                <Form header={ 'Filter Results' }>
-                    <Text
-                        label={ 'Filter people by name' }
-                        value={ input.filter }
-                        func={ event => update_input(event, 'filter') }
-                    />
-                </Form>
-                <Phonebook
-                    header={ 'phonebook' }
-                    data={ people }
-                    keyword={ input.filter }
-                    remove={ remove_user }
+        <Fragment>
+            { credentials ?
+                <Blog
+                    credentials={ credentials }
+                    revoke_credentials={ revoke_credentials }
+                    notify={ notify }
                 />
-            </div>
-            <div>
-                <Form header={ 'add person' } func={ process_user }>
-                    <Text
-                        label={ 'What is their name?' }
-                        value={ input.name }
-                        func={ event => update_input(event, 'name') }
-                    />
-                    <Text
-                        label={ 'What is their number?' }
-                        value={ input.number }
-                        func={ event => update_input(event, 'number') }
-                    />
-                    <Button label={ 'Create User' } />
-                </Form>
-                <Notifications
-                    header={ 'notifications' }
-                    data={ notifications }
+            :
+                <Auth
+                    set_credentials={ update_credentials }
+                    notify={ notify }
                 />
-            </div>
-        </div>
+            }
+            <Notifications
+                data={ notifications }
+                notify={ set_notifications }
+            />
+        </Fragment>
     )
 }
 
