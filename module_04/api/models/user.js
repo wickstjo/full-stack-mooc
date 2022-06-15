@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     },
     name: {
         type: String,
-        minlength: [3, 'An name must be at least 4 characters.'],
+        minlength: [3, 'A name must be at least 3 characters.'],
     },
     password: {
         type: String,
