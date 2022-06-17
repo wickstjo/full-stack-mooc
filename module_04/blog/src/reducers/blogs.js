@@ -1,26 +1,24 @@
-// PEOPLE REDUCER
-const people = (state, action) => {
+const blogs = (state, action) => {
     switch (action.type) {
 
-        // OVERWRITE EXISTING STATE
+        // FULLY OVERWRITE EXISTING STATE
         case 'overwrite': {
             return action.payload
         }
 
-        // ADD PERSON
+        // ADD BLOG
         case 'add': { return [
             ...state,
             action.payload
         ]}
 
-        // FILTER OUT PERSON BY ID
+        // FILTER OUT BLOG BY ID
         case 'reduce': {
-            return state.filter(entry => entry._id !== action.payload)
+            return state.filter(entry => entry.id !== action.id)
         }
 
-        // UPDATE EXISTING PERSON
+        // UPDATE EXISTING BLOG
         case 'update': {
-            console.log('foo')
 
             // FIND THE OLD INDEX
             const temp = [...state]
@@ -37,10 +35,10 @@ const people = (state, action) => {
 
         // FALLBACK
         default: {
-            console.log('PEOPLE REDUCER ERROR.');
+            console.log('BLOG REDUCER ERROR.');
             return state;
         }
     }
 }
 
-export default people;
+export default blogs;

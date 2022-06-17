@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import { Form, Text, Button } from './components/form'
+import { Form, Field, Button } from './components/input'
 import { create_user, login_user } from './funcs/user';
 import input_reducer from './reducers/input';
 
@@ -137,45 +137,59 @@ const Auth = ({ set_credentials, notify }) => {
         <div className={ 'container2' }>
             <div>
                 <Form header={ 'login' } func={ login }>
-                    <Text
+                    <Field
                         label={ 'What is your username?' }
                         value={ input.login_user }
                         func={
                             event => update_input(event, 'login_user')
                         }
                     />
-                    <Text
+                    <Field
                         label={ 'What is your password?' }
                         value={ input.login_pass }
+                        type={ 'password' }
                         func={
                             event => update_input(event, 'login_pass')
                         }
                     />
-                    <Button label={ 'Login' } />
+                    <Button
+                        label={ 'Login' }
+                        required={[
+                            input.login_user,
+                            input.login_pass
+                        ]}
+                    />
                 </Form>
                 <Form header={ 'register' } func={ register }>
-                    <Text
+                    <Field
                         label={ 'What is your username?' }
                         value={ input.register_user }
                         func={
                             event => update_input(event, 'register_user')
                         }
                     />
-                    <Text
+                    <Field
                         label={ 'What is your name?' }
                         value={ input.register_name }
                         func={
                             event => update_input(event, 'register_name')
                         }
                     />
-                    <Text
+                    <Field
                         label={ 'What is your password?' }
                         value={ input.register_pass }
+                        type={ 'password' }
                         func={
                             event => update_input(event, 'register_pass')
                         }
                     />
-                    <Button label={ 'Register' } />
+                    <Button
+                        label={ 'Register' }
+                        required={[
+                            input.register_user,
+                            input.register_pass
+                        ]}
+                    />
                 </Form>
             </div>
         </div>

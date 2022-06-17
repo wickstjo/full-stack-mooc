@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react'
 const Notifications = ({ data }) => { return (
     <div className={ 'wrapper' }>
         <div className={ 'notifications' }>
-            { data.map(entry =>
-                <Entry
-                    key={ entry.id }
-                    data={ entry }
-                />
-            )}
+            <div>
+                { data.map(entry =>
+                    <Entry
+                        key={ entry.id }
+                        data={ entry }
+                    />
+                )}
+            </div>
+            <div></div>
         </div>
     </div>
 )}
@@ -24,7 +27,7 @@ const Entry = ({ data }) => {
             set_style({
                 display: 'none'
             })
-        }, 2000)
+        }, 20000)
     }, [])
 
     return (
