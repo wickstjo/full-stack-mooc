@@ -53,6 +53,68 @@ router.get('/:id', async (request, response) => {
     })
 })
 
+// INCREMENT LIKES
+router.get('/:id/increment', async (request, response) => {
+
+    // VERIFY BEARER TOKEN
+    validate_token(request, response)
+
+    // FETCH AND INCREMENT BLOG ENTRY
+    const entry = await Blog.findOneAndUpdate(
+        { _id: request.params.id },
+        { $inc: { likes: 1 } }
+    )
+
+    // PERSON FOUND
+    if (entry) {
+
+        // FETCH REFRESHED PERSON
+        const refreshed = await Blog.findById(request.params.id)
+            .populate('user', {
+                username: 1,
+                id: 1
+            })
+
+        return response.status(200).send(refreshed)
+    }
+
+    // OTHERWISE, THROW ERROR
+    response.status(404).send({
+        errors: ['ID does not exist.']
+    })
+})
+
+// DECREMENT LIKES
+router.get('/:id/decrement', async (request, response) => {
+
+    // VERIFY BEARER TOKEN
+    validate_token(request, response)
+
+    // FETCH AND DECREMENT BLOG ENTRY
+    const entry = await Blog.findOneAndUpdate(
+        { _id: request.params.id },
+        { $inc: { likes: -1 } }
+    )
+
+    // PERSON FOUND
+    if (entry) {
+
+        // FETCH REFRESHED PERSON
+        const refreshed = await Blog.findById(request.params.id)
+            .populate('user', {
+                username: 1,
+                id: 1
+            })
+
+        return response.status(200).send(refreshed)
+    }
+
+    // OTHERWISE, THROW ERROR
+    response.status(404).send({
+        errors: ['ID does not exist.']
+    })
+})
+
 // CREATE NEW BLOG
 router.post('/', async (request, response) => {
 
@@ -70,7 +132,14 @@ router.post('/', async (request, response) => {
     user.blogs = user.blogs.concat(entry._id)
     user.save()
 
-    response.status(201).send(entry)
+    // FETCH AND POPULATE BLOG ENTRY
+    const populated = await Blog.findById(entry._id)
+        .populate('user', {
+            username: 1,
+            id: 1
+        })
+
+    response.status(201).send(populated)
 })
 
 // DELETE BLOG BY ID
@@ -114,11 +183,9 @@ router.put('/:id', async (request, response) => {
 
     // BLUEPRINT QUERY
     const result = await Blog.updateOne(identifier, request.body)
-
+    
     // ENTRY FOUND & MODIFIED
-    if (result.modifiedCount === 1) {
-
-        // FETCH & RETURN THE UPDATED USER
+    if (result.modifiedCount < 2) {
         const user = await Blog.findOne(identifier)
         return response.status(200).send(user)
     }

@@ -27,10 +27,10 @@ const notifications = (state, action) => {
 
         // FALLBACK
         default: {
-            console.log('NOTIFICATION REDUCER ERROR.');
-            return state;
+            console.log('NOTIFICATION REDUCER ERROR.')
+            return state
         }
     }
 }
 
-export default notifications;
+export default notifications

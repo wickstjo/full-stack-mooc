@@ -22,10 +22,10 @@ const input = (state, action) => {
 
         // FALLBACK
         default: {
-            console.log('INPUT REDUCER ERROR.');
-            return state;
+            console.log('INPUT REDUCER ERROR.')
+            return state
         }
     }
 }
 
-export default input;
+export default input

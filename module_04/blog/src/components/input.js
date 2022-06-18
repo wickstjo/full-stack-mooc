@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
-import Header from './header.js'
+import PropTypes from 'prop-types'
 
-const Form = ({ header, children, func }) => { return (
-    <div className={ 'wrapper' }>
-        <Header text={ header } />
-        <div className={ 'form' }>
-            <form onSubmit={ func }>
-                { children }
-            </form>
+const Form = ({ header, func, children }) => { return (
+    <div id={ 'wrapper' }>
+        <div className={ 'header' }>{ header }</div>
+        <div id={ 'content' }>
+            <form onSubmit={ func }>{ children }</form>
         </div>
     </div>
 )}
+
+Form.propTypes = {
+    header: PropTypes.string.isRequired,
+    func: PropTypes.func.isRequired,
+}
 
 const Field = ({ label, type='text', value, func }) => { return (
     <input
@@ -20,6 +23,12 @@ const Field = ({ label, type='text', value, func }) => { return (
         type={ type }
     />
 )}
+
+Field.propTypes = {
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    func: PropTypes.func.isRequired,
+}
 
 const Button = ({ label, required }) => {
 
@@ -52,6 +61,11 @@ const Button = ({ label, required }) => {
             disabled={ status }
         />
     )
+}
+
+Button.propTypes = {
+    label: PropTypes.string.isRequired,
+    required: PropTypes.array.isRequired,
 }
 
 export {

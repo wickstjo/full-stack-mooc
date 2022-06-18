@@ -1,18 +1,14 @@
+import '../interface/notifications.scss'
 import { useEffect, useState } from 'react'
 
 const Notifications = ({ data }) => { return (
-    <div className={ 'wrapper' }>
-        <div className={ 'notifications' }>
-            <div>
-                { data.map(entry =>
-                    <Entry
-                        key={ entry.id }
-                        data={ entry }
-                    />
-                )}
-            </div>
-            <div></div>
-        </div>
+    <div className={ 'notifications' }>
+        { data.map(entry =>
+            <Entry
+                key={ entry.id }
+                data={ entry }
+            />
+        )}
     </div>
 )}
 
@@ -27,7 +23,7 @@ const Entry = ({ data }) => {
             set_style({
                 display: 'none'
             })
-        }, 20000)
+        }, 2000)
     }, [])
 
     return (

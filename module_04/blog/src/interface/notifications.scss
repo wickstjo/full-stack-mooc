@@ -1,0 +1,27 @@
+$paddings: 6px 8px;
+
+.notifications {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    z-index: 100;
+    padding: 20px;
+
+    >div {
+        background: white;
+        padding: 2px;
+        flex: 1;
+        margin-top: 5px;
+        width: fit-content;
+
+        .positive, .negative, .default {
+            background: rgba(6, 136, 6, 0.384);
+            border-bottom: 2px solid #00000010;
+            padding: $paddings;
+        }
+    
+        .negative {
+            background: rgba(182, 6, 6, 0.301);
+        }
+    }
+}

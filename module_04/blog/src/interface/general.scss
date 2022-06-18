@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Open Sans';
-    src: url('../interface/main.woff');
+    src: url('./media/main.woff');
 }
 
 // SHARED BG COLORS
@@ -34,189 +34,105 @@ a:hover {
     background: #F1F1F1;
 }
 
-.container, .container2 {
+#main {
     display: flex;
+    flex-direction: column;
     height: 100vh;
-    max-width: 700px;
-    width: 100%;
-    margin: auto;
 
-    > div {
-        padding: 10px;
+    .container {
         flex: 1;
         overflow: auto;
-
-        .wrapper {
-            background: white;
-            padding: 3px;
-            border: 1px solid rgba(0, 0, 0, 0.171);
-            margin-bottom: 10px;
-
-            .greeting {
-                background: rgba(0, 112, 0, 0.295);
-                border-bottom: 2px solid #36363625;
-                border-top: 2px solid white;
-                padding: $paddings;
-                display: flex;
-                text-align: right;
-
-                div {
-                    flex: 1;
-                }
-
-                div:first-child {
-                    text-align: left;
-                }
-
-                .clicky {
+    
+        > div {
+            padding: 10px;
+            flex: 1;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+    
+            .wrapper {
+                background: white;
+                padding: 3px;
+                border: 1px solid rgba(0, 0, 0, 0.171);
+                margin-bottom: 10px;
+    
+                .header {
+                    font-size: 15px;
+                    text-transform: uppercase;
+                    background: #414141c5;
+                    border-bottom: 2px solid #2c2c2c5e;
+                    padding: 6px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    color: #F1F1F1;
+                    text-shadow: 1px 1px #242424;
                     cursor: pointer;
-                    transition: background 0.2s;
-                    color: rgb(21, 61, 99);
-                }
-
-                .clicky:hover {
-                    background: rgba(0, 0, 0, 0.096);
-                }
-
-                .user {
-                    color: rgb(141, 24, 24);
-                }
-            }
-
-            .header {
-                font-size: 15px;
-                text-transform: uppercase;
-                background: #414141c5;
-                border-bottom: 2px solid #2c2c2c5e;
-                padding: 6px;
-                padding-left: 10px;
-                padding-right: 10px;
-                color: #F1F1F1;
-                text-shadow: 1px 1px #242424;
-            }
-    
-            .form {
-                background: $shared_bg;
-                border-top: 2px solid white;
-                padding: 4px;
-                padding-bottom: 0px;
-    
-                form {
-                    input {
-                        padding: $paddings;
-                        width: 100%;
-                        border-bottom: 2px solid #3636363d;
-                        margin-bottom: 4px;
-                        transition: border 0.2s;
-                    }
-                    
-                    input:focus {
-                        border-bottom: 2px solid rgba(0, 112, 0, 0.452);
-                    }
-
-                    .submit {
-                        background: rgba(0, 112, 0, 0.295);
-                        border-bottom: 2px solid #36363625;
-                        text-transform: uppercase;
-                        cursor: pointer;
-                        transition: background 0.2s;
-                    }
-
-                    .submit:disabled {
-                        background: rgba(214, 1, 1, 0.164);
-                        text-decoration: line-through;
-                        cursor: default;
-                    }
-                }
-            }
-    
-            .blog {
-                display: flex;
-                flex-direction: column;
-                background: $shared_bg;
-                padding: 4px;
-                border-top: 2px solid white;
-
-                > div {
-                    background: white;
                     display: flex;
-                    padding: $paddings;
-                    border-bottom: 2px solid #3636363d;
-                    margin-bottom: 4px;
 
-                    div:last-child {
+                    >div {
                         flex: 1;
+                        color: #F1F1F1;
+                        text-shadow: 1px 1px #242424;
+                    }
+
+                    >div:last-child {
                         text-align: right;
                     }
                 }
-
-                div:last-child {
-                    margin: 0px;
-                }
-
-                .action {
-                    display: block;
-                    background: rgba(214, 1, 1, 0.164);
-                    text-transform: uppercase;
-                    text-align: center;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-
-    > div:nth-child(1) {
-        padding-right: 5px;
-    }
-    
-    > div:nth-child(2) {
-        padding-left: 5px;
-    }
-}
-
-.container2 {
-    justify-content: center;
-    align-items: center;
-    max-width: 350px;
-
-    >div {
-        padding: 0px;
-        margin: 0px;
-    }
-}
-
-.notifications {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    z-index: -99;
-    display: flex;
-    max-width: 700px;
-    width: 100%;
-
-    >div {
-        flex: 1;
-
-        >div {
-            border: 2px solid white;
-            flex: 1;
-            padding: 0px;
-            margin-top: 5px;
-    
-            .positive, .negative, .default {
-                background: rgba(6, 136, 6, 0.26);
-                border-bottom: 2px solid #00000010;
-                padding: $paddings;
-            }
         
-            .negative {
-                background: rgba(214, 1, 1, 0.171);
+                .blog {
+                    display: flex;
+                    flex-direction: column;
+                    background: $shared_bg;
+                    padding: 4px;
+                    border-top: 3px solid white;
+    
+                    .row {
+                        background: white;
+                        display: flex;
+                        padding: $paddings;
+                        border-bottom: 2px solid #3636363d;
+                        margin-bottom: 4px;
+    
+                        div:last-child {
+                            flex: 1;
+                            text-align: right;
+                        }
+                    }
+    
+                    .row:last-child {
+                        margin: 0px;
+                    }
+    
+                    .actions {
+                        padding: 0px;
+                        display: flex;
+                        
+                        >div {
+                            background: white;
+                            flex: 1;
+                            padding: $paddings;
+                            text-transform: uppercase;
+                            border-bottom: 2px solid #3636363d;
+                            text-align: center;
+                            cursor: pointer;
+                            margin-right: 4px;
+                        }
+    
+                        .remove, .dislike {
+                            background: rgba(214, 1, 1, 0.164);
+                        }
+    
+                        .update, .like {
+                            background: rgba(0, 112, 0, 0.212);
+                        }
+
+                        >div:last-child {
+                            margin: 0px;
+                        }
+                    }
+                }
             }
         }
-    }
-
-    >div:first-child {
-        margin: 10px;
-        margin-right: 20px;
     }
 }

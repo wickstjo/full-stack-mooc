@@ -20,13 +20,13 @@ const blogs = (state, action) => {
         // UPDATE EXISTING BLOG
         case 'update': {
 
-            // FIND THE OLD INDEX
+            // FIND INDEX
             const temp = [...state]
-            const index = temp.indexOf(action.target)
+            const target = temp.findIndex(foo => foo.id === action.id)
 
             // MERGE OLD AND NEW VALUES
-            temp[index] = {
-                ...temp[index],
+            temp[target] = {
+                ...temp[target],
                 ...action.mods
             }
             
@@ -35,10 +35,10 @@ const blogs = (state, action) => {
 
         // FALLBACK
         default: {
-            console.log('BLOG REDUCER ERROR.');
-            return state;
+            console.log('BLOG REDUCER ERROR.')
+            return state
         }
     }
 }
 
-export default blogs;
+export default blogs
