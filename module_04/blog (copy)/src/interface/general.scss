@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Open Sans';
-    src: url('./main.woff');
+    src: url('./media/main.woff');
 }
 
 *, body, h1, div, table, tr, td, input, li, button, span, form {
@@ -35,8 +35,16 @@ a:hover {
     flex-direction: column;
     height: 100vh;
 
-    #container {
+    .container {
+        flex: 1;
         overflow: auto;
-        padding: 10px;
+    
+        > div {
+            padding: 10px;
+            flex: 1;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 }

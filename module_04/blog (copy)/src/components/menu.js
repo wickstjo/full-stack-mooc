@@ -32,4 +32,4 @@ const Swapper = ({ actions, credentials }) => {
     }
 }
 
-export default Menu;
+export default Menu

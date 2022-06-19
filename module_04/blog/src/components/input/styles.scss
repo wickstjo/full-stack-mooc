@@ -1,0 +1,36 @@
+$paddings: 6px 8px;
+$spacings: 3px;
+
+input {
+    background: white;
+    padding: $paddings;
+    margin-bottom: $spacings;
+    border-bottom: 2px solid #3636363d;
+    transition: border 0.2s;
+    width: 100%;
+}
+
+input:focus {
+    border-bottom: 2px solid rgba(0, 112, 0, 0.452);
+}
+
+input:last-child {
+    margin: 0px;
+}
+
+#submit {
+    background: rgba(0, 112, 0, 0.295);
+    border-bottom: 2px solid #36363625;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: $paddings;
+    width: 100%;
+    margin-top: $spacings;
+}
+
+#submit:disabled {
+    background: rgba(214, 1, 1, 0.164);
+    text-decoration: line-through;
+    cursor: default;
+}

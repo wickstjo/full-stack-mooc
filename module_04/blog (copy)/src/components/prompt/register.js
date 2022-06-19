@@ -1,16 +1,14 @@
 import { useReducer } from 'react'
-import Form from '../input/form'
-import Field from '../input/field'
-import Button from '../input/button'
+import { Form, Field, Button } from '../input'
 import input_reducer from '../../reducers/input'
 
-const Create = ({ state }) => {
+const Register = ({ state }) => {
 
     // INPUT STATES
     const [input, set_input] = useReducer(input_reducer, {
-        title: '',
-        author: '',
-        url: '',
+        username: '',
+        name: '',
+        password: '',
     })
 
     // UPDATE INPUT FIELDS
@@ -23,7 +21,7 @@ const Create = ({ state }) => {
     }
 
     // TRIGGER FORM
-    const trigger = async (event) => {
+    const trigger = async(event) => {
         event.preventDefault()
         const success = await state.func(input)
 
@@ -36,38 +34,38 @@ const Create = ({ state }) => {
     }
 
     return (
-        <Form header={ 'Create blog' } func={ trigger }>
+        <Form header={ 'Register User' } func={ trigger }>
             <Field
-                label={ 'What is the title?' }
-                value={ input.title }
+                label={ 'What is your username?' }
+                value={ input.username }
                 func={
-                    event => update_input(event, 'title')
+                    event => update_input(event, 'username')
                 }
             />
             <Field
-                label={ 'Who is the author?' }
-                value={ input.author }
+                label={ 'What is your name?' }
+                value={ input.name }
                 func={
-                    event => update_input(event, 'author')
+                    event => update_input(event, 'name')
                 }
             />
             <Field
-                label={ 'What is the URL?' }
-                value={ input.url }
+                label={ 'What is your password?' }
+                value={ input.password }
+                type={ 'password' }
                 func={
-                    event => update_input(event, 'url')
+                    event => update_input(event, 'password')
                 }
             />
             <Button
-                label={ 'Create' }
+                label={ 'Register' }
                 required={[
-                    input.title,
-                    input.author,
-                    input.url
+                    input.username,
+                    input.password,
                 ]}
             />
         </Form>
     )
 }
 
-export default Create
+export default Register

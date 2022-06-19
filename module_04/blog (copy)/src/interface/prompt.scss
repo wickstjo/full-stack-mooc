@@ -1,5 +1,5 @@
 $paddings: 6px 8px;
-$spacings: 4px;
+$spacings: 3px;
 
 #prompt {
     background: rgba(0, 0, 0, 0.548);
@@ -19,13 +19,12 @@ $spacings: 4px;
         max-width: 500px;;
         transition: transform 0.2s;
         background: white;
-        padding: 3px;
+        padding: $spacings;
 
         .header {
-            font-size: 15px;
             text-transform: uppercase;
             background: #414141c5;
-            border-bottom: 2px solid #2c2c2c5e;
+            border-bottom: 2px solid #2c2c2c52;
             padding: 6px;
             padding-left: 10px;
             padding-right: 10px;
@@ -35,7 +34,7 @@ $spacings: 4px;
 
         #content {
             background: rgb(228, 228, 228);
-            margin-top: 3px;
+            margin-top: $spacings;
             padding: $spacings;
 
             > div, input {
@@ -51,23 +50,26 @@ $spacings: 4px;
                 border-bottom: 2px solid rgba(0, 112, 0, 0.452);
             }
 
-            .submit {
-                background: rgba(0, 112, 0, 0.295);
-                border-bottom: 2px solid #36363625;
-                text-transform: uppercase;
-                cursor: pointer;
-                transition: background 0.2s;
-            }
-
-            .submit:disabled {
-                background: rgba(214, 1, 1, 0.164);
-                text-decoration: line-through;
-                cursor: default;
-            }
-
             > div:last-child, input:last-child {
                 margin: 0px;
             }
+        }
+
+        .submit {
+            background: rgba(0, 112, 0, 0.295);
+            border-bottom: 2px solid #36363625;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: $paddings;
+            width: 100%;
+            margin-top: $spacings;
+        }
+
+        .submit:disabled {
+            background: rgba(214, 1, 1, 0.164);
+            text-decoration: line-through;
+            cursor: default;
         }
     
         // LOADING SCREEN -- https://loading.io/css/

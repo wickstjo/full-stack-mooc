@@ -1,12 +1,12 @@
-import '../interface/prompt.scss';
-import { useState, useEffect } from 'react';
-import Login from './prompt/login'
-import Register from './prompt/register'
-import Create from './prompt/create_blog'
-import Update from './prompt/update_blog'
+import './styles.scss'
+import { useState, useEffect } from 'react'
+import Login from './login'
+import Register from './register'
+import Create from './create_blog'
+import Update from './update_blog'
 
 const Prompt = ({ state, dispatch }) => {
-    
+
     // VISIBILITY STATE
     const [style, set_style] = useState({
         display: 'none'
@@ -19,7 +19,7 @@ const Prompt = ({ state, dispatch }) => {
         })
     }, [state])
 
-    // HIDE PROMPT COMPONENT
+    // HIDE PROMPT
     const hide_prompt = () => {
         dispatch({ type: 'hide' })
     }
@@ -35,9 +35,9 @@ const Prompt = ({ state, dispatch }) => {
         // OTHERWISE, RENDER PROMPT
         default: { return (
             <div id={ 'prompt' } style={ style }>
-                <div id={ 'inner' }>
-                    <Swapper state={ state } />
-                </div>
+                <Swapper
+                    state={ state }
+                />
                 <span
                     id={ 'close' }
                     onClick={ hide_prompt }
@@ -53,28 +53,27 @@ const Swapper = ({ state }) => {
 
         // LOGIN WINDOW
         case 'login': {
-            return <Login state={ state } />
+            return <Login state={ state } />
         }
 
         // REGISTER WINDOW
         case 'register': {
-            return <Register state={ state } />
+            return <Register state={ state } />
         }
 
         // CREATE NEW BLOG
         case 'create_blog': {
-            return <Create state={ state } />
+            return <Create state={ state } />
         }
 
         // CREATE NEW BLOG
         case 'update_blog': {
-            return <Update state={ state } />
+            return <Update state={ state } />
         }
 
         // OTHERWISE, RETURN NOTHING
         default: {
             console.log('UNKNOWN PROMPT WINDOW TYPE')
-            console.log(state)
             return null
         }
     }

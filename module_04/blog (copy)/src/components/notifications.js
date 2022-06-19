@@ -16,7 +16,7 @@ const Entry = ({ data }) => {
 
     // STYLE STATE
     const [style, set_style] = useState({})
-    
+
     // AFTER 2 SECONDS, HIDE NOTIFICATION WITH CSS
     useEffect(() => {
         setTimeout(() => {
@@ -35,4 +35,4 @@ const Entry = ({ data }) => {
     )
 }
 
-export default Notifications;
+export default Notifications

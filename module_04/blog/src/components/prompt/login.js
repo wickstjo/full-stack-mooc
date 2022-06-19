@@ -1,6 +1,8 @@
-import { useReducer } from 'react';
-import { Form, Field, Button } from '../input'
-import input_reducer from '../../reducers/input';
+import { useReducer } from 'react'
+import Form from '../input/form'
+import Field from '../input/field'
+import Button from '../input/button'
+import input_reducer from '../../reducers/input'
 
 const Login = ({ state }) => {
 

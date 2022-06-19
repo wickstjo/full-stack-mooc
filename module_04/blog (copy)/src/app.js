@@ -1,14 +1,12 @@
 import './interface/general.scss'
 import { useEffect, useState, useReducer, Fragment } from 'react'
-import * as blog_funcs from './funcs/blog'
-import * as user_funcs from './funcs/user'
+import { create_blog, fetch_all, remove_blog, like_blog, dislike_blog, update_blog } from './funcs/blog'
+import { login_user, create_user } from './funcs/user'
 
-// COMPONENT REDUCERS
 import notification_reducer from './reducers/notifications'
 import prompt_reducer from './reducers/prompt'
 import blog_reducer from './reducers/blogs'
 
-// MAIN COMPONENTS
 import Menu from './components/menu'
 import Notifications from './components/notifications'
 import Blogs from './components/blogs'
@@ -38,7 +36,7 @@ const App = () => {
         }
 
         // FETCH ALL BLOGS
-        blog_funcs.fetch_all().then(response => {
+        fetch_all().then(response => {
 
             // EVERYTHING WENT OK
             if (response.status === 200) {
@@ -111,7 +109,7 @@ const App = () => {
         remove: async (id) => {
 
             // ATTEMPT TO REMOVE THE BLOG
-            const response = await blog_funcs.remove(id, credentials.token)
+            const response = await remove_blog(id, credentials.token)
 
             // IF EVERYTHING WENT OK
             if (response.status === 204) {
@@ -151,7 +149,7 @@ const App = () => {
                     func: async (input, id) => {
 
                         // ATTEMPT TO LOGIN
-                        const response = await blog_funcs.update(input, id, credentials.token)
+                        const response = await update_blog(input, id, credentials.token)
 
                         // ALL OK -- TRANSITION TO USER PAGE
                         if (response.status === 200) {
@@ -191,7 +189,7 @@ const App = () => {
         like: async (id) => {
 
             // ATTEMPT TO LIKE
-            const response = await blog_funcs.like(id, credentials.token)
+            const response = await like_blog(id, credentials.token)
 
             // IF EVERYTHING WENT OK
             if (response.status === 200) {
@@ -228,7 +226,7 @@ const App = () => {
         dislike: async (id) => {
 
             // ATTEMPT TO LIKE
-            const response = await blog_funcs.dislike(id, credentials.token)
+            const response = await dislike_blog(id, credentials.token)
 
             // IF EVERYTHING WENT OK
             if (response.status === 200) {
@@ -274,7 +272,7 @@ const App = () => {
                     func: async (input) => {
 
                         // ATTEMPT TO LOGIN
-                        const response = await user_funcs.login(input)
+                        const response = await login_user(input)
 
                         // ALL OK -- TRANSITION TO USER PAGE
                         if (response.status === 200) {
@@ -340,7 +338,7 @@ const App = () => {
                         }
 
                         // ATTEMPT TO REGISTER
-                        const create_response = await user_funcs.create(profile)
+                        const create_response = await create_user(profile)
 
                         // ALL OK -- USER CREATED
                         if (create_response.status === 201) {
@@ -352,7 +350,7 @@ const App = () => {
                             })
 
                             // ATTEMPT TO LOGIN
-                            const login_response = await user_funcs.login({
+                            const login_response = await login_user({
                                 username: profile.username,
                                 password: profile.password,
                             })
@@ -408,7 +406,7 @@ const App = () => {
                     func: async (input) => {
 
                         // ATTEMPT TO CREATE THE BLOG
-                        const response = await blog_funcs.create(input, credentials.token)
+                        const response = await create_blog(input, credentials.token)
 
                         // IF EVERYTHING WENT OK
                         if (response.status === 201) {

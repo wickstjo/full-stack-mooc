@@ -14,18 +14,18 @@ const wrapper = async (query) => {
 }
 
 // CREATE NEW PERSON IN DB
-const create = async (params) => {
+const create_user = async (params) => {
     const query = axios.post(base_url, params)
     return wrapper(query)
 }
 
 // LOGIN EXISTING USER
-const login = async (params) => {
+const login_user = async (params) => {
     const query = axios.post(login_url, params)
     return wrapper(query)
 }
 
 export {
-    create,
-    login
+    create_user,
+    login_user
 }

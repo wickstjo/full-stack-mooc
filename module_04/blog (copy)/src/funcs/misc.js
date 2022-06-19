@@ -8,5 +8,5 @@ const throttle = (string, length) => {
 }
 
 export {
-    throttle,
+    throttle
 }

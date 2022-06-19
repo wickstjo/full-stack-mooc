@@ -1,3 +1,4 @@
+import '../interface/blog.scss'
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -5,7 +6,7 @@ const Blogs = ({ data, user, actions }) => {
 
     // LIST OF SORTED BLOGS
     const [sorted, set_sorted] = useState([])
-    
+
     // WHEN BLOG DATA CHANGES, SORT IT BY LIKES
     useEffect(() => {
         const temp = data.sort((a, b) => {
@@ -47,29 +48,27 @@ const Entry = ({ blog, user, actions }) => {
     return (
         <div className={ 'wrapper' } key={ blog.id }>
             <div className={ 'header' } onClick={ toggle }>
-                <div>{ blog.id } ({ blog.likes })</div>
+                <div>{ blog.title } ({ blog.likes })</div>
                 <div>{ style.display === 'none' ? 'show' : 'hide' }</div>
             </div>
-            <div className={ 'blog' } style={ style }>
-                <div className={ 'row' }>
-                    <div>Title:</div>
-                    <div>{  blog.title }</div>
-                </div>
-                <div className={ 'row' }>
-                    <div>Author:</div>
-                    <div>{ blog.author }</div>
-                </div>
-                <div className={ 'row' }>
-                    <div>URL:</div>
-                    <div><a href={ blog.url } target={ '_blank' } rel={ 'noreferrer' }>{ blog.url }</a></div>
-                </div>
-                <div className={ 'row' }>
-                    <div>Likes:</div>
-                    <div>{ blog.likes }</div>
-                </div>
-                <div className={ 'row' }>
-                    <div>Created by:</div>
-                    <div>{ blog.user.username }</div>
+            <div style={ style }>
+                <div className={ 'blog' }>
+                    <div className={ 'row' }>
+                        <div>Author:</div>
+                        <div>{ blog.author }</div>
+                    </div>
+                    <div className={ 'row' }>
+                        <div>URL:</div>
+                        <div><a href={ blog.url } target={ '_blank' } rel={ 'noreferrer' }>{ blog.url }</a></div>
+                    </div>
+                    <div className={ 'row' }>
+                        <div>Likes:</div>
+                        <div>{ blog.likes }</div>
+                    </div>
+                    <div className={ 'row' }>
+                        <div>Added by:</div>
+                        <div>{ blog.user.username }</div>
+                    </div>
                 </div>
                 <Actions
                     blog={ blog }
@@ -113,4 +112,4 @@ Blogs.propTypes = {
     actions: PropTypes.object.isRequired,
 }
 
-export default Blogs;
+export default Blogs

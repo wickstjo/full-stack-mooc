@@ -1,35 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-const Form = ({ header, func, children }) => { return (
-    <div id={ 'wrapper' }>
-        <div className={ 'header' }>{ header }</div>
-        <div id={ 'content' }>
-            <form onSubmit={ func }>{ children }</form>
-        </div>
-    </div>
-)}
-
-Form.propTypes = {
-    header: PropTypes.string.isRequired,
-    func: PropTypes.func.isRequired,
-}
-
-const Field = ({ label, type='text', value, func }) => { return (
-    <input
-        value={ value }
-        placeholder={ label }
-        onChange={ func }
-        type={ type }
-    />
-)}
-
-Field.propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    func: PropTypes.func.isRequired,
-}
-
 const Button = ({ label, required }) => {
 
     // ACTIVE STATUS
@@ -44,7 +15,7 @@ const Button = ({ label, required }) => {
         // TOGGLE RESULT IF AN EMPTY STRING IS FOUND
         for (let item of required) {
             if (item === '') {
-                result = true;
+                result = true
                 break
             }
         }
@@ -57,7 +28,7 @@ const Button = ({ label, required }) => {
         <input
             value={ label }
             type={ 'submit' }
-            className={ 'submit' }
+            id={ 'submit' }
             disabled={ status }
         />
     )
@@ -68,8 +39,4 @@ Button.propTypes = {
     required: PropTypes.array.isRequired,
 }
 
-export {
-    Form,
-    Field,
-    Button
-}
+export default Button

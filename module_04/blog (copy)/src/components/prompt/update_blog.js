@@ -1,16 +1,14 @@
 import { useReducer } from 'react'
-import Form from '../input/form'
-import Field from '../input/field'
-import Button from '../input/button'
+import { Form, Field, Button } from '../input'
 import input_reducer from '../../reducers/input'
 
-const Create = ({ state }) => {
+const Update = ({ state }) => {
 
-    // INPUT STATES
+    // INPUT STATES -- CLONE FROM PROVIDED STATE
     const [input, set_input] = useReducer(input_reducer, {
-        title: '',
-        author: '',
-        url: '',
+        title: state.blog.title,
+        author: state.blog.author,
+        url: state.blog.url
     })
 
     // UPDATE INPUT FIELDS
@@ -25,9 +23,8 @@ const Create = ({ state }) => {
     // TRIGGER FORM
     const trigger = async (event) => {
         event.preventDefault()
-        const success = await state.func(input)
+        const success = await state.func(input, state.blog.id)
 
-        // RESET FIELDS IF CHECKS PASS
         if (success) {
             set_input({
                 type: 'reset'
@@ -36,7 +33,7 @@ const Create = ({ state }) => {
     }
 
     return (
-        <Form header={ 'Create blog' } func={ trigger }>
+        <Form header={ 'Register User' } func={ trigger }>
             <Field
                 label={ 'What is the title?' }
                 value={ input.title }
@@ -59,7 +56,7 @@ const Create = ({ state }) => {
                 }
             />
             <Button
-                label={ 'Create' }
+                label={ 'Update' }
                 required={[
                     input.title,
                     input.author,
@@ -70,4 +67,4 @@ const Create = ({ state }) => {
     )
 }
 
-export default Create
+export default Update
