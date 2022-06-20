@@ -10,3 +10,6 @@
 # SECRETS
 *.env
 config.js
+
+# CYPRESS STUFF
+*videos

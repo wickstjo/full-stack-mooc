@@ -18,16 +18,16 @@ const Swapper = ({ actions, credentials }) => {
         // NOT AUTHENTICATED, SHOW LOGIN & REGISTER
         case undefined: { return (
             <Fragment>
-                <li onClick={ actions.login }>Login</li>
-                <li onClick={ actions.register }>Register</li>
+                <li id={ 'login' } onClick={ actions.login }>Login</li>
+                <li id={ 'register' } onClick={ actions.register }>Register</li>
             </Fragment>
         )}
 
         // OTHERWISE, SHOW USER OPTIONS
         default: { return (
             <Fragment>
-                <li onClick={ actions.create }>Create Blog</li>
-                <li onClick={ actions.logout }>Logout ({ credentials.username })</li>
+                <li id={ 'create' } onClick={ actions.create }>Create Blog</li>
+                <li id={ 'logout' } onClick={ actions.logout }>Logout ({ credentials.username })</li>
             </Fragment>
         )}
     }

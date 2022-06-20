@@ -12,15 +12,6 @@ const Login = ({ state }) => {
         password: '',
     })
 
-    // UPDATE INPUT FIELDS
-    const update_input = (event, target) => {
-        set_input({
-            type: 'update',
-            target: target,
-            payload: event.target.value
-        })
-    }
-
     // TRIGGER FORM
     const trigger = async (event) => {
         event.preventDefault()
@@ -35,21 +26,19 @@ const Login = ({ state }) => {
     }
 
     return (
-        <Form header={ 'Login user' } func={ trigger }>
+        <Form header={ 'login user' } func={ trigger }>
             <Field
                 label={ 'What is your username?' }
                 value={ input.username }
-                func={
-                    event => update_input(event, 'username')
-                }
+                target={ 'username' }
+                func={ set_input }
             />
             <Field
                 label={ 'What is your password?' }
                 value={ input.password }
                 type={ 'password' }
-                func={
-                    event => update_input(event, 'password')
-                }
+                target={ 'password' }
+                func={ set_input }
             />
             <Button
                 label={ 'Login' }

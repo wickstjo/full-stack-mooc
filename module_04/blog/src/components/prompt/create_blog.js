@@ -13,15 +13,6 @@ const Create = ({ state }) => {
         url: '',
     })
 
-    // UPDATE INPUT FIELDS
-    const update_input = (event, target) => {
-        set_input({
-            type: 'update',
-            target: target,
-            payload: event.target.value
-        })
-    }
-
     // TRIGGER FORM
     const trigger = async (event) => {
         event.preventDefault()
@@ -36,27 +27,24 @@ const Create = ({ state }) => {
     }
 
     return (
-        <Form header={ 'Create blog' } func={ trigger }>
+        <Form header={ 'create blog' } func={ trigger }>
             <Field
                 label={ 'What is the title?' }
                 value={ input.title }
-                func={
-                    event => update_input(event, 'title')
-                }
+                target={ 'title' }
+                func={ set_input }
             />
             <Field
                 label={ 'Who is the author?' }
                 value={ input.author }
-                func={
-                    event => update_input(event, 'author')
-                }
+                target={ 'author' }
+                func={ set_input }
             />
             <Field
                 label={ 'What is the URL?' }
                 value={ input.url }
-                func={
-                    event => update_input(event, 'url')
-                }
+                target={ 'url' }
+                func={ set_input }
             />
             <Button
                 label={ 'Create' }

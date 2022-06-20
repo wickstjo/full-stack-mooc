@@ -1,18 +1,18 @@
-import './interface/general.scss'
+import './styles.scss'
 import { useEffect, useState, useReducer, Fragment } from 'react'
-import * as blog_funcs from './funcs/blog'
-import * as user_funcs from './funcs/user'
+import * as blog_funcs from '../../funcs/blog'
+import * as user_funcs from '../../funcs/user'
 
 // COMPONENT REDUCERS
-import notification_reducer from './reducers/notifications'
-import prompt_reducer from './reducers/prompt'
-import blog_reducer from './reducers/blogs'
+import notification_reducer from '../../reducers/notifications'
+import prompt_reducer from '../../reducers/prompt'
+import blog_reducer from '../../reducers/blogs'
 
 // MAIN COMPONENTS
-import Menu from './components/menu'
-import Notifications from './components/notifications'
-import Blogs from './components/blogs'
-import Prompt from './components/prompt'
+import Menu from '../menu'
+import Notifications from '../notifications'
+import Blogs from '../blogs'
+import Prompt from '../prompt'
 
 const App = () => {
 

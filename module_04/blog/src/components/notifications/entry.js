@@ -15,7 +15,7 @@ const Entry = ({ data }) => {
     }, [])
 
     return (
-        <div className={ 'wrapper' } style={ style }>
+        <div className={ 'item' } style={ style }>
             <div id={ data.type }>
                 { data.message }
             </div>
