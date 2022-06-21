@@ -10,6 +10,7 @@ const log = require('./funcs/logger.js')
 const blog_router = require('./endpoints/blog_router.js')
 const user_router = require('./endpoints/user_router.js')
 const login_router = require('./endpoints/login_router.js')
+const testing_router = require('./endpoints/testing_router.js')
 
 // EXPRESS INSTANCE
 const app = express()
@@ -27,6 +28,7 @@ mongoose.connect(config.mongo.uri).then(() => {
     app.use('/api/blogs', middlewares.token_extractor, blog_router)
     app.use('/api/users', user_router)
     app.use('/api/login', login_router)
+    app.use('/api/testing', testing_router)
 
     // ERROR HANDLER MIDDLEWARE
     app.use(middlewares.unknown_endpoint)

@@ -1,38 +1,48 @@
-describe('Main menu', () => {
-
-    beforeEach(() => {
-        cy.visit('http://localhost:3000/')
+describe('Without user session', () => {
+    
+    // FIRST, INITIALIZE
+    before(() => {
+        cy.init()
     })
 
-    it('Login menu button is visible by default', () => {
+    it('Login menu button is visible', () => {
         cy.get('#menu #login').should('exist');
     })
-
-    it('Clicking the login menu button opens the login prompt', () => {
-        cy.get('#menu #login').click()
-
-        cy.get('#prompt').should('exist');
-        cy.get('#prompt #header').should('contain', 'login user');
-        cy.get('#prompt form input').should('have.length', 3)
-    })
-
-    it('Register menu button is not visible', () => {
+    
+    it('Register menu button is visible', () => {
         cy.get('#menu #register').should('exist');
     })
-
-    it('Clicking the register menu button opens the register prompt', () => {
-        cy.get('#menu #register').click()
-
-        cy.get('#prompt').should('exist');
-        cy.get('#prompt #header').should('contain', 'register user');
-        cy.get('#prompt form input').should('have.length', 4)
-    })
-
-    it('Logout menu button is not visible', () => {
+    
+    it('Logout menu button is hidden', () => {
         cy.get('#menu #logout').should('not.exist');
     })
 
-    it('Create blog menu button is not visible', () => {
+    it('Create blog menu button is hidden', () => {
         cy.get('#menu #create').should('not.exist');
+    })
+})
+
+describe('With user session', () => {
+    
+    // FIRST, INITIALIZE & AUTH
+    before(() => {
+        cy.init()
+        cy.register_and_login()
+    })
+
+    it('Login menu button is hidden', () => {
+        cy.get('#menu #login').should('not.exist');
+    })
+    
+    it('Register menu button is hidden', () => {
+        cy.get('#menu #register').should('not.exist');
+    })
+    
+    it('Logout menu button is visible', () => {
+        cy.get('#menu #logout').should('exist');
+    })
+
+    it('Create blog menu button is visible', () => {
+        cy.get('#menu #create').should('exist');
     })
 })
