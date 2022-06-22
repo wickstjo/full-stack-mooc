@@ -1,58 +1,18 @@
-import { populate_object } from './helper_funcs'
+import { populate_object } from "./helper_funcs";
 
-describe('Baseline page', () => {
-    
-    // FIRST, INITIALIZE
+// NUMBER OF BLOGS TO CREATE
+const n_blogs = 3;
+
+describe('Blog creation', () => {
+
+    // FIRST, REGISTER AND LOGIN USER
     before(() => {
         cy.init()
+        cy.register_and_login()
     })
 
     it('There are no blogs by default', () => {
         cy.get('.blog_wrapper').should('not.exist')
-    })
-
-    it('The create blog menu item does not exist without a user session', () => {
-        cy.get('.blog_wrapper').should('not.exist')
-    })
-})
-
-describe('Create blog prompt', () => {
-    
-    // FIRST, REGISTER AND LOGIN USER
-    before(() => {
-        cy.register_and_login()
-    })
-
-    it('Create blog menu item exists with user session', () => {
-        cy.get('#menu #create').should('exist')
-    })
-
-    it('Clicking it opens the prompt', () => {
-        cy.get('#prompt').should('not.exist')
-        cy.get('#menu #create').click()
-        cy.get('#prompt').should('exist')
-    })
-
-    it('Prompt has correct selectors', () => {
-        cy.get('#prompt #header').should('contain', 'create blog');
-        cy.get('#prompt #title').should('exist');
-        cy.get('#prompt #author').should('exist');
-        cy.get('#prompt #url').should('exist');
-    })
-
-    it('Prompt button is diabled by default', () => {
-        cy.get('#prompt #submit').should('be.disabled')
-    })
-})
-
-describe('Blog actions', () => {
-
-    // NUMBER OF BLOGS TO CREATE
-    const n_blogs = 3;
-
-    // FIRST, REGISTER AND LOGIN USER
-    before(() => {
-        cy.register_and_login()
     })
 
     it(`Creating ${ n_blogs } blog entries works correctly`, () => {
@@ -63,16 +23,19 @@ describe('Blog actions', () => {
             cy.get('.blog_wrapper #header').eq(x).click()
         }
     })
+})
+
+describe('Liking blogs', () => {
 
     it('Liking each blog once works correctly', () => {
         for (let x=0; x<n_blogs; x++) {
-            cy.like_blog(x)
+            cy.like_blog(x, 1)
         }
     })
 
     it('Disliking each blog once works correctly', () => {
         for (let x=0; x<n_blogs; x++) {
-            cy.dislike_blog(0)
+            cy.dislike_blog(0, 0)
         }
     })
 
@@ -101,9 +64,11 @@ describe('Blog actions', () => {
             cy.get('.blog_wrapper #blog #likes').eq(x).should('contain', (n_blogs-x))
         }
     })
+})
 
-    it('Removing blogs work correctly', () => {
-        for (let x=0; x<n_blogs; x++) {
+describe('Blog owner can', () => {
+    it('Remove existing blog entries', () => {
+        for (let x=0; x<(n_blogs-1); x++) {
 
             // REMOVE THE BLOG & CHECK NOTIFICATION
             cy.get('.blog_wrapper #actions #remove').eq(0).click()
@@ -111,6 +76,59 @@ describe('Blog actions', () => {
         }
 
         // VERIY THAT EVERYTHING WAS REMOVED
-        cy.get('.blog_wrapper').should('not.exist')
+        cy.get('.blog_wrapper').should('have.length', 1)
+    })
+
+    it('Update existing blog entry', () => {
+        cy.get('.blog_wrapper #actions #update').click()
+
+        // GENERATE NEW BLOG DETAILS
+        const modified = populate_object([
+            'title',
+            'author',
+            'url'
+        ], 15)
+        
+        cy.get('#prompt #title').clear().type(modified.title)
+        cy.get('#prompt #author').clear().type(modified.author)
+        cy.get('#prompt #url').clear().type(modified.url)
+        cy.get('#prompt #submit').click()
+
+        cy.get('.blog_wrapper #header').should('contain', modified.title)
+        cy.get('.blog_wrapper #blog #author').should('contain', modified.author)
+        cy.get('.blog_wrapper #blog #url').should('contain', modified.url)
+
+        cy.get('#notifications .item:last').should('contain', 'Blog successfully updated')
+    })
+})
+
+describe('For other users', () => {
+    before(() => {
+        cy.logout()
+        cy.register_and_login()
+    })
+
+    it('The remove blog button is hidden', () => {
+        cy.get('.blog_wrapper #actions #remove').should('not.exist')
+    })
+
+    it('The update blog button is hidden', () => {
+        cy.get('.blog_wrapper #actions #update').should('not.exist')
+    })
+
+    it('The like button is visible', () => {
+        cy.get('.blog_wrapper #actions #like').should('exist')
+    })
+
+    it('Can like the remaining blog', () => {
+        cy.like_blog(0, 2)
+    })
+
+    it('The dislike button is visible', () => {
+        cy.get('.blog_wrapper #actions #dislike').should('exist')
+    })
+
+    it('Can dislike the remaining blog', () => {
+        cy.dislike_blog(0, 1)
     })
 })

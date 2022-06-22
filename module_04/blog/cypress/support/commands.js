@@ -5,26 +5,49 @@ Cypress.Commands.add('init', () => {
     cy.visit(page_url)
 })
 
-// REGISTER NEW USER & AUTO LOGIN
-Cypress.Commands.add('register_and_login', () => {
-
-    // TOGO PAGE AND EXPECT BLOGS TO BE FETCHED
-    cy.visit(page_url)
-    cy.notification('Blogs fetched successfully.')
+// REGISTER NEW USER
+Cypress.Commands.add('register', (user) => {
     
     // OPEN REGISTER PROMPT
     cy.get('#menu #register').click()
-
-    // GENERATE CREDENTIALS
-    const user = populate_object([
-        'username',
-        'password'
-    ], 15)
 
     // TYPE IN CREDENTIALS & GO
     cy.get('#prompt #username').type(user.username)
     cy.get('#prompt #password').type(user.password)
     cy.get('#prompt #submit').click()
+})
+
+// REGISTER NEW USER & AUTO LOGIN
+Cypress.Commands.add('login', (user) => {
+
+    // OPEN REGISTER PROMPT
+    cy.get('#menu #login').click()
+        
+    // TYPE IN CREDENTIALS
+    cy.get('#prompt #username').type(user.username)
+    cy.get('#prompt #password').type(user.password)
+    cy.get('#prompt #submit').click()
+})
+
+Cypress.Commands.add('logout', () => {
+    cy.get('#menu #logout').click()
+    cy.notification('You have been successfully logged out.')
+})
+
+// FULL REGISTER SUITE SHORTHAND
+Cypress.Commands.add('register_and_login', (provided_user=false) => {
+    let user = provided_user
+
+    // GENERATE USER CREDENTIALS WHEN NONE WERE PROVIDED
+    if (!provided_user) {
+        user = populate_object([
+            'username',
+            'password'
+        ], 15)
+    }
+    
+    // ATTEMPT TO REGISTER USER
+    cy.register(user)
 
     // CHECK NOTIFICATIONS
     cy.notification('User successfully created!')
@@ -55,7 +78,7 @@ Cypress.Commands.add('create_blog', () => {
     cy.notification('The blog was successfully created')
 })
 
-Cypress.Commands.add('like_blog', (index) => {
+Cypress.Commands.add('like_blog', (index, value) => {
 
     // ANCHOR SELECTORS
     cy.get('.blog_wrapper #actions #like').eq(index).as('button')
@@ -63,13 +86,13 @@ Cypress.Commands.add('like_blog', (index) => {
 
     // CLICK THE LIKE BUTTON & READ THE NEW LIKES STATE
     cy.get('@button').click()
-    cy.get('@container').should('contain', 1)
+    cy.get('@container').should('contain', value)
 
     // CHECK NOTIFICATION
     cy.notification('Blog liked')
 })
 
-Cypress.Commands.add('dislike_blog', (index) => {
+Cypress.Commands.add('dislike_blog', (index, value) => {
 
     // ANCHOR SELECTORS
     cy.get('.blog_wrapper #actions #dislike').eq(index).as('button')
@@ -77,7 +100,7 @@ Cypress.Commands.add('dislike_blog', (index) => {
 
     // CLICK THE LIKE BUTTON & READ THE NEW LIKES STATE
     cy.get('@button').click()
-    cy.get('@container').should('contain', 0)
+    cy.get('@container').should('contain', value)
 
     // CHECK NOTIFICATION
     cy.notification('Blog disliked')
