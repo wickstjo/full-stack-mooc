@@ -1,0 +1,57 @@
+$paddings: 6px 8px;
+$spacings: 3px;
+
+#prompt {
+    background: rgba(0, 0, 0, 0.548);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+    transition: opacity 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+    #wrapper {
+        width: 80vw;
+        max-width: 500px;
+        transition: transform 0.2s;
+        background: white;
+        padding: $spacings;
+
+        #header {
+            text-transform: uppercase;
+            background: #414141c5;
+            border-bottom: 2px solid #2c2c2c52;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: #F1F1F1;
+            text-shadow: 1px 1px #242424;
+        }
+
+        #content {
+            background: rgb(228, 228, 228);
+            margin-top: $spacings;
+            padding: $spacings;
+        }
+    }
+ 
+    #close {
+       background: url('./close.png') center center no-repeat;
+       position: absolute;
+       bottom: 0px;
+       right: 0px;
+       height: 80px;
+       width: 80px;
+       opacity: 0.6;
+       transition: 0.3s;
+       cursor: pointer;
+    }
+ 
+    #close:hover {
+       opacity: 1;
+    }
+}
