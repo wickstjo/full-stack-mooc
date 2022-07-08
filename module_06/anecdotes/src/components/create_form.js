@@ -1,11 +1,14 @@
 import { Fragment, useReducer } from 'react';
-import { store } from '../reducers/anecdote_reducer'
+import { useDispatch } from 'react-redux'
 import input_reducer from '../reducers/input'
 
 import { Button, Field } from './inputs'
 import Header from './header'
 
 const Form = () => {
+
+    // REDUX DISPATCH
+    const dispatch = useDispatch()
 
     // FIELD STATES
     const [input, set_input] = useReducer(input_reducer, {
@@ -20,9 +23,15 @@ const Form = () => {
         if (input.anecdote !== '') {
 
             // CREATE ANECDOTE
-            store.dispatch({
-                type: 'create',
+            dispatch({
+                type: 'anecdotes/create',
                 anecdote: input.anecdote
+            })
+
+            // CREATE NOTIFICATION
+            dispatch({
+                type: 'notifications/create',
+                message: `Anecdote created: "${ input.anecdote }"`
             })
 
             // RESET INPUT STATES

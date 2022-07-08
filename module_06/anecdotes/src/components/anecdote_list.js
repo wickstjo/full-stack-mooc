@@ -1,47 +1,48 @@
-import { Fragment, useState, useEffect } from 'react'
-import { store } from '../reducers/anecdote_reducer'
+import { Fragment } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Header from './header'
 import { Button } from './inputs'
 
+
 const Anecdotes = () => {
 
-    // FETCH & SORT ANECDOTES FROM REDUX
-    const fetch_and_sort = () => {
-        const state = store.getState().sort((a, b) => b.votes - a.votes)
-        const sorted = state.sort((a, b) => b.votes - a.votes)
-        
-        return sorted
-    }
+    // REDUX STATE
+    const filter = useSelector(state => state.filter)
+    const state = useSelector(state => state.anecdotes)
+    const dispatch = useDispatch()
 
-    // LOCAL STATE
-    const [data, set_data] = useState([
-        ...fetch_and_sort()
-    ])
+    // FILTER & SORT
+    const filtered = [...state].filter(item => item.text.toLowerCase().includes(filter.value.toLowerCase()))
+    const sorted = filtered.sort((a, b) => b.votes - a.votes)
 
-    // WHEN ANECDOTATE STATE CHANGE, UPDATE
-    useEffect(() => {
-        store.subscribe(() => {
-            set_data([
-                ...fetch_and_sort()
-            ])
+    // VOTE FOR ANECDOTE
+    const vote_for = (item) => {
+
+        // REGISTER VOTE
+        dispatch({
+            type: 'anecdotes/vote',
+            id: item.id
         })
-    }, [])
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/create',
+            message: `Voted for: "${ item.text }"`
+        })
+    }
 
     return (
         <Fragment>
             <Header text={ 'Anecdotes' } />
-            { data.map((item, index) =>
-                <Fragment key={ `${ item.name }-${ index }` }>
+            { sorted.map(item =>
+                <Fragment key={ item.id }>
                     <div>{ item.text }</div>
                     <div>Has { item.votes } votes!</div>
                     <Button
-                        label={ 'Vote for' }
+                        label={ 'Vote' }
                         func={() => {
-                            store.dispatch({
-                                type: 'vote',
-                                id: index
-                            })
+                            vote_for(item)
                         }}
                     />
                     <br />
