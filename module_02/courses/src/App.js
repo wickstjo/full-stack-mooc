@@ -1,46 +1,51 @@
-import Course from './Course';
+import { useState, Fragment } from 'react';
 
 const App = () => {
-    const courses = [{
-        name: 'Half Stack application development',
-        id: 1,
-        parts: [{
-            name: 'Fundamentals of React',
-            exercises: 10,
-            id: 1
-        }, {
-            name: 'Using props to pass data',
-            exercises: 7,
-            id: 2
-        }, {
-            name: 'State of a component',
-            exercises: 14,
-            id: 3
-        }, {
-            name: 'Redux',
-            exercises: 11,
-            id: 4
-        }]
-    }, {
-        name: 'Node.js',
-        id: 2,
-        parts: [{
-            name: 'Routing',
-            exercises: 3,
-            id: 1
-        }, {
-            name: 'Middlewares',
-            exercises: 7,
-            id: 2
-        }]
-    }]
 
-    return courses.map(course =>
-        <Course
-            key={ course.id }
-            data={ course }
-        />
+    // COMPONENT DATA
+    const [local] = useState({
+        course: 'Half Stack application development',
+        exercises: [
+            ['Fundamentals of React', 10],
+            ['Using props to pass data', 7],
+            ['State of a component', 14]
+        ]
+    })
+
+    // CUMULATIVE EXERCISE POINTS
+    const cumulative = local.exercises.reduce(
+        (partial, row) => partial + row[1], 0
+    )
+  
+    return (
+        <Fragment>
+            <Header name={ local.course } />
+            <Content data={ local.exercises } />
+            <Total points={ cumulative } />
+        </Fragment>
     )
 }
 
-export default App;
+const Header = ({ name }) => { return (
+    <h1>{ name }</h1>
+)}
+
+const Content = ({ data }) => { return (
+    data.map(row =>
+        <Part
+            name={ row[0] }
+            points={ row[1] }
+            key={ row[0] }
+        />
+    )
+)}
+
+const Part = ({ name, points }) => { return (
+    <p>{ name } { points }</p>
+)}
+
+const Total = ({ points }) => { return (
+    <p>Number of exercises { points }</p>
+)}
+
+export default App
