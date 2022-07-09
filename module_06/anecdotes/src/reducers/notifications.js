@@ -6,7 +6,7 @@ const init_state = []
 // STATE ACTIONS
 const actions = {
 
-    // CREATE NEW ANECDOTE
+    // CREATE NOTIFICATION
     create (state, action) {
         state.push({
             message: action.message,
@@ -14,6 +14,11 @@ const actions = {
             id: Number((Math.random() * 100000000).toFixed(0))
         })
     },
+
+    // REMOVE NOTIFICATION
+    remove (state, action) {
+        return state.filter(item => item.id !== action.id)
+    }
 }
 
 // EXPORT SLICE REDUER

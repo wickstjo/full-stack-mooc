@@ -2,12 +2,12 @@
   "anecdotes": [
     {
       "text": "If it hurts, do it more often",
-      "votes": 4,
+      "votes": 21,
       "id": 65471789
     },
     {
       "text": "Premature optimization is the root of all evil.",
-      "votes": 1,
+      "votes": 5,
       "id": 6897019
     },
     {
@@ -17,23 +17,8 @@
     },
     {
       "text": "foo",
-      "votes": 0,
+      "votes": 4,
       "id": 56288476
-    },
-    {
-      "text": "foo",
-      "votes": 0,
-      "id": 46097915
-    },
-    {
-      "text": "bar",
-      "votes": 0,
-      "id": 45846280
-    },
-    {
-      "text": "biz",
-      "votes": 0,
-      "id": 59803272
     }
   ]
 }

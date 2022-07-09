@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import Header from './header'
 
-const Filter = () => {
+const Filter = ({ input }) => {
 
     // REDUX DISPATCH
-    const input = useSelector(state => state.filter)
     const dispatch = useDispatch()
 
     const set_input = (event) => {
@@ -28,4 +27,10 @@ const Filter = () => {
     )
 }
 
-export default Filter
+// REQUIRED PROPS
+const component_props = (state) => { return {
+    input: state.filter,
+}}
+
+// TRANSFORM & EXPORT
+export default connect(component_props)(Filter)

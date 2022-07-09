@@ -1,0 +1,96 @@
+// SHARED VARIABLES
+$shared_bg: rgb(228, 228, 228);
+$paddings: 6px 8px;
+$spacings: 3px;
+
+.blog_wrapper {
+    background: white;
+    padding: $spacings;
+    border: 1px solid rgba(0, 0, 0, 0.171);
+    margin-bottom: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    #header {
+        background: #414141c5;
+        border-bottom: 2px solid #2c2c2c5e;
+        padding: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        text-shadow: 1px 1px #242424;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+
+        >div {
+            color: #F1F1F1;
+        }
+
+        > div:first-child {
+            flex: 1;
+        }
+
+        >div:last-child {
+            text-align: right;
+            text-transform: uppercase;
+        }
+    }
+
+    #content {
+        display: flex;
+        flex-direction: column;
+
+        #blog {
+            background: $shared_bg;
+            padding: 4px;
+            border-top: $spacings solid white;
+
+            .row {
+                background: white;
+                display: flex;
+                padding: $paddings;
+                border-bottom: 2px solid #3636363d;
+                margin-bottom: 4px;
+
+                >div:last-child {
+                    text-align: right;
+                    flex: 1;
+                }
+            }
+
+            .row:last-child {
+                margin: 0px;
+            }
+        }
+
+        #actions {
+            padding: 0px;
+            display: flex;
+            padding-top: $spacings;
+            
+            .action {
+                background: white;
+                flex: 1;
+                padding: $paddings;
+                text-transform: uppercase;
+                border-bottom: 2px solid #3636363d;
+                text-align: center;
+                cursor: pointer;
+                margin-right: $spacings;
+            }
+
+            .action:last-child {
+                margin: 0px;
+            }
+
+            #remove, #dislike {
+                background: rgba(214, 1, 1, 0.164);
+            }
+
+            #update, #like {
+                background: rgba(0, 112, 0, 0.212);
+            }
+        }
+    }
+}

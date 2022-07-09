@@ -1,48 +1,54 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 
-const Notification = () => {
-
-    // REDUX STATE
-    const state = useSelector(state => state.notifications)
+const Notifications = ({ notifications }) => {
 
     // LOOP OUT EACH NOTIFICATION
-    return state.map(item =>
+    return notifications.map(item =>
         <Entry
             key={ item.id }
-            message={ item.message }
-            duration={ item.duration }
+            item={ item }
         />
     )
 }
 
-const Entry = ({ message, duration }) => {
+const Entry = ({ item }) => {
 
-    // IF NO DURATION WAS PASSED, DEFAULT TO 5 SECONDS
-    if (!duration) { duration = 5000 }
+    // ASSESS DURATION -- DEFAULT TO 5000 MS
+    const duration = item.duration ? item.duration : 5000
+
+    // REDUX DISPATCH
+    const dispatch = useDispatch()
 
     // STYLE STATE
-    const [style, set_style] = useState({
+    const [style] = useState({
         border: 'solid',
         padding: 10,
         borderWidth: 1,
         marginBottom: 5
     })
     
-    // AFTER 2 SECONDS, HIDE NOTIFICATION WITH CSS
+    // AUTO-REMOVE NOTIFICATION AFTER X MS
     useEffect(() => {
         setTimeout(() => {
-            set_style({
-                display: 'none'
+            dispatch({
+                type: 'notifications/remove',
+                id: item.id
             })
         }, duration)
-    }, [duration])
+    }, [dispatch, item.id, duration])
 
     return (
         <div style={ style }>
-            { message }
+            { item.message }
         </div>
     )
 }
 
-export default Notification
+// REQUIRED PROPS
+const component_props = (state) => { return {
+    notifications: state.notifications,
+}}
+
+// TRANSFORM & EXPORT
+export default connect(component_props)(Notifications)

@@ -1,19 +1,17 @@
 import { Fragment, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import axios from 'axios'
 
 import Header from './header'
 import { Button } from './inputs'
 
-const Anecdotes = () => {
+const Anecdotes = ({ anecdotes, filter }) => {
 
-    // REDUX STATE
-    const filter = useSelector(state => state.filter)
-    const state = useSelector(state => state.anecdotes)
+    // REDUX DISPATCH
     const dispatch = useDispatch()
 
     // FILTER & SORT ANECDOTES
-    const filtered = [...state].filter(item => item.text.toLowerCase().includes(filter.value.toLowerCase()))
+    const filtered = [...anecdotes].filter(item => item.text.toLowerCase().includes(filter.value.toLowerCase()))
     const sorted = filtered.sort((a, b) => b.votes - a.votes)
     
     // ON LOAD, FETCH ANECDOTES FROM DB
@@ -94,4 +92,11 @@ const Anecdotes = () => {
     )
 }
 
-export default Anecdotes
+// REQUIRED PROPS
+const component_props = (state) => { return {
+    filter: state.filter,
+    anecdotes: state.anecdotes,
+}}
+
+// TRANSFORM & EXPORT
+export default connect(component_props)(Anecdotes)
