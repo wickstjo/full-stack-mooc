@@ -37,7 +37,8 @@ const Anecdotes = () => {
             // CREATE NOTIFICATION
             dispatch({
                 type: 'notifications/create',
-                message: 'Anecdotes loaded from DB'
+                message: 'Anecdotes loaded from DB',
+                duration: 1000
             })
         })
     }, [dispatch])
@@ -45,16 +46,31 @@ const Anecdotes = () => {
     // VOTE FOR ANECDOTE
     const vote_for = (item) => {
 
-        // REGISTER VOTE
-        dispatch({
-            type: 'anecdotes/vote',
-            id: item.id
-        })
+        // CLONE AND MODIFY THE ITEM
+        const temp = {...item}
+        temp.votes += 1
 
-        // CREATE NOTIFICATION
-        dispatch({
-            type: 'notifications/create',
-            message: `Voted for: "${ item.text }"`
+        axios.put(`http://localhost:3001/anecdotes/${ item.id }`, temp).then(response => {
+            
+            // CATCH ERRORS
+            if (response.status !== 200) {
+                return dispatch({
+                    type: 'notifications/create',
+                    message: `Could not register your vote "${ response.status }"`
+                })
+            }
+
+            // OTHERWISE, UPDATE STATE
+            dispatch({
+                type: 'anecdotes/vote',
+                id: item.id
+            })
+    
+            // CREATE NOTIFICATION
+            dispatch({
+                type: 'notifications/create',
+                message: `Voted for: "${ item.text }"`
+            })
         })
     }
 

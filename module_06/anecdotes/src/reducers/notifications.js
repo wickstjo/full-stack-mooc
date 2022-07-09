@@ -10,6 +10,7 @@ const actions = {
     create (state, action) {
         state.push({
             message: action.message,
+            duration: action.duration,
             id: Number((Math.random() * 100000000).toFixed(0))
         })
     },

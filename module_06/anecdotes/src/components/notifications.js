@@ -6,15 +6,20 @@ const Notification = () => {
     // REDUX STATE
     const state = useSelector(state => state.notifications)
 
+    // LOOP OUT EACH NOTIFICATION
     return state.map(item =>
         <Entry
             key={ item.id }
             message={ item.message }
+            duration={ item.duration }
         />
     )
 }
 
-const Entry = ({ message }) => {
+const Entry = ({ message, duration }) => {
+
+    // IF NO DURATION WAS PASSED, DEFAULT TO 5 SECONDS
+    if (!duration) { duration = 5000 }
 
     // STYLE STATE
     const [style, set_style] = useState({
@@ -30,8 +35,8 @@ const Entry = ({ message }) => {
             set_style({
                 display: 'none'
             })
-        }, 5000)
-    }, [])
+        }, duration)
+    }, [duration])
 
     return (
         <div style={ style }>
