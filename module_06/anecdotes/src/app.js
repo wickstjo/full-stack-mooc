@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
-import Notifications from './notifications'
-import Anecdotes from './anecdote_list'
-import CreateForm from './create_form'
-import Filter from './filter'
+import Notifications from './components/notifications'
+import Anecdotes from './components/anecdote_list'
+import CreateForm from './components/create_form'
+import Filter from './components/filter'
 
 const App = () => { return (
     <Fragment>

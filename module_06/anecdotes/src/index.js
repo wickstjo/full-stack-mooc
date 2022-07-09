@@ -1,14 +1,14 @@
 import ReactDOM from 'react-dom/client'
-import App from './components/app'
+import App from './app'
 
 // REDUX
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 // REDUCERS
-import anecdotes from './reducers/anecdote_reducer'
-import notifications from './reducers/notification_reducer'
-import filter from './reducers/filter_reducer'
+import anecdotes from './reducers/anecdotes'
+import notifications from './reducers/notifications'
+import filter from './reducers/filter'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({

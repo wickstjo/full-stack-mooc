@@ -1,6 +1,7 @@
-import { Fragment, useReducer } from 'react';
+import { Fragment, useReducer } from 'react'
 import { useDispatch } from 'react-redux'
 import input_reducer from '../reducers/input'
+import axios from 'axios'
 
 import { Button, Field } from './inputs'
 import Header from './header'
@@ -16,22 +17,40 @@ const Form = () => {
     })
 
     // CREATE ANECDOTE
-    const create_anecdote = (event) => {
+    const create_anecdote = async (event) => {
         event.preventDefault()
         
         // IF THE INPUT IS VALID
         if (input.anecdote !== '') {
 
-            // CREATE ANECDOTE
+            // CREATE ANECDOTE BODY
+            const anecdote = {
+                text: input.anecdote,
+                votes: 0,
+                id: Number((Math.random() * 100000000).toFixed(0))
+            }
+
+            // CREATE THE ANECDOTE IN DB
+            const response = await axios.post('http://localhost:3001/anecdotes', anecdote)
+            
+            // IF SOMETHING WENT WRONG, CREATE ERROR
+            if (response.status !== 201) {
+                return dispatch({
+                    type: 'notifications/create',
+                    message: `Could not create anecdote (${ response.status })`
+                })
+            }
+
+            // OTHERWISE, PUSH ANECDOTE TO STATE
             dispatch({
                 type: 'anecdotes/create',
-                anecdote: input.anecdote
+                anecdote: anecdote
             })
 
             // CREATE NOTIFICATION
             dispatch({
                 type: 'notifications/create',
-                message: `Anecdote created: "${ input.anecdote }"`
+                message: `Anecdote created: "${ anecdote.text }"`
             })
 
             // RESET INPUT STATES

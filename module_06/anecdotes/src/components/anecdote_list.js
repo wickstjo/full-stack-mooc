@@ -1,9 +1,9 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
 
 import Header from './header'
 import { Button } from './inputs'
-
 
 const Anecdotes = () => {
 
@@ -12,9 +12,35 @@ const Anecdotes = () => {
     const state = useSelector(state => state.anecdotes)
     const dispatch = useDispatch()
 
-    // FILTER & SORT
+    // FILTER & SORT ANECDOTES
     const filtered = [...state].filter(item => item.text.toLowerCase().includes(filter.value.toLowerCase()))
     const sorted = filtered.sort((a, b) => b.votes - a.votes)
+    
+    // ON LOAD, FETCH ANECDOTES FROM DB
+    useEffect(() => {
+        axios.get('http://localhost:3001/anecdotes').then(response => {
+
+            // CATCH ERRORS
+            if (response.status !== 200) {
+                return dispatch({
+                    type: 'notifications/create',
+                    message: `Could not load anecdotes from DB (${ response.status })`
+                })
+            }
+
+            // OTHERWISE, LOAD IN DATASET
+            dispatch({
+                type: 'anecdotes/load',
+                dataset: response.data
+            })
+
+            // CREATE NOTIFICATION
+            dispatch({
+                type: 'notifications/create',
+                message: 'Anecdotes loaded from DB'
+            })
+        })
+    }, [dispatch])
 
     // VOTE FOR ANECDOTE
     const vote_for = (item) => {

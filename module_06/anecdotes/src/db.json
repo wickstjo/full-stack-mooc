@@ -1,0 +1,39 @@
+{
+  "anecdotes": [
+    {
+      "text": "If it hurts, do it more often",
+      "votes": 0,
+      "id": 65471789
+    },
+    {
+      "text": "Premature optimization is the root of all evil.",
+      "votes": 0,
+      "id": 6897019
+    },
+    {
+      "text": "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients",
+      "votes": 0,
+      "id": 32540446
+    },
+    {
+      "text": "foo",
+      "votes": 0,
+      "id": 56288476
+    },
+    {
+      "text": "foo",
+      "votes": 0,
+      "id": 46097915
+    },
+    {
+      "text": "bar",
+      "votes": 0,
+      "id": 45846280
+    },
+    {
+      "text": "biz",
+      "votes": 0,
+      "id": 59803272
+    }
+  ]
+}
