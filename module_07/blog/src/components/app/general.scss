@@ -20,13 +20,13 @@ body {
 }
 
 a:link, a:visited {
-    color: rgb(38, 103, 163);
+    color: rgb(21, 58, 92);
     text-decoration: none;
     transition: background 0.2s;
 }
 
 a:hover {
-    color: rgb(33, 77, 119);
+    color: rgb(104, 29, 29);
     background: #F1F1F1;
 }
 
@@ -35,7 +35,7 @@ a:hover {
     flex-direction: column;
     height: 100vh;
 
-    #content {
+    #innerbody {
         width: 100%;
         max-width: 500px;
         margin-left: auto;
@@ -47,4 +47,10 @@ a:hover {
         overflow: auto;
         padding: 10px;
     }
+}
+
+// PROMPT ACTIVE -- BLUR BACKGROUND
+.blurred {
+    filter: blur(4px);
+    transition: filter 0.1s;
 }

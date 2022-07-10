@@ -14,7 +14,7 @@ const Entry = ({ item }) => {
                 id: item.id,
             })
         }, item.duration)
-    }, [])
+    }, [dispatch, item.duration, item.id])
 
     return (
         <div className={ 'item' }>

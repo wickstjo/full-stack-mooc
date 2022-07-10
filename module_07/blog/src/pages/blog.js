@@ -1,28 +1,32 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { fetch_specific } from '../funcs/blog'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import * as blog_funcs from '../funcs/blog'
+import Wrapper from '../components/wrapper'
+import Actions from '../components/actions'
 
 const Blog = () => {
 
     // HOOKS
+    const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const params = useParams()
+    const navigator = useNavigate()
 
     // LOCAL STATE
-    const [blog, set_blog] = useState(undefined)
+    const [blog, set_blog] = useState(null)
 
     // ON LOAD, CHECK IF THE BLOG EXISTS
     useEffect(() => {
-        fetch_specific(params.id).then(response => {
+        blog_funcs.fetch_specific(params.id).then(response => {
 
             // CATCH ERRORS
             if (response.status !== 200) {
-                return response.data.errors.forEach(error => {
-                    dispatch({
-                        type: 'notifications/negative',
-                        message: error
-                    })
+                set_blog(undefined)
+
+                return dispatch({
+                    type: 'notifications/negative',
+                    message: response.data.errors
                 })
             }
 
@@ -35,51 +39,161 @@ const Blog = () => {
                 message: 'Blog found'
             })
         })
-    }, [])
+    }, [dispatch, params.id])
 
-    return (
-        <div id={ 'wrapper' }>
-            <div id={ 'header' }>Blog ({ params.id })</div>
-            <div id={ 'content' }>
-                <Swapper blog={ blog } />
-            </div>
-        </div>
-    )
-}
+    // REMOVE BLOG
+    const remove = async () => {
 
-// CONTENT SWAPPER
-const Swapper = ({ blog }) => {
+        // ATTEMPT TO REMOVE THE BLOG
+        const response = await blog_funcs.remove(params.id, auth.token)
+
+        // CATCH ERRORS
+        if (response.status !== 204) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Blog successfully removed'
+        })
+
+        // REDIRECT AWAY FROM PAGE
+        navigator('/blogs')
+    }
+
+    // UPDATE BLOG
+    const update = async (input) => {
+
+        // ATTEMPT TO LOGIN
+        const response = await blog_funcs.update(input, params.id, auth.token)
+
+        // CATCH ERRORS
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Blog updated'
+        })
+
+        console.log(blog)
+        
+        // UPDATE BLOG IN STATE
+        set_blog({
+            ...blog,
+            ...input
+        })
+        
+        console.log(blog)
+        // CLOSE THE PROMPT WINDOW
+        dispatch({ type: 'prompts/hide' })
+    }
+
+    // LIKE BLOG
+    const like = async () => {
+
+        // ATTEMPT TO REMOVE THE BLOG
+        const response = await blog_funcs.like(params.id, auth.token)
+
+        // CATCH ERRORS
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Liked blog'
+        })
+
+        // UPDATE BLOG IN STATE
+        set_blog({
+            ...blog,
+            likes: blog.likes + 1
+        })
+    }
+
+    // DISLIKE BLOG
+    const dislike = async () => {
+
+        // ATTEMPT TO REMOVE THE BLOG
+        const response = await blog_funcs.dislike(params.id, auth.token)
+
+        // CATCH ERRORS
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Disliked blog'
+        })
+
+        // UPDATE BLOG IN STATE
+        set_blog({
+            ...blog,
+            likes: blog.likes - 1
+        })
+    }
+
     switch (blog) {
 
-        // NO BLOG FOUND, RENDER ERROR
+        // NO DATA
+        case null: { return null }
+
+        // USER NOT FOUND
         case undefined: { return (
-            <div id={ 'blog' }>
-                <div className={ 'row' }>
-                    A blog with this ID does not exist.
-                </div>
-            </div>
+            <Wrapper header={ 'blog not found' }>
+                <div>A blog with this ID does not exist.</div> 
+            </Wrapper>
         )}
 
-        // OTHERWISE, RENDER NORMALLY
+        // USER FOUND
         default: { return (
-            <div id={ 'blog' }>
-                <div className={ 'row' }>
+            <Wrapper header={ 'blog found' }>
+                <div>
+                    <div>Title:</div>
+                    <div>{ blog.title }</div>
+                </div>
+                <div>
                     <div>Author:</div>
-                    <div id={ 'author' }>{ blog.author }</div>
+                    <div>{ blog.author }</div>
                 </div>
-                <div className={ 'row' }>
+                <div>
                     <div>URL:</div>
-                    <div><a href={ blog.url } target={ '_blank' } rel={ 'noreferrer' } id={ 'url' }>{ blog.url }</a></div>
+                    <div><a href={ blog.url } target={ '_blank' } rel={ 'noreferrer' }>{ blog.url }</a></div>
                 </div>
-                <div className={ 'row' }>
+                <div>
                     <div>Likes:</div>
-                    <div id={ 'likes' }>{ blog.likes }</div>
+                    <div>{ blog.likes }</div>
                 </div>
-                <div className={ 'row' }>
-                    <div>Added by:</div>
-                    <div id={ 'added_by' }>{ blog.user.username }</div>
+                <div>
+                    <div>Added By:</div>
+                    <div><Link to={ `/users/${ blog.user.id }` }>{ blog.user.username }</Link></div>
                 </div>
-            </div>
+                <Actions
+                    blog={ blog }
+                    actions={{
+                        like, dislike, update, remove
+                    }}
+                />
+            </Wrapper>
         )}
     }
 }

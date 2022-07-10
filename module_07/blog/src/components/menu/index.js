@@ -1,4 +1,4 @@
-import './styles.scss'
+import './menu.scss'
 import { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Item, Trigger } from './items'
@@ -26,9 +26,18 @@ const Swapper = () => {
     const { auth } = useSelector(state => state)
     const dispatch = useDispatch()
 
+    // LOGOUT USER
     const logout = () => {
+
+        // TERMINATE SESSION
         dispatch({
             type: 'auth/logout'
+        })
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Session terminated successfully'
         })
     }
 
@@ -38,13 +47,21 @@ const Swapper = () => {
         // NO SESSION, SHOW LOGIN & REGISTER
         case false: { return (
             <Fragment>
-                <Item
+                <Trigger
                     label={ 'Login' }
-                    target={ 'login' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/login'
+                        })
+                    }}
                 />
-                <Item
+                <Trigger
                     label={ 'Register' }
-                    target={ 'register' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/register'
+                        })
+                    }}
                 />
             </Fragment>
         )}
@@ -52,9 +69,13 @@ const Swapper = () => {
         // OTHERWISE, SHOW USER OPTIONS
         default: { return (
             <Fragment>
-                <Item
+                <Trigger
                     label={ 'Create Blog' }
-                    target={ 'create' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/create'
+                        })
+                    }}
                 />
                 <Trigger
                     label={ 'Logout' }

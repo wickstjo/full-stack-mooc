@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { fetch_specific } from '../funcs/user'
+import Wrapper from '../components/wrapper'
 
 const User = () => {
 
@@ -10,7 +11,7 @@ const User = () => {
     const params = useParams()
 
     // LOCAL STATE
-    const [user, set_user] = useState(undefined)
+    const [user, set_user] = useState(null)
 
     // ON LOAD, CHECK IF THE BLOG EXISTS
     useEffect(() => {
@@ -18,11 +19,11 @@ const User = () => {
 
             // CATCH ERRORS
             if (response.status !== 200) {
-                return response.data.errors.forEach(error => {
-                    dispatch({
-                        type: 'notifications/negative',
-                        message: error
-                    })
+                set_user(undefined)
+                
+                return dispatch({
+                    type: 'notifications/negative',
+                    message: response.data.errors
                 })
             }
 
@@ -35,52 +36,48 @@ const User = () => {
                 message: 'User found'
             })
         })
-    }, [])
+    }, [dispatch, params.id])
 
-    return (
-        <div id={ 'wrapper' }>
-            <div id={ 'header' }>User ({ params.id })</div>
-            <div id={ 'content' }>
-                <Swapper user={ user } />
-            </div>
-        </div>
-    )
-}
-
-// CONTENT SWAPPER
-const Swapper = ({ user }) => {
     switch (user) {
 
-        // NO BLOG FOUND, RENDER ERROR
+        // NO DATA
+        case null: { return null }
+
+        // USER NOT FOUND
         case undefined: { return (
-            <div id={ 'blog' }>
-                <div className={ 'row' }>
-                    A user with this ID does not exist.
-                </div>
-            </div>
+            <Wrapper header={ 'user not found' }>
+                <div>A user with this ID does not exist.</div> 
+            </Wrapper>
         )}
 
-        // OTHERWISE, RENDER NORMALLY
+        // USER FOUND
         default: { return (
-            <div id={ 'blog' }>
-                TODO: TRUE USER HERE
-                {/* <div className={ 'row' }>
-                    <div>Author:</div>
-                    <div id={ 'author' }>{ blog.author }</div>
-                </div>
-                <div className={ 'row' }>
-                    <div>URL:</div>
-                    <div><a href={ blog.url } target={ '_blank' } rel={ 'noreferrer' } id={ 'url' }>{ blog.url }</a></div>
-                </div>
-                <div className={ 'row' }>
-                    <div>Likes:</div>
-                    <div id={ 'likes' }>{ blog.likes }</div>
-                </div>
-                <div className={ 'row' }>
-                    <div>Added by:</div>
-                    <div id={ 'added_by' }>{ blog.user.username }</div>
-                </div> */}
-            </div>
+            <Fragment>
+                <Wrapper header={ 'user found' }>
+                    <div>
+                        <div>Username:</div>
+                        <div>{ user.username }</div>
+                    </div>
+                    { user.name ?
+                        <div>
+                            <div>Name:</div>
+                            <div>{ user.name }</div>
+                        </div>
+                    : null }
+                </Wrapper>
+                <Wrapper header={ 'added blogs' }>
+                    { user.blogs.length === 0 ?
+                        <div>No blogs found.</div>
+                    :
+                        user.blogs.map((item, index) =>
+                            <div key={ index }>
+                                <div><Link to={ `/blogs/${ item.id }` }>{ item.title }</Link></div>
+                                <div>{ item.likes } Likes</div>
+                            </div>
+                        )
+                    }
+                </Wrapper>
+            </Fragment>
         )}
     }
 }

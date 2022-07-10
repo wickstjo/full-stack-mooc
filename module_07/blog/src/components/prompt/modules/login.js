@@ -1,11 +1,12 @@
-import './styles.scss'
 import { useReducer } from 'react'
 import { useDispatch } from 'react-redux'
-import reducer from '../reducers/input'
 
-import Form from '../components/input/form'
-import Field from '../components/input/field'
-import Button from '../components/input/button'
+import Form from '../../input/form'
+import Field from '../../input/field'
+import Button from '../../input/button'
+import reducer from '../../input/reducer'
+
+import * as user_funcs from '../../../funcs/user'
 
 const Login = () => {
 
@@ -18,23 +19,36 @@ const Login = () => {
         password: '',
     })
 
-    // TRIGGER FORM
+    // LOGIN USER
     const trigger = async(event) => {
         event.preventDefault()
 
+        // ATTEMPT TO LOGIN
+        const response = await user_funcs.login(input)
+
+        // CATCH ERRORS
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // OTHERWISE, SAVE CREDENTIALS IN STATE
         dispatch({
-            type: 'notifications/positive',
-            message: 'login trigger',
+            type: 'auth/login',
+            credentials: response.data
         })
 
-        // const success = await state.func(input)
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Successfully logged in',
+        })
 
-        // // RESET FIELDS IF CHECKS PASS
-        // if (success) {
-        //     set_input({
-        //         type: 'reset'
-        //     })
-        // }
+        // RESET FIELDS & HIDE PROMPT
+        dispatch({ type: 'prompts/hide' })
+        set_input({ type: 'reset' })
     }
 
     return (

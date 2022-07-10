@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const Form = ({ header, func, children }) => {
+const Wrapper = ({ header, children }) => {
 
     const [local, set_local] = useState({
         opacity: 0
@@ -9,7 +9,7 @@ const Form = ({ header, func, children }) => {
     useEffect(() => {
         set_local({
             opacity: 0,
-            transform: 'translate(0px, -15px)'
+            transform: 'translate(0px, 10px)'
         })
         
         setTimeout(() => {
@@ -19,20 +19,15 @@ const Form = ({ header, func, children }) => {
             })
         }, 100)
     }, [])
-
-    // SEPARATE INPUTS FROM BUTTON
-    const inputs = [ ...children ]
-    const button = inputs.pop()
-
+    
     return (
         <div id={ 'wrapper' } style={ local }>
             <div id={ 'header' }>{ header }</div>
-            <form onSubmit={ func }>
-                <div id={ 'content' }>{ inputs }</div>
-                { button }
-            </form>
+            <div id={ 'content' }>
+                { children }
+            </div>
         </div>
     )
 }
 
-export default Form
+export default Wrapper

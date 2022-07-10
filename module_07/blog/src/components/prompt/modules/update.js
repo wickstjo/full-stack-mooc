@@ -1,33 +1,31 @@
 import { useReducer } from 'react'
-import Form from '../input/form'
-import Field from '../input/field'
-import Button from '../input/button'
-import input_reducer from '../../reducers/input'
+import { useSelector } from 'react-redux'
 
-const Create = ({ state }) => {
+import Form from '../../input/form'
+import Field from '../../input/field'
+import Button from '../../input/button'
+import reducer from '../../input/reducer'
 
-    // INPUT STATES
-    const [input, set_input] = useReducer(input_reducer, {
-        title: '',
-        author: '',
-        url: '',
+const Update = () => {
+
+    // REDUX HOOKS
+    const prompt = useSelector(state => state.prompts)
+
+    // INPUT STATES -- CLONE FROM PROVIDED STATE
+    const [input, set_input] = useReducer(reducer, {
+        title: prompt.blog.title,
+        author: prompt.blog.author,
+        url: prompt.blog.url
     })
 
     // TRIGGER FORM
-    const trigger = async (event) => {
+    const trigger = async(event) => {
         event.preventDefault()
-        const success = await state.func(input)
-
-        // RESET FIELDS IF CHECKS PASS
-        if (success) {
-            set_input({
-                type: 'reset'
-            })
-        }
+        prompt.callback(input)
     }
 
     return (
-        <Form header={ 'create blog' } func={ trigger }>
+        <Form header={ 'update blog' } func={ trigger }>
             <Field
                 label={ 'What is the title?' }
                 value={ input.title }
@@ -47,7 +45,7 @@ const Create = ({ state }) => {
                 func={ set_input }
             />
             <Button
-                label={ 'Create' }
+                label={ 'Update' }
                 required={[
                     input.title,
                     input.author,
@@ -58,4 +56,4 @@ const Create = ({ state }) => {
     )
 }
 
-export default Create
+export default Update

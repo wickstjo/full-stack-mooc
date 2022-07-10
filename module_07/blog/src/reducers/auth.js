@@ -7,11 +7,36 @@ const init_state = {
     token: undefined
 }
 
+// LOCALSTORAGE KEY
+const storage_key = 'ASDFASD'
+
 // STATE ACTIONS
 const actions = {
 
-    // CREATE SESSION
-    create (state, action) {
+    // CHECK LOCALSTORAGE
+    check (state) {
+
+        // CHECK STORAGE CONTENT
+        const content = localStorage.getItem(storage_key)
+
+        // IF SOMETHING WAS FOUND
+        if (content) {
+            return {
+                ...JSON.parse(content),
+                session: true
+            }
+        }
+
+        return state
+    },
+
+    // START SESSION
+    login (state, action) {
+
+        // SAVE CREDENTIALS IN LOCALSTORAGE
+        const stringified = JSON.stringify(action.credentials)
+        localStorage.setItem(storage_key, stringified)
+
         return {
             ...action.credentials,
             session: true
@@ -20,6 +45,7 @@ const actions = {
 
     // TERMINATE SESSION
     logout () {
+        localStorage.clear()
         return init_state
     },
 }

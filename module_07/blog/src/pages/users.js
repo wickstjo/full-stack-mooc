@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { fetch_all } from '../funcs/user'
+import { Link } from 'react-router-dom'
+import Wrapper from '../components/wrapper'
 
 const Users = () => {
 
@@ -8,7 +10,7 @@ const Users = () => {
     const dispatch = useDispatch()
 
     // LOCAL STATE
-    const [users, set_users] = useState([])
+    const [data, set_data] = useState(null)
 
     // ON LOAD, ATTEMPT TO FETCH BLOGS
     useEffect(() => {
@@ -23,7 +25,7 @@ const Users = () => {
             }
 
             // OTHERWISE, PUSH RESULT TO STATE
-            set_users(response.data)
+            set_data(response.data)
 
             // CREATE NOTIFICATION
             dispatch({
@@ -31,38 +33,36 @@ const Users = () => {
                 message: 'Users fetched from DB'
             })
         })
-    }, [])
+    }, [dispatch])
 
-    return (
-        <div id={ 'wrapper' }>
-            <div id={ 'header' }>Users</div>
-            <div id={ 'content' }>
-                <Swapper users={ users } />
-            </div>
-        </div>
-    )
-}
+    switch (data) {
 
-const Swapper = ({ users }) => {
-    switch (users.length) {
+        // NO DATA
+        case null: { return null }
 
-        case 0: { return (
-            <div id={ 'blog' }>
-                <div className={ 'row' }>
-                    No users found.
-                </div>
-            </div>
-        )}
+        // ARRAY FOUND
+        default: {
+            switch (data.length) {
 
-        default: { 
-            return users.map(blog =>
-                <div id={ 'blog' }>
-                    <div className={ 'row' }>
-                        <div>{ blog.title }</div>
-                        <div>{ blog.likes } Likes</div>
-                    </div>
-                </div>
-            )
+                // NO USERS FOUND
+                case 0: { return (
+                    <Wrapper header={ 'users' }>
+                        <div>No users exist.</div> 
+                    </Wrapper>
+                )}
+
+                // LIST USERS
+                default: { return (
+                    <Wrapper header={ `users (${ data.length })` }>
+                        { data.map((user, index) =>
+                            <div className={ 'row' } key={ index }>
+                                <div><Link to={ user.id }>{ user.username }</Link></div>
+                                <div>{ user.blogs.length } Blogs</div>
+                            </div>
+                        )}
+                    </Wrapper>
+                )}
+            }
         }
     }
 }

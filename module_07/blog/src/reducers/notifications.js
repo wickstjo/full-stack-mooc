@@ -19,12 +19,30 @@ const actions = {
 
     // CREATE NEGATIVE NOTIFICATION
     negative (state, action) {
-        state.push({
-            message: action.message,
-            kind: 'negative',
-            duration: action.duration ? action.duration : default_duration,
-            id: Number((Math.random() * 100000000).toFixed(0))
-        })
+        switch (typeof(action.message)) {
+
+            // SINGLE MESSAGE
+            case 'string': {
+                state.push({
+                    message: action.message,
+                    kind: 'negative',
+                    duration: action.duration ? action.duration : default_duration,
+                    id: Number((Math.random() * 100000000).toFixed(0))
+                })
+            }
+
+            // ARRAY OF MESSAGES
+            case 'object': {
+                action.message.forEach(msg => {
+                    state.push({
+                        message: msg,
+                        kind: 'negative',
+                        duration: action.duration ? action.duration : default_duration,
+                        id: Number((Math.random() * 100000000).toFixed(0))
+                    })
+                })
+            }
+        }
     },
     
     // REMOVE NOTIFICATION

@@ -7,16 +7,19 @@ import { configureStore } from '@reduxjs/toolkit'
 
 // REDUCERS
 import notifications from './reducers/notifications'
-import prompts from './reducers/prompts'
 import auth from './reducers/auth'
+import prompts from './reducers/prompts'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
     reducer: {
         notifications,
+        auth,
         prompts,
-        auth
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    }),
 })
 
 // CREATE PROVIDER

@@ -6,9 +6,34 @@ const init_state = null
 // STATE ACTIONS
 const actions = {
 
-    // SHOW PROMPT
-    show (state, action) {
-        return action.payload
+    // CREATE BLOG PROMPT
+    create () {
+        return {
+            window: 'create'
+        }
+    },
+
+    // UPDATE BLOG PROMPT
+    update (state, actions) {
+        return {
+            window: 'update',
+            blog: actions.blog,
+            callback: actions.callback,
+        }
+    },
+
+    // LOGIN PROMPT
+    login () {
+        return {
+            window: 'login'
+        }
+    },
+
+    // REGISTER PROMPT
+    register () {
+        return {
+            window: 'register'
+        }
     },
 
     // HIDE PROMPT

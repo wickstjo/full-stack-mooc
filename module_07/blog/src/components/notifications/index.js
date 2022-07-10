@@ -1,4 +1,4 @@
-import './styles.scss'
+import './notifications.scss'
 import { useSelector } from 'react-redux'
 import Entry from './entry'
 

@@ -1,8 +1,11 @@
-import './styles.scss'
+import './prompt.scss'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Update from './update_blog'
+import Update from './modules/update'
+import Create from './modules/create'
+import Login from './modules/login'
+import Register from './modules/register'
 
 const Prompt = () => {
 
@@ -12,13 +15,13 @@ const Prompt = () => {
 
     // VISIBILITY STATE
     const [style, set_style] = useState({
-        display: 'none'
+        display: 'none',
     })
 
     // WHEN THE STATE CHANGES, EVALUATE VISIBILITY
     useEffect(() => {
         set_style({
-            display: state ? 'flex' : 'none'
+            display: state ? 'flex' : 'none',
         })
     }, [state])
 
@@ -39,7 +42,7 @@ const Prompt = () => {
                 <span
                     id={ 'close' }
                     onClick={() => {
-                        dispatch({ type: 'hide' })
+                        dispatch({ type: 'prompts/hide' })
                     }}
                 />
             </div>
@@ -47,15 +50,18 @@ const Prompt = () => {
     }
 }
 
-// CONTENT SWAPPER
+// LOAD IN CORRECT MODULE
 const Swapper = ({ state }) => {
     switch (state.window) {
 
-        // CREATE NEW BLOG
-        case 'update_blog': {
-            return <Update />
-        }
+        // BLOG ACTIONS
+        case 'create': { return <Create /> }
+        case 'update': { return <Update /> }
 
+        // AUTH ACTIONS
+        case 'login': { return <Login /> }
+        case 'register': { return <Register /> }
+        
         // OTHERWISE, RETURN NOTHING
         default: {
             console.log('UNKNOWN PROMPT WINDOW TYPE')

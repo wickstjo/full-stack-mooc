@@ -1,7 +1,11 @@
+import Wrapper from '../components/wrapper'
+
 const ErrorPage = () => { return (
-    <div>
-        Error
-    </div>
+    <Wrapper header={ 'Error' }>
+        <div>
+            This page does not exist.
+        </div>
+    </Wrapper>
 )}
 
 export default ErrorPage

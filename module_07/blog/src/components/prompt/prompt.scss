@@ -1,6 +1,3 @@
-$paddings: 6px 8px;
-$spacings: 3px;
-
 #prompt {
     background: rgba(0, 0, 0, 0.548);
     position: absolute;
@@ -9,7 +6,6 @@ $spacings: 3px;
     height: 100%;
     width: 100%;
     z-index: 99;
-    transition: opacity 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,9 +13,9 @@ $spacings: 3px;
     #wrapper {
         width: 80vw;
         max-width: 500px;
-        transition: transform 0.2s;
+        transition: transform 0.1s, opacity 0.1s;
         background: white;
-        padding: $spacings;
+        padding: 3px;
 
         #header {
             text-transform: uppercase;
@@ -34,8 +30,41 @@ $spacings: 3px;
 
         #content {
             background: rgb(228, 228, 228);
-            margin-top: $spacings;
-            padding: $spacings;
+            margin-top: 3px;
+            padding: 4px;
+        }
+
+        input {
+            background: white;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-bottom: 2px solid #3636363d;
+            transition: border 0.2s;
+            width: 100%;
+        }
+        
+        input:focus {
+            border-bottom: 2px solid rgba(0, 112, 0, 0.452);
+        }
+        
+        input:last-child {
+            margin: 0px;
+        }
+        
+        #submit {
+            background: rgba(0, 112, 0, 0.295);
+            border-bottom: 2px solid #36363625;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: 4px;
+            width: 100%;
+            margin-top: 3px;
+        }
+        
+        #submit:disabled {
+            background: rgba(214, 1, 1, 0.164);
+            cursor: default;
         }
     }
  
