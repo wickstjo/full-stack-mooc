@@ -1,10 +1,5 @@
-import { useReducer } from 'react'
 import { useDispatch } from 'react-redux'
-
-import Form from '../../input/form'
-import Field from '../../input/field'
-import Button from '../../input/button'
-import reducer from '../../input/reducer'
+import { Form, useField } from '../../inputs'
 
 import * as user_funcs from '../../../funcs/user'
 
@@ -13,26 +8,34 @@ const Register = () => {
     // REDUX DISPATCH
     const dispatch = useDispatch()
 
-    // INPUT STATES
-    const [input, set_input] = useReducer(reducer, {
-        username: '',
-        name: '',
-        password: '',
+    // USERNAME FIELD
+    const username = useField({
+        placeholder: 'What is your username?'
+    })
+
+    // NAME FIELD
+    const name = useField({
+        placeholder: 'What is your name?'
+    })
+
+    // PASSWORD FIELD
+    const password = useField({
+        placeholder: 'What is your username?',
+        type: 'password'
     })
 
     // REGISTER USER
-    const trigger = async(event) => {
-        event.preventDefault()
+    const trigger = async() => {
         
         // DEFAULT USER PROFILE
         const profile = {
-            username: input.username,
-            password: input.password
+            username: username.value,
+            password: password.value
         }
 
         // IF DEFINED, PUSH NAME TO PROFILE
-        if (input.name !== '') {
-            profile.name = input.name
+        if (name.value !== '') {
+            profile.name = name.value
         }
 
         // ATTEMPT TO REGISTER
@@ -67,7 +70,6 @@ const Register = () => {
 
             // RESET FIELDS & HIDE PROMPT
             dispatch({ type: 'prompts/hide' })
-            set_input({ type: 'reset' })
 
             return
         }
@@ -84,40 +86,20 @@ const Register = () => {
             message: 'Successfully logged in',
         })
 
-        // RESET FIELDS & HIDE PROMPT
+        // HIDE PROMPT
         dispatch({ type: 'prompts/hide' })
-        set_input({ type: 'reset' })
     }
 
     return (
-        <Form header={ 'register user' } func={ trigger }>
-            <Field
-                label={ 'What is your username?' }
-                value={ input.username }
-                target={ 'username' }
-                func={ set_input }
-            />
-            <Field
-                label={ 'What is your name?' }
-                value={ input.name }
-                target={ 'name' }
-                func={ set_input }
-            />
-            <Field
-                label={ 'What is your password?' }
-                value={ input.password }
-                type={ 'password' }
-                target={ 'password' }
-                func={ set_input }
-            />
-            <Button
-                label={ 'Register' }
-                required={[
-                    input.username,
-                    input.password,
-                ]}
-            />
-        </Form>
+        <Form
+            header={ 'register user' }
+            func={ trigger }
+            fields={[ username, name, password ]}
+            button={{
+                label: 'register',
+                required: [ username, password ]
+            }}
+        />
     )
 }
 

@@ -1,11 +1,6 @@
-import { useReducer } from 'react'
 import { useDispatch } from 'react-redux'
 
-import Form from '../../input/form'
-import Field from '../../input/field'
-import Button from '../../input/button'
-import reducer from '../../input/reducer'
-
+import { Form, useField } from '../../inputs'
 import * as user_funcs from '../../../funcs/user'
 
 const Login = () => {
@@ -13,18 +8,25 @@ const Login = () => {
     // REDUX DISPATCH
     const dispatch = useDispatch()
 
-    // INPUT STATES
-    const [input, set_input] = useReducer(reducer, {
-        username: '',
-        password: '',
+    // USERNAME FIELD
+    const username = useField({
+        placeholder: 'What is your username?'
+    })
+
+    // PASSWORD FIELD
+    const password = useField({
+        placeholder: 'What is your password?',
+        type: 'password'
     })
 
     // LOGIN USER
-    const trigger = async(event) => {
-        event.preventDefault()
+    const trigger = async() => {
 
         // ATTEMPT TO LOGIN
-        const response = await user_funcs.login(input)
+        const response = await user_funcs.login({
+            username: username.value,
+            password: password.value,
+        })
 
         // CATCH ERRORS
         if (response.status !== 200) {
@@ -46,34 +48,20 @@ const Login = () => {
             message: 'Successfully logged in',
         })
 
-        // RESET FIELDS & HIDE PROMPT
+        // HIDE PROMPT
         dispatch({ type: 'prompts/hide' })
-        set_input({ type: 'reset' })
     }
 
     return (
-        <Form header={ 'login user' } func={ trigger }>
-            <Field
-                label={ 'What is your username?' }
-                value={ input.username }
-                target={ 'username' }
-                func={ set_input }
-            />
-            <Field
-                label={ 'What is your password?' }
-                value={ input.password }
-                type={ 'password' }
-                target={ 'password' }
-                func={ set_input }
-            />
-            <Button
-                label={ 'Login' }
-                required={[
-                    input.username,
-                    input.password
-                ]}
-            />
-        </Form>
+        <Form
+            header={ 'login user' }
+            func={ trigger }
+            fields={[ username, password ]}
+            button={{
+                label: 'Login',
+                required: [ username, password ]
+            }}
+        />
     )
 }
 

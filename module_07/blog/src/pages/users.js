@@ -1,44 +1,22 @@
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { fetch_all } from '../funcs/user'
 import { Link } from 'react-router-dom'
+import useResource from '../hooks/resource'
 import Wrapper from '../components/wrapper'
 
 const Users = () => {
 
-    // REDUX STUFF
-    const dispatch = useDispatch()
-
-    // LOCAL STATE
-    const [data, set_data] = useState(null)
-
-    // ON LOAD, ATTEMPT TO FETCH BLOGS
-    useEffect(() => {
-        fetch_all().then(response => {
-            
-            // CATCH ERRORS
-            if (response.status !== 200) {
-                return dispatch({
-                    type: 'notifications/negative',
-                    message: `Could not fetch users from DB (${ response.status })`
-                })
-            }
-
-            // OTHERWISE, PUSH RESULT TO STATE
-            set_data(response.data)
-
-            // CREATE NOTIFICATION
-            dispatch({
-                type: 'notifications/positive',
-                message: 'Users fetched from DB'
-            })
-        })
-    }, [dispatch])
+    // FETCH RESOURCE
+    const [data] = useResource({
+        url: 'http://localhost:3001/api/users'
+    })
 
     switch (data) {
 
-        // NO DATA
-        case null: { return null }
+        // NOTHING LOADED
+        case null: { return (
+            <Wrapper header={ 'error' }>
+                <div>A list of users cannot be fetched from the server.</div> 
+            </Wrapper>
+        )}
 
         // ARRAY FOUND
         default: {

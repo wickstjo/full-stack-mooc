@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // INIT STATE & DEFAULT NOTIFICATION DURATION
 const init_state = []
-const default_duration = 1000;
+const default_duration = 3000;
 
 // STATE ACTIONS
 const actions = {
@@ -22,17 +22,17 @@ const actions = {
         switch (typeof(action.message)) {
 
             // SINGLE MESSAGE
-            case 'string': {
+            case 'string':
                 state.push({
                     message: action.message,
                     kind: 'negative',
                     duration: action.duration ? action.duration : default_duration,
                     id: Number((Math.random() * 100000000).toFixed(0))
                 })
-            }
+            break
 
             // ARRAY OF MESSAGES
-            case 'object': {
+            case 'object':
                 action.message.forEach(msg => {
                     state.push({
                         message: msg,
@@ -41,7 +41,10 @@ const actions = {
                         id: Number((Math.random() * 100000000).toFixed(0))
                     })
                 })
-            }
+            break
+
+            // CATCH ERRORS
+            default: { console.log('Notification reducer error') }
         }
     },
     

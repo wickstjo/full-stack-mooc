@@ -41,11 +41,71 @@ a:hover {
         margin-left: auto;
         margin-right: auto;
         padding: 20px;
-    }
 
-    #container {
-        overflow: auto;
-        padding: 10px;
+        #wrapper {
+            transition: transform 0.2s;
+            background: white;
+            padding: 3px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.164);
+            opacity: 0;
+            transition: opacity 0.1s, transform 0.1s;
+        
+            #header {
+                text-transform: uppercase;
+                background: #414141c5;
+                border-bottom: 2px solid #2c2c2c52;
+                padding: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+                color: #F1F1F1;
+                text-shadow: 1px 1px #242424;
+            }
+        
+            #content {
+                >div {
+                    background: #2d618b33;
+                    display: flex;
+                    padding: 6px 8px;
+                    border-bottom: 2px solid #3f79a83d;
+                    margin-top: 3px;
+    
+                    >div:nth-child(2) {
+                        text-align: right;
+                        flex: 1;
+                    }
+                }
+    
+                #actions {
+                    padding: 0px;
+                    display: flex;
+                    border: 0px solid black;
+                    background: None;
+                    
+                    .action {
+                        flex: 1;
+                        padding: 6px 8px;
+                        text-transform: uppercase;
+                        border-bottom: 2px solid #3636363d;
+                        text-align: center;
+                        cursor: pointer;
+                        margin-right: 3px;
+                    }
+        
+                    .action:last-child {
+                        margin: 0px;
+                    }
+        
+                    #remove, #dislike {
+                        background: rgba(172, 51, 51, 0.342);
+                    }
+        
+                    #update, #like {
+                        background: rgba(47, 179, 47, 0.404);
+                    }
+                }
+            }
+        }
     }
 }
 

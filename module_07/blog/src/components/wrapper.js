@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react'
 
 const Wrapper = ({ header, children }) => {
 
-    const [local, set_local] = useState({
+    // STYLE STATE
+    const [style, set_style] = useState({
         opacity: 0
     })
 
     useEffect(() => {
-        set_local({
+        set_style({
             opacity: 0,
-            transform: 'translate(0px, 10px)'
+            transform: 'translate(0px, 15px)'
         })
         
         setTimeout(() => {
-            set_local({
+            set_style({
                 opacity: 1,
                 transform: 'translate(0px, 0px)'
             })
@@ -21,7 +22,7 @@ const Wrapper = ({ header, children }) => {
     }, [])
     
     return (
-        <div id={ 'wrapper' } style={ local }>
+        <div id={ 'wrapper' } style={ style }>
             <div id={ 'header' }>{ header }</div>
             <div id={ 'content' }>
                 { children }

@@ -1,48 +1,26 @@
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { fetch_all } from '../funcs/blog'
 import { Link } from 'react-router-dom'
+import useResource from '../hooks/resource'
 import Wrapper from '../components/wrapper'
 
 const Blogs = () => {
 
-    // REDUX STUFF
-    const dispatch = useDispatch()
+    // FETCH RESOURCE
+    const [blogs] = useResource({
+        url: 'http://localhost:3001/api/blogs'
+    })
 
-    // LOCAL STATE
-    const [data, set_data] = useState(null)
-
-    // ON LOAD, ATTEMPT TO FETCH BLOGS
-    useEffect(() => {
-        fetch_all().then(response => {
-            
-            // CATCH ERRORS
-            if (response.status !== 200) {
-                return dispatch({
-                    type: 'notifications/negative',
-                    message: `Could not fetch blogs from DB (${ response.status })`
-                })
-            }
-
-            // OTHERWISE, PUSH RESULT TO STATE
-            set_data(response.data)
-
-            // CREATE NOTIFICATION
-            dispatch({
-                type: 'notifications/positive',
-                message: 'Blogs fetched from DB'
-            })
-        })
-    }, [dispatch])
-
-    switch (data) {
+    switch (blogs) {
 
         // NOTHING LOADED
-        case null: { return null }
+        case null: { return (
+            <Wrapper header={ 'error' }>
+                <div>A list of blogs cannot be fetched from the server.</div> 
+            </Wrapper>
+        )}
 
         // ARRAY FOUND
         default: {
-            switch (data.length) {
+            switch (blogs.length) {
 
                 // NO BLOGS FOUND
                 case 0: { return (
@@ -53,8 +31,8 @@ const Blogs = () => {
         
                 // LIST USERS
                 default: { return (
-                    <Wrapper header={ `blogs (${ data.length })` }>
-                        { data.map((blog, index) =>
+                    <Wrapper header={ `blogs (${ blogs.length })` }>
+                        { blogs.map((blog, index) =>
                             <div className={ 'row' } key={ index }>
                                 <div><Link to={ blog.id }>{ blog.title }</Link></div>
                                 <div>{ blog.likes } Likes</div>
