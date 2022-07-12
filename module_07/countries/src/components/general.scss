@@ -1,0 +1,124 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('./main.woff');
+}
+
+*, body, h1, div, table, tr, td, input, li, button, span, form {
+    margin: 0px;
+    padding: 0px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font: 13px 'Open Sans', verdana;
+    color: rgb(34, 34, 34);
+    outline: none;
+    border: 0px solid black;
+}
+
+body {
+    background: #F1F1F1;
+}
+
+a:link, a:visited {
+    color: rgb(21, 58, 92);
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+a:hover {
+    color: rgb(104, 29, 29);
+    background: #F1F1F1;
+}
+
+#innerbody {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    padding-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+
+    #wrapper {
+        transition: transform 0.2s;
+        background: white;
+        padding: 3px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.164);
+        opacity: 0;
+        transition: opacity 0.1s, transform 0.1s;
+    
+        #header {
+            text-transform: uppercase;
+            background: #414141c5;
+            border-bottom: 2px solid #2c2c2c52;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: #F1F1F1;
+            text-shadow: 1px 1px #242424;
+        }
+    
+        #content {
+            >div {
+                background: #2d618b33;
+                display: flex;
+                padding: 6px 8px;
+                border-bottom: 2px solid #3f79a83d;
+                margin-top: 3px;
+                text-align: justify;
+
+                >div:nth-child(2) {
+                    text-align: right;
+                    flex: 1;
+                }
+            }
+
+            #submit {
+                background: rgba(0, 112, 0, 0.295);
+                border-bottom: 2px solid #36363625;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: background 0.2s;
+                padding: 4px;
+                width: 100%;
+                margin-top: 3px;
+                flex: 3;
+            }
+        }
+
+        #form {
+            background: rgb(228, 228, 228);
+            margin-top: 3px;
+            padding: 4px;
+
+            input {
+                background: white;
+                padding: 6px 8px;
+                margin-bottom: 4px;
+                border-bottom: 2px solid #3636363d;
+                transition: border 0.2s;
+                width: 100%;
+            }
+            
+            input:focus {
+                border-bottom: 2px solid rgba(0, 112, 0, 0.452);
+            }
+            
+            input:last-child {
+                margin: 0px;
+            }
+        }
+    }
+
+    #flag {
+        width: 100%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+
+        img {
+            margin-top: 30px;
+        }
+    }
+}
