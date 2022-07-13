@@ -24,7 +24,10 @@ const blog_schema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    comments: [{
+        type: String,
+    }]
 })
 
 // SANITIZE JSON ENTRIES

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import useTransition from '../hooks/transition'
 
 // INPUT FIELD HOOK
 const useField = ({ type='text', default_value='', placeholder }) => {
@@ -40,21 +41,8 @@ const Form = ({ header, func, fields, button=true, reset=true }) => {
         inputs.push(item)
     })
 
-    // STYLE STATE
-    const [style, set_style] = useState({
-        opacity: 0,
-        transform: 'translate(0px, -15px)'
-    })
-
-    // ON LOAD...
-    useEffect(() => {
-        setTimeout(() => {
-            set_style({
-                opacity: 1,
-                transform: 'translate(0px, 0px)'
-            })
-        }, 100)
-    }, [])
+    // CSS TRANSITION
+    const style = useTransition()
 
     // FORM TRIGGER
     const trigger = async(event) => {

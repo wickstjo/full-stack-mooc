@@ -54,7 +54,7 @@ router.get('/:id', async (request, response) => {
 })
 
 // INCREMENT LIKES
-router.get('/:id/increment', async (request, response) => {
+router.get('/:id/like', async (request, response) => {
 
     // VERIFY BEARER TOKEN
     validate_token(request, response)
@@ -85,7 +85,7 @@ router.get('/:id/increment', async (request, response) => {
 })
 
 // DECREMENT LIKES
-router.get('/:id/decrement', async (request, response) => {
+router.get('/:id/dislike', async (request, response) => {
 
     // VERIFY BEARER TOKEN
     validate_token(request, response)
@@ -94,6 +94,37 @@ router.get('/:id/decrement', async (request, response) => {
     const entry = await Blog.findOneAndUpdate(
         { _id: request.params.id },
         { $inc: { likes: -1 } }
+    )
+
+    // PERSON FOUND
+    if (entry) {
+
+        // FETCH REFRESHED PERSON
+        const refreshed = await Blog.findById(request.params.id)
+            .populate('user', {
+                username: 1,
+                id: 1
+            })
+
+        return response.status(200).send(refreshed)
+    }
+
+    // OTHERWISE, THROW ERROR
+    response.status(404).send({
+        errors: ['ID does not exist.']
+    })
+})
+
+// LEAVE COMMENT
+router.post('/:id/comment', async (request, response) => {
+
+    // VERIFY BEARER TOKEN
+    validate_token(request, response)
+
+    // FETCH AND INCREMENT BLOG ENTRY
+    const entry = await Blog.findOneAndUpdate(
+        { _id: request.params.id },
+        { $push: { comments: request.body.comment } }
     )
 
     // PERSON FOUND

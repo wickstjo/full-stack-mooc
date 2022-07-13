@@ -10,8 +10,16 @@ const Actions = ({ blog, service }) => {
     const update = () => {
         dispatch({
             type: 'prompts/update',
-            blog: blog,
-            callback: service.overwrite
+            resource: blog,
+            service: service.update
+        })
+    }
+
+    // ADD COMMENT
+    const comment = () => {
+        dispatch({
+            type: 'prompts/comment',
+            service: service.comment
         })
     }
 
@@ -22,6 +30,7 @@ const Actions = ({ blog, service }) => {
             <div id={ 'actions' }>
                 <div className={ 'action' } id={ 'like' } onClick={ service.like }>Like</div>
                 <div className={ 'action' } id={ 'dislike' } onClick={ service.dislike }>Dislike</div>
+                <div className={ 'action' } id={ 'comment' } onClick={ comment }>Comment</div>
                 <div className={ 'action' } id={ 'update' } onClick={ update }>Update</div>
                 <div className={ 'action' } id={ 'remove' } onClick={ service.remove }>Remove</div>
             </div>
@@ -32,6 +41,7 @@ const Actions = ({ blog, service }) => {
             <div id={ 'actions' }>
                 <div className={ 'action' } id={ 'like' } onClick={ service.like }>Like</div>
                 <div className={ 'action' } id={ 'dislike' } onClick={ service.dislike }>Dislike</div>
+                <div className={ 'action' } id={ 'comment' } onClick={ comment }>Comment</div>
             </div>
         )}
 

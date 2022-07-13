@@ -78,7 +78,7 @@ const Swapper = () => {
                     }}
                 />
                 <Trigger
-                    label={ 'Logout' }
+                    label={ `Logout (${ auth.username })` }
                     func={ logout }
                 />
             </Fragment>

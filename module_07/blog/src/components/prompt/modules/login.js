@@ -1,12 +1,10 @@
-import { useDispatch } from 'react-redux'
-
 import { Form, useField } from '../../inputs'
-import * as user_funcs from '../../../funcs/user'
+import useAuth from '../../../hooks/auth'
 
 const Login = () => {
 
-    // REDUX DISPATCH
-    const dispatch = useDispatch()
+    // AUTH SERVICE
+    const auth_service = useAuth()
 
     // USERNAME FIELD
     const username = useField({
@@ -19,37 +17,12 @@ const Login = () => {
         type: 'password'
     })
 
-    // LOGIN USER
+    // TRIGGER FORM
     const trigger = async() => {
-
-        // ATTEMPT TO LOGIN
-        const response = await user_funcs.login({
+        auth_service.login({
             username: username.value,
             password: password.value,
         })
-
-        // CATCH ERRORS
-        if (response.status !== 200) {
-            return dispatch({
-                type: 'notifications/negative',
-                message: response.data.errors
-            })
-        }
-
-        // OTHERWISE, SAVE CREDENTIALS IN STATE
-        dispatch({
-            type: 'auth/login',
-            credentials: response.data
-        })
-
-        // CREATE NOTIFICATION
-        dispatch({
-            type: 'notifications/positive',
-            message: 'Successfully logged in',
-        })
-
-        // HIDE PROMPT
-        dispatch({ type: 'prompts/hide' })
     }
 
     return (

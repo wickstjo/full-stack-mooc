@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Update from './modules/update'
 import Create from './modules/create'
+import Comment from './modules/comment'
 import Login from './modules/login'
 import Register from './modules/register'
 
@@ -57,6 +58,7 @@ const Swapper = ({ state }) => {
         // BLOG ACTIONS
         case 'create': { return <Create /> }
         case 'update': { return <Update /> }
+        case 'comment': { return <Comment /> }
 
         // AUTH ACTIONS
         case 'login': { return <Login /> }

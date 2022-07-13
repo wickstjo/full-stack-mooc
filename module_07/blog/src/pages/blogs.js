@@ -20,6 +20,10 @@ const Blogs = () => {
 
         // ARRAY FOUND
         default: {
+
+            // SORT THE BLOGS BY LIKES
+            const sorted = blogs.sort((a, b) => b.likes - a.likes)
+
             switch (blogs.length) {
 
                 // NO BLOGS FOUND
@@ -32,7 +36,7 @@ const Blogs = () => {
                 // LIST USERS
                 default: { return (
                     <Wrapper header={ `blogs (${ blogs.length })` }>
-                        { blogs.map((blog, index) =>
+                        { sorted.map((blog, index) =>
                             <div className={ 'row' } key={ index }>
                                 <div><Link to={ blog.id }>{ blog.title }</Link></div>
                                 <div>{ blog.likes } Likes</div>

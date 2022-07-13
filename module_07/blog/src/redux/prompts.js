@@ -9,7 +9,7 @@ const actions = {
     // CREATE BLOG PROMPT
     create () {
         return {
-            window: 'create'
+            window: 'create',
         }
     },
 
@@ -17,8 +17,16 @@ const actions = {
     update (state, actions) {
         return {
             window: 'update',
-            blog: actions.blog,
-            callback: actions.callback,
+            resource: actions.resource,
+            service: actions.service,
+        }
+    },
+
+    // LEAVE BLOG COMMENT
+    comment (state, actions) {
+        return {
+            window: 'comment',
+            service: actions.service,
         }
     },
 

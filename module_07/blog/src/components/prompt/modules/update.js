@@ -9,24 +9,24 @@ const Update = () => {
     // TITLE FIELD
     const title = useField({
         placeholder: 'What is the title?',
-        default_value: prompt.blog.title,
+        default_value: prompt.resource.title,
     })
 
     // AUTHOR FIELD
     const author = useField({
         placeholder: 'Who is the author?',
-        default_value: prompt.blog.author,
+        default_value: prompt.resource.author,
     })
 
     // URL FIELD
     const url = useField({
         placeholder: 'What is the URL?',
-        default_value: prompt.blog.url,
+        default_value: prompt.resource.url,
     })
 
     // TRIGGER FORM
-    const trigger = async() => {
-        prompt.callback({
+    const trigger = () => {
+        prompt.service({
             title: title.value,
             author: author.value,
             url: url.value,
@@ -39,7 +39,7 @@ const Update = () => {
             func={ trigger }
             fields={[ title, author, url ]}
             button={{
-                label: 'register',
+                label: 'update',
                 required: [ title, author, url]
             }}
         />

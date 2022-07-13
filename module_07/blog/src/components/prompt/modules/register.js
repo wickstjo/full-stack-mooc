@@ -1,12 +1,10 @@
-import { useDispatch } from 'react-redux'
 import { Form, useField } from '../../inputs'
-
-import * as user_funcs from '../../../funcs/user'
+import useAuth from '../../../hooks/auth'
 
 const Register = () => {
 
-    // REDUX DISPATCH
-    const dispatch = useDispatch()
+    // AUTH SERVICE
+    const auth_service = useAuth()
 
     // USERNAME FIELD
     const username = useField({
@@ -24,70 +22,13 @@ const Register = () => {
         type: 'password'
     })
 
-    // REGISTER USER
+    // TRIGGER FORM
     const trigger = async() => {
-        
-        // DEFAULT USER PROFILE
-        const profile = {
+        auth_service.register({
             username: username.value,
-            password: password.value
-        }
-
-        // IF DEFINED, PUSH NAME TO PROFILE
-        if (name.value !== '') {
-            profile.name = name.value
-        }
-
-        // ATTEMPT TO REGISTER
-        const register_response = await user_funcs.create(profile)
-
-        // CATCH ERRORS
-        if (register_response.status !== 201) {
-            return dispatch({
-                type: 'notifications/negative',
-                message: register_response.data.errors
-            })
-        }
-
-        // OTHERWISE, CREATE NOTIFICATION
-        dispatch({
-            type: 'notifications/positive',
-            message: 'Successfully registered user',
+            name: name.value,
+            password: password.value,
         })
-
-        // ATTEMPT TO LOGIN
-        const login_response = await user_funcs.login({
-            username: profile.username,
-            password: profile.password,
-        })
-
-        // CATCH ERRORS
-        if (login_response.status !== 200) {
-            dispatch({
-                type: 'notifications/negative',
-                message: login_response.data.errors
-            })
-
-            // RESET FIELDS & HIDE PROMPT
-            dispatch({ type: 'prompts/hide' })
-
-            return
-        }
-
-        // OTHERWISE, SAVE CREDENTIALS IN STATE
-        dispatch({
-            type: 'auth/login',
-            credentials: login_response.data
-        })
-
-        // CREATE NOTIFICATION
-        dispatch({
-            type: 'notifications/positive',
-            message: 'Successfully logged in',
-        })
-
-        // HIDE PROMPT
-        dispatch({ type: 'prompts/hide' })
     }
 
     return (

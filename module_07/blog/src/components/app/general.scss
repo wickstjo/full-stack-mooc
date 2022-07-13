@@ -96,12 +96,20 @@ a:hover {
                         margin: 0px;
                     }
         
-                    #remove, #dislike {
+                    #dislike {
                         background: rgba(172, 51, 51, 0.342);
                     }
         
-                    #update, #like {
+                    #like {
                         background: rgba(47, 179, 47, 0.404);
+                    }
+
+                    #comment {
+                        background: rgba(143, 145, 29, 0.349);
+                    }
+
+                    #remove, #update {
+                        background: rgba(153, 42, 153, 0.349);
                     }
                 }
             }

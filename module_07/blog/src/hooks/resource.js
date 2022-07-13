@@ -10,13 +10,6 @@ const useResource = ({ url }) => {
     const dispatch = useDispatch()
     const navigator = useNavigate()
 
-    // QUERY HEADER
-    const [header] = useState({
-        headers: {
-            Authorization: `Bearer ${ auth.token }`
-        }
-    })
-
     // RESOURCE STATE
     const [resource, set_resource] = useState(null)
 
@@ -44,6 +37,13 @@ const useResource = ({ url }) => {
         })
     }, [url, dispatch])
 
+    // QUERY AUTH HEADER
+    const header = {
+        headers: {
+            Authorization: `Bearer ${ auth.token }`
+        }
+    }
+
     // QUERY WRAPPER
     const wrapper = async (query) => {
         try {
@@ -57,39 +57,37 @@ const useResource = ({ url }) => {
         }
     }
 
-    // OVERWRITE RESOURCE
-    const overwrite = (params) => {
-        set_resource({
-            ...resource,
-            ...params
-        })
-    }
-
     // CREATE NEW RESOURCE
-    const create = async(payload) => {
-        console.log('create trigger')
+    const create = async({ payload, category }) => {
 
-        // // PUSH ID & PERFORM QUERY
-        // payload.id = Number((Math.random() * 100000000).toFixed(0))
-        // const response = await axios.post(url, payload)
+        // EXECUTE QUERY
+        const response = await wrapper(
+            axios.post(url, payload, header)
+        )
 
-        // // ALL OK
-        // if (response.status === 201) {
+        // CATCH ERRORS
+        if (response.status !== 201) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
 
-        //     // PUSH TO RESOURCES
-        //     set_resource([
-        //         ...resource,
-        //         payload
-        //     ])
+        // REDIRECT TO RESOURCE PAGE
+        navigator(`/${ category }/${ response.data.id }`)
 
-        //     return true
-        // }
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Resource created',
+        })
 
-        // return false
+        // HIDE PROMPT
+        dispatch({ type: 'prompts/hide' })
     }
 
-    // REMOVE ITEM
-    const remove = async ({ redirect=false }) => {
+    // REMOVE RESOURCE
+    const remove = async () => {
 
         // EXECUTE QUERY
         const response = await wrapper(
@@ -110,12 +108,12 @@ const useResource = ({ url }) => {
             message: 'Resource removed'
         })
 
-        // REDIRECT WHEN REQUESTED
-        if (redirect) { navigator(redirect) }
+        // REDIRECT TO BLOGS
+        navigator('/blogs')
     }
 
-    // UPDATE BLOG
-    const update = async ({ payload }) => {
+    // UPDATE RESOURCE
+    const update = async (payload) => {
 
         // EXECUTE QUERY
         const response = await wrapper(
@@ -138,14 +136,20 @@ const useResource = ({ url }) => {
 
         // CLOSE THE PROMPT WINDOW
         dispatch({ type: 'prompts/hide' })
+
+        // UPDATE STATE
+        set_resource({
+            ...resource,
+            ...payload
+        })
     }
 
-    // LIKE BLOG
+    // LIKE RESOURCE
     const like = async () => {
 
         // EXECUTE QUERY
         const response =  await wrapper(
-            axios.get(`${ url }/increment`, header)
+            axios.get(`${ url }/like`, header)
         )
 
         // CATCH ERRORS
@@ -161,14 +165,20 @@ const useResource = ({ url }) => {
             type: 'notifications/positive',
             message: 'Liked resource'
         })
+
+        // UPDATE LIKES IN STATE
+        set_resource({
+            ...resource,
+            likes: resource.likes + 1
+        })
     }
 
-    // DISLIKE BLOG
+    // DISLIKE RESOURCE
     const dislike = async () => {
 
         // ATTEMPT TO REMOVE THE BLOG
         const response = await wrapper(
-            axios.get(`${ url }/decrement`, header)
+            axios.get(`${ url }/dislike`, header)
         )
 
         // CATCH ERRORS
@@ -182,17 +192,58 @@ const useResource = ({ url }) => {
         // CREATE NOTIFICATION
         dispatch({
             type: 'notifications/positive',
-            message: 'Disliked blog'
+            message: 'Disliked resource'
+        })
+
+        // UPDATE LIKES IN STATE
+        set_resource({
+            ...resource,
+            likes: resource.likes - 1
         })
     }
 
+    // LEAVE COMMENT
+    const comment = async (comment) => {
+
+        // EXECUTE QUERY
+        const response =  await wrapper(
+            axios.post(`${ url }/comment`, { comment }, header)
+        )
+
+        // CATCH ERRORS
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // UPDATE LIKES IN STATE
+        set_resource({
+            ...resource,
+            comments: [
+                ...resource.comments,
+                comment
+            ]
+        })
+
+        // CREATE NOTIFICATION
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Comment added'
+        })
+
+        // CLOSE THE PROMPT WINDOW
+        dispatch({ type: 'prompts/hide' })
+    }
+
     return [resource, {
-        overwrite,
         create,
         remove,
         update,
         like,
-        dislike
+        dislike,
+        comment
     }]
 }
 

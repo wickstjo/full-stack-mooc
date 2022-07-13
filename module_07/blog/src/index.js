@@ -6,9 +6,9 @@ import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 // REDUCERS
-import notifications from './reducers/notifications'
-import auth from './reducers/auth'
-import prompts from './reducers/prompts'
+import notifications from './redux/notifications'
+import auth from './redux/auth'
+import prompts from './redux/prompts'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
