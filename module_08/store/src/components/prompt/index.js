@@ -9,6 +9,8 @@ import UpdateAuthor from './modules/update_author'
 import Login from './modules/login'
 import Register from './modules/register'
 
+import UpdateUser from './modules/update_user'
+
 const Prompt = () => {
 
     // REDUX STUFF
@@ -38,9 +40,7 @@ const Prompt = () => {
         // OTHERWISE, RENDER REQUESTED PROMPT
         default: { return (
             <div id={ 'prompt' } style={ style }>
-                <Swapper
-                    state={ state }
-                />
+                <Swapper window={ state.window } />
                 <span
                     id={ 'close' }
                     onClick={() => {
@@ -53,8 +53,8 @@ const Prompt = () => {
 }
 
 // LOAD IN CORRECT MODULE
-const Swapper = ({ state }) => {
-    switch (state.window) {
+const Swapper = ({ window }) => {
+    switch (window) {
 
         // BLOG ACTIONS
         case 'create_book': { return <CreateBook /> }
@@ -66,6 +66,8 @@ const Swapper = ({ state }) => {
         // AUTH
         case 'login': { return <Login /> }
         case 'register': { return <Register /> }
+
+        case 'update_user': { return <UpdateUser /> }
         
         // OTHERWISE, RETURN NOTHING
         default: {

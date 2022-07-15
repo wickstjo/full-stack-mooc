@@ -1,21 +1,29 @@
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
 import { Form, useField } from '../../inputs'
-import { create_book, all_books } from '../../../models'
+import { create_book, book_filter } from '../../../models'
 
 const Create = () => {
 
     // REDUX DISPATCH
+    const filter = useSelector(state => state.filter)
+    const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    const navigator = useNavigate()
 
     // CREATE BOOK
     const [createBook] = useMutation(create_book, {
         refetchQueries: [{
-            query: all_books
-        }]
+            query: book_filter,
+            variables: {
+                genre: filter
+            }
+        }],
+        context: {
+            headers: {
+                authorization: `bearer ${ auth.token }`
+            }
+        }
     })
 
     // TITLE
@@ -60,7 +68,7 @@ const Create = () => {
             })
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
-            navigator(`/books/${ response.data.addBook.id }`)
+            // navigator(`/books/${ response.data.addBook.id }`)
             dispatch({  type: 'prompts/hide' })
 
         // CATCH & RENDER VALIDATION ERRORS

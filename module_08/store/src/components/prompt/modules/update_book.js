@@ -1,47 +1,55 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_book, one_book, all_books } from '../../../models'
+import { update_book, one_book, book_filter } from '../../../models'
 import { Form, useField } from '../../inputs'
 
-const Update = () => {
+const UpdateBook = () => {
 
-    // REDUX HOOKS
-    const prompt = useSelector(state => state.prompts)
+    // AUXILLARY
+    const { prompts, filter, auth } = useSelector(state => state)
     const dispatch = useDispatch()
-
+    
     // CREATE BOOK
     const [editBook] = useMutation(update_book, {
         refetchQueries: [{
-            query: one_book(prompt.id)
+            query: one_book(prompts.id)
         }, {
-            query: all_books
-        }]
+            query: book_filter,
+            variables: {
+                genre: filter
+            }
+        }],
+        context: {
+            headers: {
+                authorization: `bearer ${ auth.token }`
+            }
+        }
     })
 
     // TITLE FIELD
     const title = useField({
         placeholder: 'What is the title?',
-        default_value: prompt.book.title,
+        default_value: prompts.book.title,
     })
 
     // AUTHOR FIELD
     const author = useField({
         placeholder: 'Who is the author?',
-        default_value: prompt.book.author.name,
+        default_value: prompts.book.author.name,
     })
 
     // PUBLISHED FIELD
     const published = useField({
         placeholder: 'When was it published?',
-        default_value: prompt.book.published,
+        default_value: prompts.book.published,
         type: 'number'
     })
 
     // PUBLISHED FIELD
     const genres = useField({
         placeholder: 'Under what genre?',
-        default_value: prompt.book.genres.join(','),
+        default_value: prompts.book.genres.join(','),
     })
 
     // TRIGGER FORM
@@ -51,7 +59,7 @@ const Update = () => {
         try {
             await editBook({
                 variables: {
-                    id: prompt.id,
+                    id: prompts.id,
                     title: title.value,
                     published: Number(published.value),
                     author: author.value,
@@ -90,4 +98,4 @@ const Update = () => {
     )
 }
 
-export default Update
+export default UpdateBook

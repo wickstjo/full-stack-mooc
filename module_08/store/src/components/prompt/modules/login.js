@@ -10,7 +10,7 @@ const Register = () => {
     const dispatch = useDispatch()
 
     // CREATE BOOK
-    const [userLogin] = useMutation(login)
+    const [loginUser] = useMutation(login)
 
     // USERNAME FIELD
     const username = useField({
@@ -28,17 +28,23 @@ const Register = () => {
 
         // ATTEMPT TO UPDATE THE AUTHOR
         try {
-            await userLogin({
+            const response = await loginUser({
                 variables: {
                     username: username.value,
                     password: password.value,
                 }
             })
+
+            // SAVE CREDENTAILS IN STATE
+            dispatch({
+                type: 'auth/login',
+                credentials: response.data.loginUser
+            })
             
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'Login successful'
+                message: 'login successful'
             })
 
             // HIDE PROMPT
@@ -55,11 +61,11 @@ const Register = () => {
 
     return (
         <Form
-            header={ 'update author' }
+            header={ 'login user' }
             func={ trigger }
             fields={[ username, password ]}
             button={{
-                label: 'update',
+                label: 'login',
                 required: [ username, password ]
             }}
         />

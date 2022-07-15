@@ -37,12 +37,18 @@ const Register = () => {
 
         // ATTEMPT TO UPDATE THE AUTHOR
         try {
-            await registerUser({
+            const response = await registerUser({
                 variables: {
                     username: username.value,
                     password: password.value,
                     genre: genre.value,
                 }
+            })
+
+            // SAVE CREDENTAILS IN STATE
+            dispatch({
+                type: 'auth/login',
+                credentials: response.data.registerUser
             })
             
             // NOTIFY SUCCESS

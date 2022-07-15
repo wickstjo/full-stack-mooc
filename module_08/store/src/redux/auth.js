@@ -4,11 +4,21 @@ import { createSlice } from '@reduxjs/toolkit'
 const init_state = {
     session: false,
     username: undefined,
-    token: undefined
+    token: undefined,
+    header: {}
 }
 
 // LOCALSTORAGE KEY
-const storage_key = 'ASDFASD'
+const storage_key = 'ASDFAsdfsdSD'
+
+// CREATE AUTH HEADER
+const create_header = (data) => {
+    return {
+        headers: {
+            authorization: `bearer ${ data.token }`
+        }
+    }
+}
 
 // STATE ACTIONS
 const actions = {
@@ -23,12 +33,15 @@ const actions = {
         if (content) {
             return {
                 ...JSON.parse(content),
+                header: create_header(JSON.parse(content)),
                 session: true
             }
         }
 
         return state
     },
+
+    
 
     // START SESSION
     login (state, action) {
@@ -39,6 +52,7 @@ const actions = {
 
         return {
             ...action.credentials,
+            header: create_header(action.credentials),
             session: true
         }
     },

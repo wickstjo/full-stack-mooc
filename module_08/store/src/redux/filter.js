@@ -1,24 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-// INIT STATE
-const init_state = null
+// AUXILLARY
+const init_state = ''
 
 // STATE ACTIONS
 const actions = {
 
-    // OPEN REQUESTED PROMPT WINDOW
-    open (state, actions) {
-        return actions
+    // CREATE POSITIVE NOTIFICATION
+    update (state, action) {
+        return action.keyword
     },
-
-    hide () {
-        return null
-    }
 }
 
 // EXPORT SLICE REDUER
 export default createSlice({
-    name: 'prompts',
+    name: 'filter',
     initialState: init_state,
     reducers: actions,
 }).reducer

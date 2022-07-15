@@ -1,36 +1,31 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_author, one_author, all_authors } from '../../../models'
+import { update_user, one_user } from '../../../models'
 import { Form, useField } from '../../inputs'
 
 const Update = () => {
 
     // AUXILLARY
-    const { auth, prompts } = useSelector(state => state)
+    const { prompts, auth } = useSelector(state => state)
     const dispatch = useDispatch()
 
     // CREATE BOOK
-    const [editAuthor] = useMutation(update_author, {
+    const [editUser] = useMutation(update_user, {
         refetchQueries: [{
-            query: one_author(prompts.id)
-        }, {
-            query: all_authors
+            query: one_user(prompts.id)
         }],
-        context: auth.header
+        context: {
+            headers: {
+                authorization: `bearer ${ auth.token }`
+            }
+        }
     })
 
     // TITLE FIELD
-    const name = useField({
-        placeholder: 'What is their name?',
-        default_value: prompts.author.name,
-    })
-
-    // AUTHOR FIELD
-    const born = useField({
-        placeholder: 'When were they born?',
-        default_value: prompts.author.born ? prompts.author.born : 0,
-        type: 'number'
+    const genre = useField({
+        placeholder: 'What is your favorite genre?',
+        default_value: prompts.genre,
     })
 
     // TRIGGER FORM
@@ -38,22 +33,21 @@ const Update = () => {
 
         // ATTEMPT TO UPDATE THE AUTHOR
         try {
-            await editAuthor({
+            await editUser({
                 variables: {
                     id: prompts.id,
-                    name: name.value,
-                    born: Number(born.value)
+                    genre: genre.value,
                 }
             })
             
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'Author updated!'
+                message: 'User updated!'
             })
 
             // HIDE PROMPTs
-            dispatch({ type: 'prompts/hide' })
+            dispatch({  type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
@@ -66,12 +60,12 @@ const Update = () => {
 
     return (
         <Form
-            header={ 'update author' }
+            header={ 'update favorite genre' }
             func={ trigger }
-            fields={[ name, born ]}
+            fields={[ genre ]}
             button={{
                 label: 'update',
-                required: [ name, born ]
+                required: [ genre ]
             }}
         />
     )

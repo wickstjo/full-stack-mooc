@@ -33,14 +33,25 @@ const Swapper = () => {
     switch (auth.session) {
 
         case true: { return (
-            <Trigger
-                label={ 'Create Book' }
-                func={() => {
-                    dispatch({
-                        type: 'prompts/create_book'
-                    })
-                }}
-            />
+            <Fragment>
+                <Trigger
+                    label={ 'Create Book' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/open',
+                            window: 'create_book'
+                        })
+                    }}
+                />
+                <Trigger
+                    label={ `Logout (${ auth.username })` }
+                    func={() => {
+                        dispatch({
+                            type: 'auth/logout'
+                        })
+                    }}
+                />
+            </Fragment>
         )}
 
         default: { return (
@@ -49,7 +60,8 @@ const Swapper = () => {
                     label={ 'Login' }
                     func={() => {
                         dispatch({
-                            type: 'prompts/login'
+                            type: 'prompts/open',
+                            window: 'login'
                         })
                     }}
                 />
@@ -57,7 +69,8 @@ const Swapper = () => {
                     label={ 'Register' }
                     func={() => {
                         dispatch({
-                            type: 'prompts/register'
+                            type: 'prompts/open',
+                            window: 'register'
                         })
                     }}
                 />

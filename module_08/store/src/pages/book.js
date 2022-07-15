@@ -1,63 +1,58 @@
 import { useParams, Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { throttle } from '../misc'
-
-import { one_book } from '../models'
-import { useQuery } from '@apollo/client'
+import { useDispatch, useSelector } from 'react-redux'
+import { BOOK } from '../models'
+import useExtract from '../hooks/extractor'
 
 import { Button } from '../components/inputs'
 import Wrapper from '../components/wrapper'
+import Content from '../components/content'
 
 const Book = () => {
 
     // AUXILLARY
+    const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const params = useParams()
-    const target = 'findBook'
 
-    // APOLLO HOOK
-    const result = useQuery(one_book(params.id))
+    // APOLLO QUERY
+    const [data, config] = useExtract(BOOK, {
+        id: params.id
+    })
 
-    // OPEN PROMPT WINDOW
-    const update = () => {
-        dispatch({
-            type: 'prompts/update_book',
-            book: result.data[target],
-            id: params.id
-        })
-    }
-
-    // DONE LOADING
-    if (!result.loading && result.data[target]) { return (
-        <Wrapper header={ 'book' }>
-            <div>
-                <div>Title:</div>
-                <div>{ throttle(result.data[target].title, 50) }</div>
-            </div>
-            <div>
-                <div>Author:</div>
-                <div><Link to={ `/authors/${ result.data[target].author.id }` }>{ result.data[target].author.name }</Link></div>
-            </div>
-            <div>
-                <div>Published:</div>
-                <div>{ result.data[target].published }</div>
-            </div>
-            <div>
-                <div>Genres:</div>
-                <div>{ result.data[target].genres.join(', ') }</div>
-            </div>
-            <Button
-                label={ 'update' }
-                func={ update }
-            />
-        </Wrapper>
-    )}
-
-    // FALLBACK
     return (
-        <Wrapper header={ 'error' }>
-            <div>Data could not be retrieved.</div>
-        </Wrapper>
+        <Content payload={ config }>
+            <Wrapper header={ `book ${ params.id }` }>
+                <div>
+                    <div>Title:</div>
+                    <div>{ data.title }</div>
+                </div>
+                <div>
+                    <div>Author:</div>
+                    <div><Link to={ `/authors/${ data.author?.id }` }>{ data.author?.name }</Link></div>
+                </div>
+                <div>
+                    <div>Published:</div>
+                    <div>{ data.published }</div>
+                </div>
+                <div>
+                    <div>Genres:</div>
+                    <div>{ data.genres?.join(', ') }</div>
+                </div>
+                { auth.session ? 
+                    <Button
+                        label={ 'update' }
+                        func={() => {
+                            dispatch({
+                                type: 'prompts/open',
+                                window: 'update_book',
+                                book: data,
+                                id: params.id
+                            })
+                        }}
+                    />
+                : null }
+            </Wrapper>
+        </Content>
     )
 }
 

@@ -10,6 +10,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import notifications from './redux/notifications'
 import prompts from './redux/prompts'
 import auth from './redux/auth'
+import filter from './redux/filter'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
@@ -17,6 +18,7 @@ const store = configureStore({
         notifications,
         prompts,
         auth,
+        filter,
     }
 })
 

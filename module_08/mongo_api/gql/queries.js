@@ -7,21 +7,10 @@ module.exports = {
     // DOCUMENT COUNTS
     bookCount: async () => await Book.countDocuments(),
     authorCount: async () => await Author.countDocuments(),
+    userCount: async () => await User.countDocuments(),
 
     // BOOK QUERIES
-    allBooks: async (root, args) => {
-
-        // FILTER BY BOTH ARGS
-        if (args.author && args.genre) {
-            return await Book.find({
-                author: await Author.findOne({
-                    name: args.author
-                }),
-                genres: {
-                    $in: [args.genre]
-                }
-            })
-        }
+    books: async (root, args) => {
 
         // FILTER BY AUTHOR
         if (args.author) {
@@ -29,46 +18,51 @@ module.exports = {
                 author: await Author.findOne({
                     name: args.author
                 })
+            }).populate('author', {
+                name: 1,
+                id: 1
             })
         }
 
         // FILTER BY GENRE
         if (args.genre) {
             return await Book.find({
-                genre: {
-                    $in: args.genre
+                genres: {
+                    $in: [args.genre]
                 }
+            }).populate('author', {
+                name: 1,
+                id: 1
             })
+            
         }
-
+        
         // OTHERWISE, RETURN ALL BOOKS
-        return await Book.find({})
-    },
-    findBook: async (root, args) => {
-        const result = await Book.findById(args.id).populate('author', {
+        return await Book.find({}).populate('author', {
             name: 1,
             id: 1
         })
-        return result
+    },
+    book: async (root, args) => {
+        return await Book.findById(args.id).populate('author', {
+            name: 1,
+            id: 1
+        })
     },
 
     // AUTHOR QUERIES
-    allAuthors: async () => {
-        const result = await Author.find({})
-        return result
+    authors: async (root, args) => {
+        return await Author.find({})
     },
-    findAuthor: async (root, args) => {
-        const result = await Author.findById(args.id)
-        return result
+    author: async (root, args) => {
+        return await Author.findById(args.id)
     },
 
     // USER QUERIES
-    allUsers: async () => {
-        const result = await User.find({})
-        return result
+    users: async () => {
+        return await User.find({})
     },
-    findUser: async (root, args) => {
-        const result = await User.findById(args.id)
-        return result
+    user: async (root, args) => {
+        return await User.findById(args.id)
     }
 }

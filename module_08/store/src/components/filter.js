@@ -1,31 +1,34 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, useField } from './inputs'
 
 const Filter = () => {
 
-    // REDUX DISPATCH
+    // AUXILLARY
+    const { filter } = useSelector(state => state)
     const dispatch = useDispatch()
 
     // FILTER INPUT
-    const filter = useField({
-        placeholder: 'Enter keyword'
+    const filter_field = useField({
+        placeholder: 'Filter by genre',
+        default_value: filter
     })
     
-    // UPDATE FILTER IN STATE
-    useEffect(() => {
+    // TRIGGER FORM
+    const trigger = () => {
         dispatch({
             type: 'filter/update',
-            keyword: filter.value
+            keyword: filter_field.value
         })
-    }, [dispatch, filter.value])
+    }
 
     return (
         <Form
             header={ 'filter by keyword' }
-            func={ () => {} }
-            fields={[ filter ]}
-            button={ false }
+            func={ trigger }
+            fields={[ filter_field ]}
+            button={{
+                label: 'filter'
+            }}
             reset={ false }
         />
     )

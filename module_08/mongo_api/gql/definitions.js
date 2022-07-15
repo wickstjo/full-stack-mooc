@@ -4,7 +4,6 @@ module.exports = gql(`
     type Author {
         name: String!
         born: Int
-        bookCount: Int
         id: ID!
     }
 
@@ -18,12 +17,14 @@ module.exports = gql(`
 
     type User {
         username: String!
-        favouriteGenre: String!
+        favoriteGenre: String!
         id: ID!
     }
       
     type Token {
-        value: String!
+        token: String!
+        username: String!
+        id: ID!
     }
 
     type Query {
@@ -31,16 +32,14 @@ module.exports = gql(`
         bookCount: Int!
         userCount: Int!
 
-        allBooks(author: String, genre: String): [Book!]!
-        findBook(id: ID!): Book
+        books(author: String, genre: String): [Book!]!
+        book(id: ID!): Book
         
-        allAuthors: [Author!]!
-        findAuthor(id: ID!): Author
+        authors: [Author!]!
+        author(id: ID!): Author
 
-        allUsers: [User!]!
-        findUser(id: ID!): User
-
-        me: User
+        users: [User!]!
+        user(id: ID!): User
     }
 
     type Mutation {
@@ -74,6 +73,16 @@ module.exports = gql(`
             username: String!
             password: String!
             genre: String!
+        ): Token
+
+        editUser(
+            id: ID!
+            genre: String!
+        ): User
+
+        loginUser(
+            username: String!
+            password: String!
         ): Token
     }
 `)

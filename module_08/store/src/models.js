@@ -1,5 +1,108 @@
 import { gql } from '@apollo/client'
 
+// BOOKS QUERY
+const BOOKS = {
+    key: 'books',
+    query: gql(`
+        query ($genre: String, $author: String) {
+            books (genre: $genre, author: $author) {
+                id
+                title
+                published
+                genres
+                author {
+                    name
+                    id
+                }
+            }
+        }
+    `)
+}
+
+// BOOK QUERY
+const BOOK = {
+    key: 'book',
+    query: gql(`
+        query ($id: ID!) {
+            book (id: $id) {
+                id
+                title
+                published
+                genres
+                author {
+                    name
+                    id
+                }
+            }
+        }
+    `)
+}
+
+// AUTHORS QUERY
+const AUTHORS = {
+    key: 'authors',
+    query: gql(`
+        query {
+            authors {
+                id
+                name
+                born
+            }
+        }
+    `)
+}
+
+// SINGLE AUTHOR QUERY
+const AUTHOR = {
+    key: 'author',
+    query: gql(`
+        query ($id: ID!) {
+            author (id: $id) {
+                id
+                name
+                born
+            }
+        }
+    `)
+}
+
+// USERS QUERY
+const USERS = {
+    key: 'users',
+    query: gql(`
+        query {
+            users {
+                username
+                id
+            }
+        }
+    `)
+}
+
+// SINGLE USER QUERY
+const USER = {
+    key: 'user',
+    query: gql(`
+        query ($id: ID!) {
+            user (id: $id) {
+                id
+                favoriteGenre
+                username
+            }
+        }
+    `)
+}
+
+const book_filter = gql(`
+    query Foobar($genre: String, $author: String) {
+        allBooks(genre: $genre, author: $author) {
+            id
+            title
+            published
+        }
+    }
+`)
+
 // FETCH ALL BOOKS
 const all_books = gql(`
     query {
@@ -7,6 +110,10 @@ const all_books = gql(`
             id
             title
             published
+            genres
+            author {
+                name
+            }
         }
     }
 `)
@@ -118,6 +225,32 @@ const all_users = gql(`
     }
 `)
 
+// FETCH ONE USER
+const one_user = (id) => {
+    return gql(`
+        query {
+            findUser(id: "${ id }") {
+                username
+                favoriteGenre
+            }
+        }
+    `)
+}
+
+const update_user = gql(`
+    mutation editUser(
+        $id: ID!,
+        $genre: String!,
+    ) {
+        editUser(
+            id: $id,
+            genre: $genre,
+        ) {
+            id
+        }
+    }
+`)
+
 // LOGIN USER
 const login = gql(`
     mutation loginUser(
@@ -128,7 +261,9 @@ const login = gql(`
             username: $username,
             password: $password
         ) {
-            value
+            username
+            id
+            token
         }
     }
 `)
@@ -145,12 +280,23 @@ const register = gql(`
             genre: $genre,
             password: $password,
         ) {
-            value
+            username
+            id
+            token
         }
     }
 `)
 
 export {
+    BOOKS,
+    BOOK,
+    
+    AUTHORS,
+    AUTHOR,
+
+    USERS,
+    USER,
+
     all_books,
     one_book,
     create_book,
@@ -159,6 +305,9 @@ export {
     one_author,
     update_author,
     all_users,
+    one_user,
+    update_user,
     login,
     register,
+    book_filter,
 }

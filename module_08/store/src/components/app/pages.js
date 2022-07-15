@@ -24,7 +24,7 @@ const Pages = () => { return (
             <Route path={ '/authors/:id' } element={ <Author /> } />
 
             <Route exact path={ '/users' } element={ <Users /> } />
-            <Route path={ '/user/:id' } element={ <User /> } />
+            <Route path={ '/users/:id' } element={ <User /> } />
 
             <Route path={ '/*' } element={ <ErrorPage /> } />
         </Routes>
