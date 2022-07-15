@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { register, all_users } from '../../../models'
+import { register, USERS } from '../../../models'
 import { Form, useField } from '../../inputs'
 
 const Register = () => {
@@ -12,7 +12,7 @@ const Register = () => {
     // CREATE BOOK
     const [registerUser] = useMutation(register, {
         refetchQueries: [{
-            query: all_users
+            query: USERS.query
         }]
     })
 
@@ -58,7 +58,7 @@ const Register = () => {
             })
 
             // HIDE PROMPT
-            dispatch({  type: 'prompts/hide' })
+            dispatch({ type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {

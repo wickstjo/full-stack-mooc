@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { login } from '../../../models'
 import { Form, useField } from '../../inputs'
 
-const Register = () => {
+const Login = () => {
 
     // AUXILLARY
     const dispatch = useDispatch()
@@ -72,4 +72,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Login

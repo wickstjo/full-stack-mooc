@@ -93,48 +93,6 @@ const USER = {
     `)
 }
 
-const book_filter = gql(`
-    query Foobar($genre: String, $author: String) {
-        allBooks(genre: $genre, author: $author) {
-            id
-            title
-            published
-        }
-    }
-`)
-
-// FETCH ALL BOOKS
-const all_books = gql(`
-    query {
-        allBooks {
-            id
-            title
-            published
-            genres
-            author {
-                name
-            }
-        }
-    }
-`)
-
-// FETCH ONE BOOKS
-const one_book = (id) => {
-    return gql(`
-        query {
-            findBook(id: "${ id }") {
-                title
-                published
-                genres
-                author {
-                    name
-                    id
-                }
-            }
-        }
-    `)
-}
-
 // CREATE BOOK
 const create_book = gql(`
     mutation createBook(
@@ -175,29 +133,6 @@ const update_book = gql(`
     }
 `)
 
-// FETCH ALL AUTHORS
-const all_authors = gql(`
-    query {
-        allAuthors {
-            name
-            born
-            id
-        }
-    }
-`)
-
-// FETCH ONE AUTHOR
-const one_author = (id) => {
-    return gql(`
-        query {
-            findAuthor(id: "${ id }") {
-                name
-                born
-            }
-        }
-    `)
-}
-
 // UPDATE AUTHOR
 const update_author = gql(`
     mutation editAuthor(
@@ -214,28 +149,6 @@ const update_author = gql(`
         }
     }
 `)
-
-// FETCH ALL USERS
-const all_users = gql(`
-    query {
-        allUsers {
-            username
-            id
-        }
-    }
-`)
-
-// FETCH ONE USER
-const one_user = (id) => {
-    return gql(`
-        query {
-            findUser(id: "${ id }") {
-                username
-                favoriteGenre
-            }
-        }
-    `)
-}
 
 const update_user = gql(`
     mutation editUser(
@@ -290,24 +203,17 @@ const register = gql(`
 export {
     BOOKS,
     BOOK,
+    create_book,
+    update_book,
     
     AUTHORS,
     AUTHOR,
+    update_author,
 
     USERS,
     USER,
-
-    all_books,
-    one_book,
-    create_book,
-    update_book,
-    all_authors,
-    one_author,
-    update_author,
-    all_users,
-    one_user,
     update_user,
+
     login,
     register,
-    book_filter,
 }

@@ -83,6 +83,8 @@ module.exports = {
             await Book.updateOne({
                 _id: args.id
             }, modifications, { runValidators: true })
+
+            return await Book.findById(args.id)
         }
     },
     editAuthor: async (root, args, context) => {
@@ -90,6 +92,17 @@ module.exports = {
             await Author.updateOne({
                 _id: args.id
             }, args, { runValidators: true })
+
+            return await Author.findById(args.id)
+        }
+    },
+    editUser: async (root, args, context) => {
+        if (valid_session(context, args.id)) {
+            await User.updateOne({
+                _id: args.id
+            }, { favoriteGenre: args.genre }, { runValidators: true })
+
+            return await User.findById(args.id)
         }
     },
     registerUser: async (root, args) => {
@@ -108,13 +121,6 @@ module.exports = {
 
         // OTHERWISE, CREATE AUTH TOKEN
         return create_auth_token(user)
-    },
-    editUser: async (root, args, context) => {
-        if (valid_session(context, args.id)) {
-            await User.updateOne({
-                _id: args.id
-            }, { favoriteGenre: args.genre }, { runValidators: true })
-        }
     },
     loginUser: async (root, args) => {
 

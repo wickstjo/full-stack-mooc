@@ -50,11 +50,6 @@ module.exports = gql(`
             genres: [String!]!
         ): Book
 
-        addAuthor(
-            name: String!
-            born: Int
-        ): Author
-
         editBook(
             id: ID!
             title: String!
@@ -62,6 +57,11 @@ module.exports = gql(`
             author: String!
             genres: [String!]!
         ): Book
+        
+        addAuthor(
+            name: String!
+            born: Int
+        ): Author
 
         editAuthor(
             id: ID!

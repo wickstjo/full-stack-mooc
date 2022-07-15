@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
 import { Form, useField } from '../../inputs'
-import { create_book, book_filter } from '../../../models'
+import { create_book, BOOKS } from '../../../models'
 
-const Create = () => {
+const CreateBook = () => {
 
     // REDUX DISPATCH
     const filter = useSelector(state => state.filter)
@@ -14,16 +14,12 @@ const Create = () => {
     // CREATE BOOK
     const [createBook] = useMutation(create_book, {
         refetchQueries: [{
-            query: book_filter,
+            query: BOOKS.query,
             variables: {
                 genre: filter
             }
         }],
-        context: {
-            headers: {
-                authorization: `bearer ${ auth.token }`
-            }
-        }
+        context: auth.header
     })
 
     // TITLE
@@ -52,7 +48,7 @@ const Create = () => {
 
         // ATTEMPT TO CREATE THE BOOK
         try {
-            const response = await createBook({
+            await createBook({
                 variables: {
                     title: title.value,
                     published: Number(published.value),
@@ -68,8 +64,7 @@ const Create = () => {
             })
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
-            // navigator(`/books/${ response.data.addBook.id }`)
-            dispatch({  type: 'prompts/hide' })
+            dispatch({ type: 'prompts/hide' })
 
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
@@ -93,4 +88,4 @@ const Create = () => {
     )
 }
 
-export default Create
+export default CreateBook

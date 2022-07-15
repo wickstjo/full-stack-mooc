@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_author, one_author, all_authors } from '../../../models'
+import { update_author, AUTHOR, AUTHORS } from '../../../models'
 import { Form, useField } from '../../inputs'
 
-const Update = () => {
+const UpdateAuthor = () => {
 
     // AUXILLARY
     const { auth, prompts } = useSelector(state => state)
@@ -12,11 +12,15 @@ const Update = () => {
 
     // CREATE BOOK
     const [editAuthor] = useMutation(update_author, {
-        refetchQueries: [{
-            query: one_author(prompts.id)
-        }, {
-            query: all_authors
-        }],
+        refetchQueries: [
+            { query: AUTHORS.query },
+            {
+                query: AUTHOR.query,
+                variables: {
+                    id: prompts.id
+                }
+            },
+        ],
         context: auth.header
     })
 
@@ -77,4 +81,4 @@ const Update = () => {
     )
 }
 
-export default Update
+export default UpdateAuthor

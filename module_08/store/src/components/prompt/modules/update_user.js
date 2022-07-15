@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_user, one_user } from '../../../models'
+import { update_user, USER } from '../../../models'
 import { Form, useField } from '../../inputs'
 
-const Update = () => {
+const UpdateUser = () => {
 
     // AUXILLARY
     const { prompts, auth } = useSelector(state => state)
@@ -13,13 +13,12 @@ const Update = () => {
     // CREATE BOOK
     const [editUser] = useMutation(update_user, {
         refetchQueries: [{
-            query: one_user(prompts.id)
-        }],
-        context: {
-            headers: {
-                authorization: `bearer ${ auth.token }`
+            query: USER.query,
+            variables: {
+                id: prompts.id
             }
-        }
+        }],
+        context: auth.header
     })
 
     // TITLE FIELD
@@ -47,7 +46,7 @@ const Update = () => {
             })
 
             // HIDE PROMPTs
-            dispatch({  type: 'prompts/hide' })
+            dispatch({ type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
@@ -71,4 +70,4 @@ const Update = () => {
     )
 }
 
-export default Update
+export default UpdateUser

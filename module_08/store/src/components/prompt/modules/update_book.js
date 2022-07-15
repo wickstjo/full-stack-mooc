@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_book, one_book, book_filter } from '../../../models'
+import { update_book, BOOKS, BOOK } from '../../../models'
 import { Form, useField } from '../../inputs'
 
 const UpdateBook = () => {
@@ -13,18 +13,17 @@ const UpdateBook = () => {
     // CREATE BOOK
     const [editBook] = useMutation(update_book, {
         refetchQueries: [{
-            query: one_book(prompts.id)
+            query: BOOK.query,
+            variables: {
+                id: prompts.id
+            }
         }, {
-            query: book_filter,
+            query: BOOKS.query,
             variables: {
                 genre: filter
             }
         }],
-        context: {
-            headers: {
-                authorization: `bearer ${ auth.token }`
-            }
-        }
+        context: auth.header
     })
 
     // TITLE FIELD
@@ -74,7 +73,7 @@ const UpdateBook = () => {
             })
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
-            dispatch({  type: 'prompts/hide' })
+            dispatch({ type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
