@@ -18,7 +18,7 @@ const Register = () => {
 
     // PASSWORD FIELD
     const password = useField({
-        placeholder: 'What is your username?',
+        placeholder: 'What is your password?',
         type: 'password'
     })
 

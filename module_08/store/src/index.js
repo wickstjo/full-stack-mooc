@@ -7,18 +7,16 @@ import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 // REDUCERS
-import anecdotes from './redux/anecdotes'
-import filter from './redux/filter'
 import notifications from './redux/notifications'
 import prompts from './redux/prompts'
+import auth from './redux/auth'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
     reducer: {
-        anecdotes,
         notifications,
         prompts,
-        filter,
+        auth,
     }
 })
 
@@ -26,8 +24,8 @@ const store = configureStore({
 const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
-        uri: 'http://localhost:4000',
-    })
+        uri: 'http://localhost:4000/graphql',
+    }),
 })
 
 // CREATE PROVIDER

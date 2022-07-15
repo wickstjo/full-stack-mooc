@@ -6,6 +6,9 @@ import CreateBook from './modules/create_book'
 import UpdateBook from './modules/update_book'
 import UpdateAuthor from './modules/update_author'
 
+import Login from './modules/login'
+import Register from './modules/register'
+
 const Prompt = () => {
 
     // REDUX STUFF
@@ -59,6 +62,10 @@ const Swapper = ({ state }) => {
 
         // AUTHOR ACTIONS
         case 'update_author': { return <UpdateAuthor /> }
+
+        // AUTH
+        case 'login': { return <Login /> }
+        case 'register': { return <Register /> }
         
         // OTHERWISE, RETURN NOTHING
         default: {

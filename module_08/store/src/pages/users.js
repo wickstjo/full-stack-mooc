@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
-import { all_authors } from '../models'
 import { useQuery } from '@apollo/client'
+import { all_users } from '../models'
 
 import Wrapper from '../components/wrapper'
 
-const Authors = () => {
+const Users = () => {
 
     // APOLLO HOOK
-    const target = 'allAuthors'
-    const result = useQuery(all_authors)
+    const target = 'allUsers'
+    const result = useQuery(all_users)
 
     // DONE LOADING
     if (!result.loading && result.data[target]) {
@@ -20,18 +20,17 @@ const Authors = () => {
 
             // NO DATA
             case 0: { return (
-                <Wrapper header={ 'all books' }>
-                    <div>There are currently no authors available.</div>
+                <Wrapper header={ 'all users' }>
+                    <div>There are currently no users available.</div>
                 </Wrapper>
             )}
 
             // RENDER NORMALLY
             default: { return (
-                <Wrapper header={ `all authors (${ result.data[target].length })` }>
+                <Wrapper header={ `all users (${ result.data[target].length })` }>
                     { result.data[target].map(item =>
                         <div key={ item.id }>
-                            <div><Link to={ `/authors/${ item.id }` }>{ item.name }</Link></div>
-                            <div>{ item.born }</div>
+                            <div><Link to={ `/users/${ item.id }` }>{ item.username }</Link></div>
                         </div>
                     )}
                 </Wrapper>
@@ -40,4 +39,4 @@ const Authors = () => {
     }
 }
 
-export default Authors
+export default Users

@@ -41,9 +41,19 @@ const typeDefs = gql`
             author: String!
             genres: [String!]!
         ): Book
+
+        editBook(
+            id: ID!
+            title: String!
+            published: Int!
+            author: String!
+            genres: [String!]!
+        ): Book
+
         editAuthor(
+            id: ID!
             name: String!
-            setBornTo: Int!
+            born: Int!
         ): Author
     }
 `
@@ -116,16 +126,35 @@ const actions = {
 
         return book
     },
-    editAuthor: (root, args) => {
+    editBook: (root, args) => {
 
         // ATTEMPT TO FIND THE PERSON
-        const target = authors.findIndex(author => author.name === args.name)
+        const target = books.findIndex(book => book.id === args.id)
 
         // ABORT IF AUTHOR WAS NOT FOUND
         if (target === -1) { return null }
 
         // OTHERWISE, OVERWRITE BIRTHYEAR
-        authors[target].born = args.setBornTo
+        books[target] = {
+            ...books[target],
+            ...args
+        }
+
+        return books[target]
+    },
+    editAuthor: (root, args) => {
+
+        // ATTEMPT TO FIND THE PERSON
+        const target = authors.findIndex(author => author.id === args.id)
+
+        // ABORT IF AUTHOR WAS NOT FOUND
+        if (target === -1) { return null }
+
+        // OTHERWISE, OVERWRITE BIRTHYEAR
+        authors[target] = {
+            ...authors[target],
+            ...args
+        }
 
         return authors[target]
     }

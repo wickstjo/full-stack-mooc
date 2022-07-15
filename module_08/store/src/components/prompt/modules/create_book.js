@@ -1,10 +1,22 @@
-import { Form, useField } from '../../inputs'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
+
+import { Form, useField } from '../../inputs'
+import { create_book, all_books } from '../../../models'
 
 const Create = () => {
 
     // REDUX DISPATCH
     const dispatch = useDispatch()
+    const navigator = useNavigate()
+
+    // CREATE BOOK
+    const [createBook] = useMutation(create_book, {
+        refetchQueries: [{
+            query: all_books
+        }]
+    })
 
     // TITLE
     const title = useField({
@@ -18,7 +30,8 @@ const Create = () => {
 
     // PUBLICATION YEAR
     const published = useField({
-        placeholder: 'What year was it published?'
+        placeholder: 'What year was it published?',
+        type: 'number'
     })
 
     // PUBLICATION YEAR
@@ -28,22 +41,35 @@ const Create = () => {
 
     // TRIGGER FORM
     const trigger = async() => {
-        
-        // CREATE ANECDOTE BODY
-        const body = {
-            title: title.value,
-            author: author.value,
-            published: published.value,
-            genres: genres.value.split(','),
+
+        // ATTEMPT TO CREATE THE BOOK
+        try {
+            const response = await createBook({
+                variables: {
+                    title: title.value,
+                    published: Number(published.value),
+                    author: author.value,
+                    genres: genres.value.split(','),
+                }
+            })
+
+            // NOTIFY SUCCESS
+            dispatch({
+                type: 'notifications/positive',
+                message: 'Book created!'
+            })
+
+            // REDIRECT TO BOOK PAGE & HIDE PROMPT
+            navigator(`/books/${ response.data.addBook.id }`)
+            dispatch({  type: 'prompts/hide' })
+
+        // CATCH & RENDER VALIDATION ERRORS
+        } catch (error) {
+            dispatch({
+                type: 'notifications/negative',
+                message: error.graphQLErrors.map(item => item.message)
+            })
         }
-
-        console.log(body)
-
-        // CREATE NOTIFICATION
-        dispatch({
-            type: 'notifications/positive',
-            message: 'Book created!'
-        })
     }
 
     return (
