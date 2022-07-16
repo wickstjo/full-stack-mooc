@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import useTransition from '../hooks/transition'
+import useTransition from './transition'
 
 // INPUT FIELD HOOK
 const useField = ({ type='text', default_value='', placeholder }) => {

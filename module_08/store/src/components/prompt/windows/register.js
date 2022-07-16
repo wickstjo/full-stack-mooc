@@ -1,20 +1,25 @@
 import { useDispatch } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { login } from '../../../models'
+import { REGISTER } from '../../../gql/auth'
 import { Form, useField } from '../../inputs'
 
-const Login = () => {
+const Register = () => {
 
     // AUXILLARY
     const dispatch = useDispatch()
 
     // CREATE BOOK
-    const [loginUser] = useMutation(login)
+    const [registerUser] = useMutation(REGISTER)
 
     // USERNAME FIELD
     const username = useField({
         placeholder: 'What is your username?'
+    })
+
+    // GENRE FIELD
+    const genre = useField({
+        placeholder: 'What is your favorite book genre?',
     })
 
     // PASSWORD FIELD
@@ -28,27 +33,28 @@ const Login = () => {
 
         // ATTEMPT TO UPDATE THE AUTHOR
         try {
-            const response = await loginUser({
+            const response = await registerUser({
                 variables: {
                     username: username.value,
                     password: password.value,
+                    genre: genre.value,
                 }
             })
 
             // SAVE CREDENTAILS IN STATE
             dispatch({
                 type: 'auth/login',
-                credentials: response.data.loginUser
+                credentials: response.data.registerUser
             })
             
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'login successful'
+                message: 'Registration successful'
             })
 
             // HIDE PROMPT
-            dispatch({  type: 'prompts/hide' })
+            dispatch({ type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
@@ -61,15 +67,15 @@ const Login = () => {
 
     return (
         <Form
-            header={ 'login user' }
+            header={ 'register user' }
             func={ trigger }
-            fields={[ username, password ]}
+            fields={[ username, genre, password ]}
             button={{
-                label: 'login',
-                required: [ username, password ]
+                label: 'register',
+                required: [ username, genre, password ]
             }}
         />
     )
 }
 
-export default Login
+export default Register

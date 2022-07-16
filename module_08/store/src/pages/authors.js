@@ -1,19 +1,22 @@
 import { Link } from 'react-router-dom'
-import { AUTHORS } from '../models'
-import useExtract from '../hooks/extractor'
+import { useSelector } from 'react-redux'
 import Content from '../components/content'
 
 const Authors = () => {
 
-    // APOLLO QUERY
-    const [data, config] = useExtract(AUTHORS)
+    // GLOBAL STATE
+    const { authors } = useSelector(state => state.data)
+
+    // LOCAL STATE
+    const header = `All authors (${ authors.length })`
+    const fallback = 'No authors currently exist in the database.'
 
     return (
-        <Content payload={ config } header={ 'all authors' }>
-            { data.map(item =>
-                <div key={ item.id }>
-                    <div><Link to={ `/authors/${ item.id }` }>{ item.name }</Link></div>
-                    <div>{ item.born }</div>
+        <Content payload={[ header, fallback, authors ]}>
+            { authors.map(item =>
+                <div key={ item?.id }>
+                    <div><Link to={ `/authors/${ item?.id }` }>{ item?.name }</Link></div>
+                    <div>{ item?.born }</div>
                 </div>
             )}
         </Content>

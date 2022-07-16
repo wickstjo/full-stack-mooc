@@ -1,48 +1,67 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { BOOKS } from '../models'
-import useExtract from '../hooks/extractor'
+import { Fragment } from 'react'
 
-import Wrapper from '../components/wrapper'
-import Filter from '../components/filter'
 import Content from '../components/content'
+import { Form, useField } from '../components/inputs'
 
 const Books = () => {
     
-    // FILTER STATE
-    const filter = useSelector(state => state.filter)
+    // GLOBAL STATE
+    const { books } = useSelector(state => state.data)
 
-    // APOLLO QUERY
-    const [data, config] = useExtract(BOOKS, {
-        genre: filter
-    })
+    // FILTER FIELD
+    const genre = useField({ placeholder: 'By genre' })
+    const published = useField({ placeholder: 'By publication year' })
+    const title = useField({ placeholder: 'By title' })
+
+    // APPLY FILTER WHEN DEFINED
+    const apply_filters = (data) => {
+        let temp = [...data]
+
+        // APPLY GENRE FILTER
+        if (genre.value !== '') {
+            temp = temp.filter(book => book.genres.includes(genre.value))
+        }
+
+        // APPLY TITLE FILTER
+        if (title.value !== '') {
+            temp = temp.filter(book => book.title.includes(title.value))
+        }
+
+        // APPLY PUBLISH FILTER
+        if (published.value !== '') {
+            temp = temp.filter(book => String(book.published) === published.value)
+        }
+
+        return temp
+    }
+
+    // LOCAL STATE
+    const filtered = apply_filters(books)
+    const header = `All books (${ books.length })`
+    const fallback = 'No books currently exist in the database.'
 
     return (
-        <Content payload={ config } verify={ false }>
-            <Filter />
-            <Wrapper header={ `all books (${ data.length })` }>
-                <Swapper data={ data } />
-            </Wrapper>
-        </Content>
+        <Fragment>
+            { books.length > 0 ?
+                <Form
+                    header={ 'Filter books' }
+                    fields={[ genre, published, title ]}
+                    button={ false }
+                    reset={ false }
+                />
+            : null }
+            <Content payload={[ header, fallback, books ]}>
+                { filtered.map(item =>
+                    <div key={ item.id }>
+                        <div><Link to={ `/books/${ item.id }` }>{ item.title }</Link></div>
+                        <div>{ item.published }</div>
+                    </div>
+                )}
+            </Content>
+        </Fragment>
     )
-}
-
-// SEARCH RESULT SWAPPER
-const Swapper = ({ data }) => {
-    switch (data.length) {
-        case 0: { return (
-            <div>Sorry, no books found.</div>
-        )}
-
-        default: { return (
-            data.map(item =>
-                <div key={ item.id }>
-                    <div><Link to={ `/books/${ item.id }` }>{ item.title }</Link></div>
-                    <div>{ item.published }</div>
-                </div>
-            )
-        )}
-    }
 }
 
 export default Books

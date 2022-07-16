@@ -1,29 +1,20 @@
 import { useDispatch } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { register, USERS } from '../../../models'
+import { LOGIN } from '../../../gql/auth'
 import { Form, useField } from '../../inputs'
 
-const Register = () => {
+const Login = () => {
 
     // AUXILLARY
     const dispatch = useDispatch()
 
     // CREATE BOOK
-    const [registerUser] = useMutation(register, {
-        refetchQueries: [{
-            query: USERS.query
-        }]
-    })
+    const [loginUser] = useMutation(LOGIN)
 
     // USERNAME FIELD
     const username = useField({
         placeholder: 'What is your username?'
-    })
-
-    // GENRE FIELD
-    const genre = useField({
-        placeholder: 'What is your favorite book genre?',
     })
 
     // PASSWORD FIELD
@@ -37,28 +28,27 @@ const Register = () => {
 
         // ATTEMPT TO UPDATE THE AUTHOR
         try {
-            const response = await registerUser({
+            const response = await loginUser({
                 variables: {
                     username: username.value,
                     password: password.value,
-                    genre: genre.value,
                 }
             })
 
             // SAVE CREDENTAILS IN STATE
             dispatch({
                 type: 'auth/login',
-                credentials: response.data.registerUser
+                credentials: response.data.loginUser
             })
             
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'Registration successful'
+                message: 'Login successful'
             })
 
             // HIDE PROMPT
-            dispatch({ type: 'prompts/hide' })
+            dispatch({  type: 'prompts/hide' })
         
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
@@ -71,15 +61,15 @@ const Register = () => {
 
     return (
         <Form
-            header={ 'register user' }
+            header={ 'login user' }
             func={ trigger }
-            fields={[ username, genre, password ]}
+            fields={[ username, password ]}
             button={{
-                label: 'register',
-                required: [ username, genre, password ]
+                label: 'login',
+                required: [ username, password ]
             }}
         />
     )
 }
 
-export default Register
+export default Login

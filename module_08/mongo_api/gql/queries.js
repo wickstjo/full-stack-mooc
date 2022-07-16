@@ -52,10 +52,18 @@ module.exports = {
 
     // AUTHOR QUERIES
     authors: async (root, args) => {
-        return await Author.find({})
+        return await Author.find({}).populate('books', {
+            title: 1,
+            published: 1,
+            id: 1
+        })
     },
     author: async (root, args) => {
-        return await Author.findById(args.id)
+        return await Author.findById(args.id).populate('books', {
+            title: 1,
+            published: 1,
+            id: 1
+        })
     },
 
     // USER QUERIES

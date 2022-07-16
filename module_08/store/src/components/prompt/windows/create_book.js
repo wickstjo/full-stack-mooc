@@ -1,64 +1,48 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_book, BOOKS, BOOK } from '../../../models'
+import { CREATE } from '../../../gql/book'
 import { Form, useField } from '../../inputs'
 
-const UpdateBook = () => {
+const CreateBook = () => {
 
-    // AUXILLARY
-    const { prompts, filter, auth } = useSelector(state => state)
+    // REDUX DISPATCH
+    const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    
+
     // CREATE BOOK
-    const [editBook] = useMutation(update_book, {
-        refetchQueries: [{
-            query: BOOK.query,
-            variables: {
-                id: prompts.id
-            }
-        }, {
-            query: BOOKS.query,
-            variables: {
-                genre: filter
-            }
-        }],
+    const [createBook] = useMutation(CREATE, {
         context: auth.header
     })
 
-    // TITLE FIELD
+    // TITLE
     const title = useField({
-        placeholder: 'What is the title?',
-        default_value: prompts.book.title,
+        placeholder: 'What is the title?'
     })
 
     // AUTHOR FIELD
     const author = useField({
-        placeholder: 'Who is the author?',
-        default_value: prompts.book.author.name,
+        placeholder: 'Who is the author?'
     })
 
-    // PUBLISHED FIELD
+    // PUBLICATION YEAR
     const published = useField({
-        placeholder: 'When was it published?',
-        default_value: prompts.book.published,
+        placeholder: 'What year was it published?',
         type: 'number'
     })
 
-    // PUBLISHED FIELD
+    // PUBLICATION YEAR
     const genres = useField({
-        placeholder: 'Under what genre?',
-        default_value: prompts.book.genres.join(','),
+        placeholder: 'Under what genres?'
     })
 
     // TRIGGER FORM
-    const trigger = async () => {
+    const trigger = async() => {
 
-        // ATTEMPT TO UPDATE BOOK
+        // ATTEMPT TO CREATE THE BOOK
         try {
-            await editBook({
+            await createBook({
                 variables: {
-                    id: prompts.id,
                     title: title.value,
                     published: Number(published.value),
                     author: author.value,
@@ -69,12 +53,12 @@ const UpdateBook = () => {
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'Book updated!'
+                message: 'Book created!'
             })
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
             dispatch({ type: 'prompts/hide' })
-        
+
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
             dispatch({
@@ -86,15 +70,15 @@ const UpdateBook = () => {
 
     return (
         <Form
-            header={ 'update book' }
+            header={ 'create new book' }
             func={ trigger }
             fields={[ title, author, published, genres ]}
             button={{
-                label: 'update',
+                label: 'create',
                 required: [ title, author, published, genres ]
             }}
         />
     )
 }
 
-export default UpdateBook
+export default CreateBook

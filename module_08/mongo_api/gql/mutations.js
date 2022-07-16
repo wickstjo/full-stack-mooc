@@ -1,4 +1,6 @@
 const { UserInputError, AuthenticationError } = require('apollo-server')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 const Book = require('../mongo/book.js')
 const Author = require('../mongo/author.js')
@@ -17,9 +19,16 @@ const generate_author_id = async (name) => {
 
     // IF THE AUTHOR DOES NOT EXIST, CREATE IT
     if (!author) {
+
+        // CREATE AUTHOR
         author = await new Author({
             name
         }).save()
+
+        // PUSH ENTRY TO PUBSUB
+        pubsub.publish('AUTHOR_ADDED', {
+            authorAdded: author
+        })
     }
 
     return author.id
@@ -53,7 +62,7 @@ const valid_session = (context, target_id=false) => {
     return true
 }
 
-module.exports = {
+module.exports = [{
     addBook: async (root, args, context) => {
         if (valid_session(context)) {
 
@@ -61,30 +70,47 @@ module.exports = {
             const author_id = await generate_author_id(args.author)
 
             // CREATE THE BOOK -- PASS IN THE AUTHOR ID
-            return await new Book({
+            const book = await new Book({
                 ...args,
                 author: author_id
             }).save()
+
+            // PUSH ENTRY TO PUBSUB
+            pubsub.publish('BOOK_ADDED', {
+                bookAdded: book.populate('author', {
+                    name: 1,
+                    id: 1
+                })
+            })
+
+            // ADD BOOK TO AUTHOR BOOKLIST
+            await Author.updateOne(
+                { _id: author_id },
+                { $push: { books: book.id } }
+            )
+
+            return book
         }
     },
     editBook: async (root, args, context) => {
         if (valid_session(context)) {
 
-            // FETCH OR CREATE AUTHOR
-            const author_id = await generate_author_id(args.author)
-
-            // FIXED MODIFICATIONS
-            const modifications = {
-                ...args,
-                author: author_id
-            }
-
             // MODIFY BOOK WITH MATCHING ID
             await Book.updateOne({
                 _id: args.id
-            }, modifications, { runValidators: true })
+            }, args, { runValidators: true })
 
-            return await Book.findById(args.id)
+            const book = await Book.findById(args.id)
+
+            // PUSH ENTRY TO PUBSUB
+            pubsub.publish('BOOK_UPDATED', {
+                bookUpdated: book.populate('author', {
+                    name: 1,
+                    id: 1
+                })
+            })
+
+            return book
         }
     },
     editAuthor: async (root, args, context) => {
@@ -93,7 +119,18 @@ module.exports = {
                 _id: args.id
             }, args, { runValidators: true })
 
-            return await Author.findById(args.id)
+            const author = await Author.findById(args.id)
+
+            // PUSH ENTRY TO PUBSUB
+            pubsub.publish('AUTHOR_UPDATED', {
+                authorUpdated: author.populate('books', {
+                    title: 1,
+                    published: 1,
+                    id: 1
+                })
+            })
+
+            return author
         }
     },
     editUser: async (root, args, context) => {
@@ -102,7 +139,14 @@ module.exports = {
                 _id: args.id
             }, { favoriteGenre: args.genre }, { runValidators: true })
 
-            return await User.findById(args.id)
+            const user = await User.findById(args.id)
+
+            // PUSH ENTRY TO PUBSUB
+            pubsub.publish('USER_UPDATED', {
+                userUpdated: user
+            })
+
+            return user
         }
     },
     registerUser: async (root, args) => {
@@ -118,6 +162,11 @@ module.exports = {
         if (!user) {
             throw new UserInputError('Something went wrong, try again.')
         }
+
+        // PUSH ENTRY TO PUBSUB
+        pubsub.publish('USER_ADDED', {
+            userAdded: user
+        })
 
         // OTHERWISE, CREATE AUTH TOKEN
         return create_auth_token(user)
@@ -138,4 +187,15 @@ module.exports = {
         // OTHERWISE, CREATE AUTH TOKEN
         return create_auth_token(user)
     }
-}
+},
+{
+    // SUBSCRIPTIONS
+    bookAdded: { subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']) },
+    bookUpdated: { subscribe: () => pubsub.asyncIterator(['BOOK_UPDATED']) },
+
+    authorAdded: { subscribe: () => pubsub.asyncIterator(['AUTHOR_ADDED']) },
+    authorUpdated: { subscribe: () => pubsub.asyncIterator(['AUTHOR_UPDATED']) },
+
+    userAdded: { subscribe: () => pubsub.asyncIterator(['USER_ADDED']) },
+    userUpdated: { subscribe: () => pubsub.asyncIterator(['USER_UPDATED']) },
+}]

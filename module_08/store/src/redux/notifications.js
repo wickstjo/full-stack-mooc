@@ -27,6 +27,16 @@ const actions = {
         })
     },
 
+    // CREATE NEUTRAL NOTIFICATION
+    neutral (state, action) {
+        state.push({
+            message: action.message,
+            kind: 'neutral',
+            duration: action.duration ? action.duration : default_duration,
+            id: Number((Math.random() * 100000000).toFixed(0))
+        })
+    },
+
     // REMOVE NOTIFICATION
     remove (state, action) {
         return state.filter(item => item.id !== action.id)

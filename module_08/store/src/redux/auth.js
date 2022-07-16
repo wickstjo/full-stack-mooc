@@ -41,8 +41,6 @@ const actions = {
         return state
     },
 
-    
-
     // START SESSION
     login (state, action) {
 

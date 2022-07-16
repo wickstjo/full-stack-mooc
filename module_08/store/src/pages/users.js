@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom'
-import { USERS } from '../models'
+import { useSelector } from 'react-redux'
 
 import Content from '../components/content'
-import useExtract from '../hooks/extractor'
 
 const Users = () => {
 
-    // APOLLO QUERY
-    const [data, config] = useExtract(USERS)
+    // GLOBAL STATE
+    const { users } = useSelector(state => state.data)
+
+    // LOCAL STATE
+    const header = `All users (${ users.length })`
+    const fallback = 'No users currently exist in the database.'
 
     return (
-        <Content payload={ config } header={ 'all users' }>
-            { data.map(item =>
+        <Content payload={[ header, fallback, users ]}>
+            { users.map(item =>
                 <div key={ item.id }>
                     <div><Link to={ `/users/${ item.id }` }>{ item.username }</Link></div>
                 </div>

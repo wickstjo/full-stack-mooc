@@ -1,33 +1,23 @@
 import Wrapper from './wrapper'
 
-const Content = ({ payload, verify=true, header=false, children }) => {
+const Content = ({ payload, children }) => {
 
-    // DESTRUCT PAYLOAD
-    const { result, query } = payload
+    // DESTRUCTURE PAYLOAD PARTS
+    const [header, fallback, data] = payload
 
-    // WHEN LOADING OR NO-DATA
-    if (result?.loading || !result?.data[query.key]) { return (
-        <Wrapper header={ 'error' }>
-            <div>Data could not be retrieved.</div>
-        </Wrapper>
-    )}
-
-    // DONE LOADING, BUT THE LIST IS EMPTY
-    if (verify && !result?.loading && result?.data[query.key].length === 0) { return (
+    // CATCH PROBLEMS
+    if (!data || data.length === 0) { return (
         <Wrapper header={ header }>
-            <div>There are currently no listed items under this category.</div>
+            <div>{ fallback }</div>
         </Wrapper>
     )}
 
-    // WITH HEADER
-    if (header) { return (
+    // OTHERWISE, RENDER CHILDREN
+    return (
         <Wrapper header={ header }>
             { children }
         </Wrapper>
-    )}
-
-    // RAW
-    return children
+    )
 }
 
 export default Content

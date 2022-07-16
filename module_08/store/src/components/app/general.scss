@@ -149,3 +149,41 @@ a:hover {
         }
     }
 }
+
+#loading {
+    height: 100vh;
+    display: flex;
+
+    // LOADING SCREEN -- https://loading.io/css/
+    .lds-dual-ring {
+        display: block;
+        width: 80px;
+        height: 80px;
+        margin: auto;
+    }
+
+    .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 80px;
+        height: 80px;
+        margin: 1px;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: rgba(0, 0, 0, 0.445) transparent rgba(0, 0, 0, 0.445) transparent;
+        animation: lds-dual-ring 1s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    // >div {
+    //     background: rgba(0, 112, 0, 0.295);
+    //     border-bottom: 2px solid #36363625;
+    //     width: fit-content;
+    //     padding: 10px 15px;
+    //     margin: auto;
+    // }
+}

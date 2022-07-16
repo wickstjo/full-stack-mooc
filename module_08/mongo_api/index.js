@@ -1,28 +1,53 @@
-const mongoose = require('mongoose')
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer } = require('apollo-server-express')
+const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
+const { makeExecutableSchema } = require('@graphql-tools/schema')
+const express = require('express')
+const http = require('http')
+const { execute, subscribe } = require('graphql')
+const { SubscriptionServer } = require('subscriptions-transport-ws')
+
 const jwt = require('jsonwebtoken')
 const config = require('./config.js')
-
+const mongoose = require('mongoose')
 const User = require('./mongo/user.js')
 
 // GQL PARTS
-const mutations = require('./gql/mutations.js')
+const [mutations, subscriptions] = require('./gql/mutations.js')
 const queries = require('./gql/queries.js')
-const objects = require('./gql/objects.js')
 const definitions = require('./gql/definitions.js')
 
 // ATTEMPT TO CONNECT TO MONGO DB
 mongoose.connect(config.mongo.uri).then(() => {
     console.log(`MONGO-DB CONNECTED ON PORT ${ config.mongo.port }`)
+}).catch(error => {
+    console.log('COULD NOT CONNECT TO MONGO-DB')
+    console.log(error)
+})
 
-    // STITCH SERVER TOGETHER
-    const server = new ApolloServer({
+const start = async () => {
+    const app = express()
+    const httpServer = http.createServer(app)
+
+    const schema = makeExecutableSchema({
         typeDefs: definitions,
         resolvers: {
             Query: queries,
             Mutation: mutations,
-            ...objects,
-        },
+            Subscription: subscriptions,
+        }
+    })
+
+    const subscriptionServer = SubscriptionServer.create({
+        schema,
+        execute,
+        subscribe,
+    },{
+        server: httpServer,
+        path: '',
+    })
+
+    const server = new ApolloServer({
+        schema,
         context: async ({ req }) => {
 
             // CHECK FOR AUTH HEADER
@@ -39,16 +64,32 @@ mongoose.connect(config.mongo.uri).then(() => {
                     session: user
                 }
             }
-        }
+        },
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }), {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            subscriptionServer.close()
+                        },
+                    }
+                },
+            }
+        ],
     })
 
-    // START SERVER
-    server.listen().then(({ url }) => {
-        console.log(`SERVER STARTED ON: ${ url }`)
+    await server.start()
+
+    server.applyMiddleware({
+        app,
+        path: '/',
     })
 
-// LOG MONGO DB ERROR
-}).catch(error => {
-    console.log('COULD NOT CONNECT TO MONGO-DB')
-    console.log(error)
-})
+    const PORT = 4000
+
+    httpServer.listen(PORT, () =>
+        console.log(`Server is now running on http://localhost:${ PORT }`)
+    )
+}
+
+start()

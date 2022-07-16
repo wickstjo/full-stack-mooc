@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
-import { update_author, AUTHOR, AUTHORS } from '../../../models'
+import { UPDATE } from '../../../gql/author'
 import { Form, useField } from '../../inputs'
 
 const UpdateAuthor = () => {
@@ -11,16 +11,7 @@ const UpdateAuthor = () => {
     const dispatch = useDispatch()
 
     // CREATE BOOK
-    const [editAuthor] = useMutation(update_author, {
-        refetchQueries: [
-            { query: AUTHORS.query },
-            {
-                query: AUTHOR.query,
-                variables: {
-                    id: prompts.id
-                }
-            },
-        ],
+    const [editAuthor] = useMutation(UPDATE, {
         context: auth.header
     })
 

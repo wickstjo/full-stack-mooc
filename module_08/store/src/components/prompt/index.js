@@ -2,14 +2,12 @@ import './prompt.scss'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import CreateBook from './modules/create_book'
-import UpdateBook from './modules/update_book'
-import UpdateAuthor from './modules/update_author'
-
-import Login from './modules/login'
-import Register from './modules/register'
-
-import UpdateUser from './modules/update_user'
+import CreateBook from './windows/create_book'
+import UpdateBook from './windows/update_book'
+import UpdateAuthor from './windows/update_author'
+import UpdateUser from './windows/update_user'
+import Login from './windows/login'
+import Register from './windows/register'
 
 const Prompt = () => {
 
@@ -56,18 +54,14 @@ const Prompt = () => {
 const Swapper = ({ window }) => {
     switch (window) {
 
-        // BLOG ACTIONS
         case 'create_book': { return <CreateBook /> }
+
         case 'update_book': { return <UpdateBook /> }
-
-        // AUTHOR ACTIONS
         case 'update_author': { return <UpdateAuthor /> }
+        case 'update_user': { return <UpdateUser /> }
 
-        // AUTH
         case 'login': { return <Login /> }
         case 'register': { return <Register /> }
-
-        case 'update_user': { return <UpdateUser /> }
         
         // OTHERWISE, RETURN NOTHING
         default: {

@@ -2,6 +2,11 @@ import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 
+import { useQuery } from '@apollo/client'
+import { BOOKS } from '../../gql/book'
+import { AUTHORS } from '../../gql/author'
+import { USERS } from '../../gql/user'
+
 import Menu from '../menu'
 import Pages from './pages'
 import Notifications from '../notifications'
@@ -9,27 +14,59 @@ import Prompt from '../prompt'
 
 const App = () => {
 
-    // REDUX DISPATCH
-    const prompt = useSelector(state => state.prompts)
+    // AUXILLARY
+    const { prompts, data } = useSelector(state => state)
     const dispatch = useDispatch()
 
-    // ON LOAD, CHECK LOCALSTORAGE FOR CREDENTIALS
+    // API CALLS
+    const books = useQuery(BOOKS.query)
+    const authors = useQuery(AUTHORS.query)
+    const users = useQuery(USERS.query)
+
+    // CHECK LOCALSTORAGE FOR CREDENTIALS
     useEffect(() => {
         dispatch({
             type: 'auth/check'
         })
     }, [dispatch])
-    
-    return (
-        <BrowserRouter>
-            <div id={ 'main' } className={ prompt ? 'blurred' : null }>
-                <Menu />
-                <Pages />
+
+    // CHECK IF ALL DATA HAS BEEN LOADED
+    useEffect(() => {
+        if (!books.loading && !authors.loading && !users.loading) {
+            if (books.data[BOOKS.key] && authors.data[AUTHORS.key] && users.data[USERS.key]) {
+                setTimeout(() => {
+                    dispatch({
+                        type: 'data/init',
+                        books: books.data[BOOKS.key],
+                        authors: authors.data[AUTHORS.key],
+                        users: users.data[USERS.key]
+                    })
+                }, 1000)
+            }
+        }
+    }, [books, authors, users, dispatch])
+
+    switch (data.loading) {
+
+        // LOADING DATA
+        case true: { return (
+            <div id={ 'loading' }>
+                <div className={ 'lds-dual-ring' } />
             </div>
-            <Prompt />
-            <Notifications />
-        </BrowserRouter>
-    )
+        )}
+
+        // RENDER NORMALLY
+        default: { return (
+            <BrowserRouter>
+                <div id={ 'main' } className={ prompts ? 'blurred' : null }>
+                    <Menu />
+                    <Pages />
+                </div>
+                <Prompt />
+                <Notifications />
+            </BrowserRouter>
+        )}
+    }
 }
 
 export default App

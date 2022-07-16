@@ -1,4 +1,4 @@
-import useTransition from '../hooks/transition'
+import useTransition from './transition'
 
 const Wrapper = ({ header, children }) => {
 

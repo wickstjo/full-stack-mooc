@@ -1,58 +1,49 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
 
+import { UPDATE } from '../../../gql/book'
 import { Form, useField } from '../../inputs'
-import { create_book, BOOKS } from '../../../models'
 
-const CreateBook = () => {
+const UpdateBook = () => {
 
-    // REDUX DISPATCH
-    const filter = useSelector(state => state.filter)
-    const auth = useSelector(state => state.auth)
+    // AUXILLARY
+    const { prompts, auth } = useSelector(state => state)
     const dispatch = useDispatch()
-
+    
     // CREATE BOOK
-    const [createBook] = useMutation(create_book, {
-        refetchQueries: [{
-            query: BOOKS.query,
-            variables: {
-                genre: filter
-            }
-        }],
+    const [editBook] = useMutation(UPDATE, {
         context: auth.header
     })
 
-    // TITLE
+    // TITLE FIELD
     const title = useField({
-        placeholder: 'What is the title?'
+        placeholder: 'What is the title?',
+        default_value: prompts.book.title,
     })
 
-    // AUTHOR FIELD
-    const author = useField({
-        placeholder: 'Who is the author?'
-    })
-
-    // PUBLICATION YEAR
+    // PUBLISHED FIELD
     const published = useField({
-        placeholder: 'What year was it published?',
+        placeholder: 'When was it published?',
+        default_value: prompts.book.published,
         type: 'number'
     })
 
-    // PUBLICATION YEAR
+    // PUBLISHED FIELD
     const genres = useField({
-        placeholder: 'Under what genres?'
+        placeholder: 'Under what genre?',
+        default_value: prompts.book.genres.join(','),
     })
 
     // TRIGGER FORM
-    const trigger = async() => {
+    const trigger = async () => {
 
-        // ATTEMPT TO CREATE THE BOOK
+        // ATTEMPT TO UPDATE BOOK
         try {
-            await createBook({
+            await editBook({
                 variables: {
+                    id: prompts.id,
                     title: title.value,
                     published: Number(published.value),
-                    author: author.value,
                     genres: genres.value.split(','),
                 }
             })
@@ -60,12 +51,12 @@ const CreateBook = () => {
             // NOTIFY SUCCESS
             dispatch({
                 type: 'notifications/positive',
-                message: 'Book created!'
+                message: 'Book updated!'
             })
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
             dispatch({ type: 'prompts/hide' })
-
+        
         // CATCH & RENDER VALIDATION ERRORS
         } catch (error) {
             dispatch({
@@ -77,15 +68,15 @@ const CreateBook = () => {
 
     return (
         <Form
-            header={ 'create new book' }
+            header={ 'update book' }
             func={ trigger }
-            fields={[ title, author, published, genres ]}
+            fields={[ title, published, genres ]}
             button={{
-                label: 'create',
-                required: [ title, author, published, genres ]
+                label: 'update',
+                required: [ title, published, genres ]
             }}
         />
     )
 }
 
-export default CreateBook
+export default UpdateBook

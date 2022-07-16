@@ -4,6 +4,7 @@ module.exports = gql(`
     type Author {
         name: String!
         born: Int
+        books: [Book!]!
         id: ID!
     }
 
@@ -25,6 +26,17 @@ module.exports = gql(`
         token: String!
         username: String!
         id: ID!
+    }
+
+    type Subscription {
+        bookAdded: Book!
+        bookUpdated: Book!
+        
+        authorAdded: Author!
+        authorUpdated: Author!
+
+        userAdded: User!
+        userUpdated: User!
     }
 
     type Query {
@@ -54,7 +66,6 @@ module.exports = gql(`
             id: ID!
             title: String!
             published: Int!
-            author: String!
             genres: [String!]!
         ): Book
         
