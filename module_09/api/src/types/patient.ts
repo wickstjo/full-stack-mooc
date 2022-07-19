@@ -1,4 +1,5 @@
-import { parse_gender, parse_string, parse_date } from './utils';
+import { Entry } from './entry';
+import { parse_gender, parse_string, parse_date } from '../utils';
 
 export enum Gender {
     Male = 'male',
@@ -13,16 +14,12 @@ export interface Patient {
     ssn: string;
     gender: Gender;
     occupation: string;
+    entries: Entry[];
 }
 
 export type ScrubbedPatient = Omit<Patient, 'ssn'>;
-export type NewPatient = Omit<Patient, 'id'>;
 
-export interface Diagnosis {
-    code: string;
-    name: string;
-    latin?: string;
-}
+export type NewPatient = Omit<Patient, 'id' | 'entries'>;
 
 type Fields = {
     name: unknown,
@@ -32,13 +29,13 @@ type Fields = {
     occupation: unknown
 };
 
-export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation }: Fields): NewPatient => {
+export const parse_patient = ({ name, dateOfBirth, ssn, gender, occupation }: Fields): NewPatient => {
     const newEntry: NewPatient = {
-        name: parse_string(name),
+        name: parse_string(name, 'name'),
         dateOfBirth: parse_date(dateOfBirth),
-        ssn: parse_string(ssn),
+        ssn: parse_string(ssn, 'ssn'),
         gender: parse_gender(gender),
-        occupation: parse_string(occupation),
+        occupation: parse_string(occupation, 'occupation'),
     };
   
     return newEntry;
