@@ -54,7 +54,7 @@ export const parse_array = (param: unknown, prop: string): Array<string> => {
 
 export const parse_rating = (param: unknown): HealthRating => {
     if (!param || !is_rating(param)) {
-        throw new Error(`Health ratign property incorrect or missing. Expecting one of [${ Object.values(HealthRating).join(', ') }].`);
+        throw new Error(`Health ratign property incorrect or missing. Expecting one 0-3.`);
     }
     
     return param;

@@ -36,49 +36,49 @@ const addPatient = (input: NewPatient) => {
     return entry;
 };
 
-const add_healthcare = ({ description, date, specialist, diagnosisCodes, employerName, sickLeave }: NewHealthCare, target: number) => {
+const add_healthcare = ({ description, date, specialist, employerName, sickLeave }: NewHealthCare, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
         ...parse_health_care({
-            description, date, specialist, diagnosisCodes, employerName, sickLeave
+            description, date, specialist, employerName, sickLeave
         }),
         id: uuid(),
     };
 
     // PUSH & RETURN
     data[target].entries.push(entry);
-    return entry;
+    return data[target];
 }
 
-const add_hospital = ({ description, date, specialist, diagnosisCodes, discharge }: NewHospital, target: number) => {
+const add_hospital = ({ description, date, specialist, discharge }: NewHospital, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
         ...parse_hospital({
-            description, date, specialist, diagnosisCodes, discharge
+            description, date, specialist, discharge
         }),
         id: uuid(),
     };
 
-    // PUSH & RETURN
+    // PUSH & RETURN PATIENT
     data[target].entries.push(entry);
-    return entry;
+    return data[target];
 }
 
-const add_healthcheck = ({ description, date, specialist, diagnosisCodes, healthCheckRating }: NewHealthCheck, target: number) => {
+const add_healthcheck = ({ description, date, specialist, healthCheckRating }: NewHealthCheck, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
         ...parse_health_check({
-            description, date, specialist, diagnosisCodes, healthCheckRating
+            description, date, specialist, healthCheckRating
         }),
         id: uuid(),
     };
 
     // PUSH & RETURN
     data[target].entries.push(entry);
-    return entry;
+    return data[target];
 }
 
 export default {

@@ -26,7 +26,7 @@ export const is_gender = (param: any): param is Gender => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const is_rating = (param: any): param is HealthRating => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.values(HealthRating).includes(param);
+    return Object.keys(HealthRating).includes(param);
 };
 
 export const exists = (param: unknown | null | undefined, prop: string): unknown => {

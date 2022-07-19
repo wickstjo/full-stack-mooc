@@ -56,27 +56,26 @@ router.post('/:id/entries', (req, res) => {
     }
 
     // DESTRUCTURE ALL THE PARAMS
-    const { type, description, date, specialist, diagnosisCodes, employerName, sickLeave, discharge, healthCheckRating } = req.body;
+    const { type, description, date, specialist, employerName, sickLeave, discharge, healthCheckRating } = req.body;
 
     try {
         switch (type) {
 
             case 'OccupationalHealthcare': {
                 entry = service.add_healthcare({
-                    type, description, date, specialist, diagnosisCodes, employerName, sickLeave
+                    type, description, date, specialist, employerName, sickLeave
                 }, target);
             } break;
 
             case 'Hospital': {
-                console.log(type, description, date, specialist, diagnosisCodes, discharge);
                 entry = service.add_hospital({
-                    type, description, date, specialist, diagnosisCodes, discharge
+                    type, description, date, specialist, discharge
                 }, target);
             } break;
 
             case 'HealthCheck': {
                 entry = service.add_healthcheck({
-                    type, description, date, specialist, diagnosisCodes, healthCheckRating
+                    type, description, date, specialist, healthCheckRating
                 }, target);
             } break;
 
@@ -87,8 +86,6 @@ router.post('/:id/entries', (req, res) => {
                 });
             }
         }
-
-        console.log(entry);
 
         // RETURN WITH SUCCESS
         return res.status(200).json(entry);
