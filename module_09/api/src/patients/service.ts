@@ -1,7 +1,7 @@
 import { v1 as uuid } from 'uuid';
 import data from './data';
 import { Patient, NewPatient, parse_patient, ScrubbedPatient } from '../types/patient';
-import { NewHospital, NewOccupationalHealthcare, NewHealthCheck  } from '../types/entry';
+import { NewHospital, NewHealthCare, NewHealthCheck, parse_health_check, parse_health_care, parse_hospital } from '../types/entry';
 
 const getEntries = (): Patient[] => {
     return data;
@@ -36,12 +36,13 @@ const addPatient = (input: NewPatient) => {
     return entry;
 };
 
-const add_healthcare = (input: NewOccupationalHealthcare, target: number) => {
-
+const add_healthcare = ({ description, date, specialist, diagnosisCodes, employerName, sickLeave }: NewHealthCare, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
-        ...input,
+        ...parse_health_care({
+            description, date, specialist, diagnosisCodes, employerName, sickLeave
+        }),
         id: uuid(),
     };
 
@@ -50,12 +51,13 @@ const add_healthcare = (input: NewOccupationalHealthcare, target: number) => {
     return entry;
 }
 
-const add_hospital = (input: NewHospital, target: number) => {
-    console.log(input);
+const add_hospital = ({ description, date, specialist, diagnosisCodes, discharge }: NewHospital, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
-        ...input,
+        ...parse_hospital({
+            description, date, specialist, diagnosisCodes, discharge
+        }),
         id: uuid(),
     };
 
@@ -64,12 +66,13 @@ const add_hospital = (input: NewHospital, target: number) => {
     return entry;
 }
 
-const add_healthcheck = (input: NewHealthCheck, target: number) => {
-    console.log(input);
+const add_healthcheck = ({ description, date, specialist, diagnosisCodes, healthCheckRating }: NewHealthCheck, target: number) => {
 
     // CREATE NEW ENTRY WITH ID
     const entry = {
-        ...input,
+        ...parse_health_check({
+            description, date, specialist, diagnosisCodes, healthCheckRating
+        }),
         id: uuid(),
     };
 

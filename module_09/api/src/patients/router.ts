@@ -42,6 +42,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
+    console.log('called');
 
     // CHECK IF THE PATIENT EXISTS
     const target = data.findIndex(entry => entry.id === req.params.id);
@@ -58,7 +59,7 @@ router.post('/:id/entries', (req, res) => {
     const { type, description, date, specialist, diagnosisCodes, employerName, sickLeave, discharge, healthCheckRating } = req.body;
 
     try {
-        switch (req.body.type) {
+        switch (type) {
 
             case 'OccupationalHealthcare': {
                 entry = service.add_healthcare({
@@ -67,6 +68,7 @@ router.post('/:id/entries', (req, res) => {
             } break;
 
             case 'Hospital': {
+                console.log(type, description, date, specialist, diagnosisCodes, discharge);
                 entry = service.add_hospital({
                     type, description, date, specialist, diagnosisCodes, discharge
                 }, target);
@@ -81,16 +83,19 @@ router.post('/:id/entries', (req, res) => {
             // FALLBACK
             default: {
                 return res.json({
-                    error: `Unknown entry type: ${ req.body.type }`
+                    error: `Unknown entry type: ${ type }`
                 });
             }
         }
+
+        console.log(entry);
 
         // RETURN WITH SUCCESS
         return res.status(200).json(entry);
 
     } catch (error: unknown) {
         if (error instanceof Error) {
+            console.log(error.message);
             return res.json({
                 error: error.message
             });

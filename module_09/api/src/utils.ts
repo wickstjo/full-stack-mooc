@@ -43,10 +43,6 @@ export const parse_gender = (param: unknown): Gender => {
 
 
 
-
-
-
-
 export const parse_string_array = (param: unknown): string => {
     if (!param || !is_string(param) || !is_date(param)) {
         throw new Error(`date property incorrect or missing. Expecting date.`);

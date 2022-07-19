@@ -8,7 +8,7 @@ interface BaseEntry {
     diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-enum HealthRating {
+export enum HealthRating {
     "Healthy" = 0,
     "LowRisk" = 1,
     "HighRisk" = 2,
@@ -20,12 +20,12 @@ export interface HealthCheck extends BaseEntry {
     healthCheckRating: HealthRating;
 }
 
-interface Discharge {
+export interface Discharge {
     date: string;
     criteria: string;
 }
 
-interface SickLeave {
+export interface SickLeave {
     startDate: string;
     endDate: string;
 }
@@ -44,10 +44,36 @@ export interface OccupationalHealthcare extends BaseEntry {
 
 export type Entry = | Hospital | OccupationalHealthcare | HealthCheck;
 
+export type NewHealthCheck = Omit<HealthCheck, 'id'>;
+export type NewHealthCare = Omit<OccupationalHealthcare, 'id'>;
+export type NewHospital = Omit<Hospital, 'id'>;
 
-export type NewHealthCheck = Omit<HealthCheck, 'id' | 'type'>;
-export type NewOccupationalHealthcare = Omit<OccupationalHealthcare, 'id' | 'type'>;
-export type NewHospital = Omit<Hospital, 'id' | 'type'>;
+import { parse_string, parse_date, parse_array, parse_rating, parse_sickleave, parse_discharge } from '../utils/parsers';
+
+//////////////////////////////////////////////////////// HOSPITAL
+
+type HospitalProps = {
+    description: unknown,
+    date: unknown,
+    specialist: unknown,
+    diagnosisCodes: unknown,
+    discharge: unknown,
+};
+
+export const parse_hospital = ({ description, date, specialist, diagnosisCodes, discharge }: HospitalProps): NewHospital => {
+    const newEntry: NewHospital = {
+        type: 'Hospital',
+        description: parse_string(description, 'description'),
+        date: parse_date(date),
+        specialist: parse_string(specialist, 'specialist'),
+        diagnosisCodes: parse_array(diagnosisCodes, 'diagnosisCodes'),
+        discharge: parse_discharge(discharge)
+    };
+  
+    return newEntry;
+};
+
+//////////////////////////////////////////////////////// HEALTH CHECK
 
 type HealthCheckProps = {
     description: unknown,
@@ -57,15 +83,39 @@ type HealthCheckProps = {
     healthCheckRating: unknown
 };
 
-import { parse_string, parse_date, parse_string_array, parse_rating } from '../utils';
-
-export const parse_patient = ({ description, date, specialist, diagnosisCodes, healthCheckRating }: HealthCheckProps): NewHealthCheck => {
-    const newEntry: NewHealthCheck = {
+export const parse_health_care = ({ description, date, specialist, diagnosisCodes, employerName, sickLeave }: HealthCareProps): NewHealthCare => {
+    const newEntry: NewHealthCare = {
+        type: 'OccupationalHealthcare',
         description: parse_string(description, 'description'),
         date: parse_date(date),
         specialist: parse_string(specialist, 'specialist'),
-        diagnosisCodes: parse_string_array(diagnosisCodes, 'diagnosisCodes'),
-        healthCheckRating: parse_rating(healthCheckRating, 'healthCheckRating'),
+        diagnosisCodes: parse_array(diagnosisCodes, 'diagnosisCodes'),
+        employerName: parse_string(employerName, 'employerName'),
+        sickLeave: parse_sickleave(sickLeave)
+    };
+  
+    return newEntry;
+};
+
+//////////////////////////////////////////////////////// HEALTH CARE
+
+type HealthCareProps = {
+    description: unknown,
+    date: unknown,
+    specialist: unknown,
+    diagnosisCodes: unknown,
+    employerName: unknown,
+    sickLeave: unknown
+};
+
+export const parse_health_check = ({ description, date, specialist, diagnosisCodes, healthCheckRating }: HealthCheckProps): NewHealthCheck => {
+    const newEntry: NewHealthCheck = {
+        type: 'HealthCheck',
+        description: parse_string(description, 'description'),
+        date: parse_date(date),
+        specialist: parse_string(specialist, 'specialist'),
+        diagnosisCodes: parse_array(diagnosisCodes, 'diagnosisCodes'),
+        healthCheckRating: parse_rating(healthCheckRating),
     };
   
     return newEntry;
