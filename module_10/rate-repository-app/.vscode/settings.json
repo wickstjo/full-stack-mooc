@@ -1,0 +1,5 @@
+{
+    "eslint.options": {
+        "configFile": "/home/wickstjo/aalto/full-stack/module_10/rate-repository-app/babel.config.js"
+    }
+}

@@ -1,0 +1,5 @@
+npm install --global expo-cli
+
+expo init rate-repository-app --template expo-template-blank@sdk-44 --npm
+
+export NODE_OPTIONS=--openssl-legacy-provider
