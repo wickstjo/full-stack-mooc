@@ -7,7 +7,7 @@ export default StyleSheet.create({
         height: '50px',
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     item: {
         flex: 1,

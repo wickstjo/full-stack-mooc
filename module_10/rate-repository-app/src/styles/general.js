@@ -11,7 +11,13 @@ export default StyleSheet.create({
     },
     innerbody: {
         flex: 1,
-        paddingTop: '5px'
+        position: 'relative'
+    },
+    scroller: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        overflow: 'auto'
     },
     container: {
         backgroundColor: 'white',
@@ -34,14 +40,6 @@ export default StyleSheet.create({
     },
     search: {
         backgroundColor: 'white',
+        marginTop: '5px',
     },
-    error: {
-        backgroundColor: 'rgba(255, 176, 176, 0.602)',
-        padding: '10px',
-        marginBottom: '5px',
-        borderRadius: '5px',
-        borderColor: 'background: rgba(0, 0, 0, 0.259);',
-        borderWidth: '1px',
-        ...fonts,
-    }
 })

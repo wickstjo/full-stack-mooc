@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import styles from '../../styles/repos'
-import { shorten } from '../../funcs'
+import { shorten } from '../../funcs/misc'
 
 export default ({ item }) => { return (
     <View style={ styles.lower }>
