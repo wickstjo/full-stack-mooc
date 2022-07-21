@@ -1,35 +1,33 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { Navigate } from 'react-router-native';
+import { useDispatch } from 'react-redux'
 import { useMutation } from '@apollo/client'
-import { LOGIN } from '../gql/mutations'
 
-import Container from '../components/container'
-import Header from '../components/header'
-
-import Field from '../components/inputs/field'
-import Button from '../components/inputs/button'
-
-import useField from '../hooks/field'
-import useStorage from '../hooks/storage'
+import { LOGIN } from '../../../gql/mutations'
+import Form from '../../inputs/form'
+import useField from '../../../hooks/field'
 
 export default () => {
 
-    // LOGIN MUTATION
-    const [authenticate] = useMutation(LOGIN)
-
-    // GLOBAL STATE
-    const auth = useSelector(state => state.auth)
+    // AUXILLARY
     const dispatch = useDispatch()
-    const storage = useStorage()
+
+    // CREATE BOOK
+    const [loginUser] = useMutation(LOGIN)
 
     // USERNAME FIELD
     const username = useField({
-        placeholder: 'Username'
+        placeholder: 'What is your username?'
     })
 
     // PASSWORD FIELD
     const password = useField({
-        placeholder: 'Password'
+        placeholder: 'What is your password?',
+        type: 'password'
+    })
+
+    // PASSWORD FIELD
+    const password_again = useField({
+        placeholder: 'Write your password again?',
+        type: 'password'
     })
 
     // TRIGGER FORM
@@ -39,7 +37,7 @@ export default () => {
         if (username.value === '' || password.value === '') {
             return dispatch({
                 type: 'notifications/negative',
-                message: 'A username and password is required.'
+                message: 'Every field is required.'
             })
         }
 
@@ -71,11 +69,13 @@ export default () => {
                 credentials
             })
 
-            // NOTIFY USER
+            // NOTIFY USER & HIDE PROMPT
             dispatch({
                 type: 'notifications/positive',
                 message: 'Successfully logged in!'
             })
+
+            dispatch({ type: 'prompts/hide' })
         
         // CATCH & RENDER ERRORS
         } catch (error) {
@@ -86,24 +86,13 @@ export default () => {
         }
     }
 
-    switch (auth.session) {
-
-        // NO SESSION, RENDER NORMALLY
-        case false: { return (
-            <Container>
-                <Header text={ 'Login User' } />
-                <Field { ...username } />
-                <Field { ...password } />
-                <Button
-                    label={ 'Login' }
-                    func={ trigger }
-                />
-            </Container>
-        )}
-
-        // OTHERWISE, REDIRECT
-        default: { return (
-            <Navigate to={ '/' } replace />
-        )}
-    }
+    return (
+        <Form
+            header={ 'register user' }
+            func={ trigger }
+            fields={[ username, password, password_again ]}
+            required={[ username, password, password_again ]}
+            button={ 'Register' }
+        />
+    )
 }

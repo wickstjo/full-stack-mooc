@@ -17,7 +17,6 @@ export default StyleSheet.create({
         position: 'absolute',
         height: '100%',
         width: '100%',
-        overflow: 'auto'
     },
     container: {
         backgroundColor: 'white',
@@ -28,7 +27,7 @@ export default StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.65)',
         padding: '15px',
         color: 'white',
-        borderRadius: '5px',
+        borderRadius: 5,
         marginBottom: '5px',
         textTransform: 'uppercase',
         textAlign: 'center',

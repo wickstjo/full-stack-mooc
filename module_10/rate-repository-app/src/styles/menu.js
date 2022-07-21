@@ -8,6 +8,7 @@ export default StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: '5px'
     },
     item: {
         flex: 1,
@@ -18,16 +19,6 @@ export default StyleSheet.create({
     },
     item_label: {
         color: 'white',
-        ...fonts,
-    },
-    selected: {
-        backgroundColor: 'rgba(14, 59, 102, 0.641)',
-        flex: 1,
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textDecorationLine: 'underline',
         ...fonts,
     }
 })

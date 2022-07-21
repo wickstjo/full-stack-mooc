@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 
-export default ({ query, extract }) => {
+export default ({ query, extract, variables={} }) => {
 
     // PERFORM GQL QUERY
     const { data, error, loading } = useQuery(query, {
+        variables: variables,
         fetchPolicy: 'cache-and-network',
     })
     

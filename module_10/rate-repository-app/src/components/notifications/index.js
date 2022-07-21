@@ -6,13 +6,16 @@ import Entry from './entry'
 const Notifications = () => {
 
     // REDUX STATE
-    const { notifications } = useSelector(state => state)
+    const { notifications, prompts } = useSelector(state => state)
+
+    // REMOVE BACKGROUND WHEN PROMPT IS ENABLED
+    const secondary = prompts ? { backgroundColor: 'transparent' } : null
 
     switch (notifications.length > 0) {
 
         // NOTIFICATIONS FOUND, RENDER THEM
         case true: { return (
-            <View style={ styles.notifications }>
+            <View style={[ styles.notifications, secondary ]}>
                 { notifications.map(entry =>
                     <Entry
                         key={ entry.id }

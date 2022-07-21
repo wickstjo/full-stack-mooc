@@ -5,6 +5,7 @@ import useStorage from '../../hooks/storage'
 
 import Item from './item'
 import Trigger from './trigger'
+import { Fragment } from 'react'
 
 
 export default () => { return (
@@ -12,10 +13,6 @@ export default () => { return (
         <Item
             label={ 'Repositories' }
             destination={ '/repos' }
-        />
-        <Item
-            label={ 'Reviews' }
-            destination={ '/reviews' }
         />
         <Swapper />
     </View>
@@ -49,17 +46,44 @@ const Swapper = () => {
     switch (auth.session) {
 
         case true: { return (
-            <Trigger
-                label={ `Logout (${ auth.username })` }
-                func={ logout }
-            />
+            <Fragment>
+                <Trigger
+                    label={ `Review` }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/open',
+                            window: 'add_review'
+                        })
+                    }}
+                />
+                <Trigger
+                    label={ `Logout (${ auth.username })` }
+                    func={ logout }
+                />
+            </Fragment>
         )}
 
         default: { return (
-            <Item
-                label={ 'Login' }
-                destination={ '/login' }
-            />
+            <Fragment>
+                <Trigger
+                    label={ 'Login' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/open',
+                            window: 'login'
+                        })
+                    }}
+                />
+                <Trigger
+                    label={ 'Register' }
+                    func={() => {
+                        dispatch({
+                            type: 'prompts/open',
+                            window: 'register'
+                        })
+                    }}
+                />
+            </Fragment>
         )}
     }
 }

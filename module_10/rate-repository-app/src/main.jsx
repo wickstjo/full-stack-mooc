@@ -7,8 +7,9 @@ import Redux from './redux/'
 
 import Init from './components/init'
 import Menu from './components/menu/'
+import Prompts from './components/prompt/'
 import Notifications from './components/notifications/'
-import Pages from './components/pages'
+import Pages from './pages/'
 
 export default () => { return (
     <Apollo>
@@ -21,6 +22,7 @@ export default () => { return (
                         <Pages />
                     </View>
                 </View>
+                <Prompts />
                 <Notifications />
             </NativeRouter>
         </Redux>

@@ -19,12 +19,15 @@ export default ({ item }) => { return (
         <Item
             label={ 'Rating' }
             count={ item.ratingAverage }
+            style={{
+                borderRight: 0
+            }}
         />
     </View>
 )}
 
-const Item = ({ label, count }) => { return (
-    <View style={ styles.block }>
+const Item = ({ label, count, style }) => { return (
+    <View style={[ styles.block, style ]}>
         <Text style={ styles.count }>{ shorten(count) }</Text>
         <Text style={ styles.type }>{ label }</Text>
     </View>

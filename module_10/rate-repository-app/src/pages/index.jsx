@@ -1,16 +1,14 @@
 import { Route, Routes, Navigate } from 'react-router-native';
 
-import Repositories from '../pages/repositories'
-import Reviews from '../pages/reviews'
-import Login from '../pages/login'
-import Error from '../pages/error'
+import Repositories from './repositories'
+import Repository from './repository'
+import Error from './error'
 
 export default () => { return (
     <Routes>
         <Route exact path={ '/' } element={ <Navigate to={ '/repos' } replace /> } />
         <Route path={ '/repos' } element={ <Repositories /> } />
-        <Route path={ '/reviews' } element={ <Reviews /> } />
-        <Route path={ '/login' } element={ <Login /> } />
+        <Route path={ '/repos/:id' } element={ <Repository /> } />
         <Route path={ '*' } element={ <Error /> } />
     </Routes>
 )}

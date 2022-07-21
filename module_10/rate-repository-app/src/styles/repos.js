@@ -8,14 +8,14 @@ export default StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: 'rgba(68, 135, 190, 0.181)',
-        padding: '5px',
-        borderRadius: '5px',
+        padding: 5,
+        borderRadius: 5,
     },
     img: {
         width: 60,
         height: 60,
         resizeMode: 'stretch',
-        borderRadius: '5px',
+        borderRadius: 5,
     },
     details: {
         flex: 1,
@@ -36,22 +36,35 @@ export default StyleSheet.create({
 
     // FOOTER STUFF
     lower: {
+        backgroundColor: '#F1F1F1',
+        borderRadius: 5,
         display: 'flex',
         flexDirection: 'row',
         height: '70px',
         alignItems: 'center',
+        marginTop: 5,
     },
     block: {
         flex: 1,
         textAlign: 'center',
+        borderRightWidth: 1,
+        borderRightColor: 'rgba(0, 0, 0, 0.08)'
     },
     count: {
         fontWeight: 'bold',
-        paddingTop: '5px',
+        paddingTop: 5,
         ...fonts,
     },
     type: {
-        paddingTop: '5px',
+        paddingTop: 5,
         ...fonts
+    },
+    buttons: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 5,
+    },
+    button: {
+        flex: 1
     }
 })
