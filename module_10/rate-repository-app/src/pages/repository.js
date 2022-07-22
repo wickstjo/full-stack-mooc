@@ -13,16 +13,20 @@ export default () => {
     const params = useParams()
 
     // PERFORM QUERY
-    const [data, loading] = useResource({
+    const [data, loading, fetch_more] = useResource({
         query: GET_REPO,
         variables: {
-            id: params.id
+            id: params.id,
+            first: 5
         },
-        extract: (response) => { return {
+        data_extract: (response) => { return {
             ...response.repository,
             id: params.id,
-            reviews: response.repository.reviews.edges.map(item => item.node)
-        }}
+            reviews: response.repository.reviews?.edges.map(item => item.node)
+        }},
+        page_extract: (response) => {
+            return response.repository.reviews
+        }
     })
 
     switch (loading) {
@@ -37,6 +41,8 @@ export default () => {
                 <FlatList
                     data={ data.reviews }
                     renderItem={ Review }
+                    onEndReached={ fetch_more }
+                    onEndReachedThreshold={ 0.5 }
                 />
             </Scroller>
         )}

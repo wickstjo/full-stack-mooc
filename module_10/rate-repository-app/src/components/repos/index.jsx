@@ -1,5 +1,4 @@
 import * as Linking from 'expo-linking';
-import styles from '../../styles/repos'
 
 import Container from '../container'
 import Details from './details'

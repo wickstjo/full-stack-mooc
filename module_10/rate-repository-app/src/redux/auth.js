@@ -12,7 +12,7 @@ const init_state = {
 const create_header = (data) => {
     return {
         headers: {
-            authorization: `bearer ${ data.token }`
+            authorization: `Bearer ${ data.token }`
         }
     }
 }

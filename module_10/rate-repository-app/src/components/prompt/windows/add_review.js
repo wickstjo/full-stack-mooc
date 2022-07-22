@@ -19,15 +19,15 @@ export default () => {
     })
 
     const git_user = useField({
-        placeholder: 'What is your github username?',
+        placeholder: 'Who is the target github user?',
     })
 
     const git_repo = useField({
-        placeholder: 'What is your github repo?',
+        placeholder: 'What is the target github repo?',
     })
 
     const description = useField({
-        placeholder: 'What is your review feedback?'
+        placeholder: 'What is your feedback?'
     })
 
     const rating = useField({
@@ -77,7 +77,7 @@ export default () => {
             })
 
             // REDIRECT TO NEW PAGE
-            const created_id = response.data.createReview.id
+            const created_id = response.data.createReview.repositoryId
             navigator(`/repos/${ created_id }`)
 
             // HIDE PROMPT

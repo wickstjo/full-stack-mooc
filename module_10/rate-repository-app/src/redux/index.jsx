@@ -5,14 +5,19 @@ import { configureStore } from '@reduxjs/toolkit'
 import auth from './auth'
 import notifications from './notifications'
 import prompts from './prompts'
+import filter from './filter'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
     reducer: {
         auth,
         notifications,
-        prompts
-    }
+        prompts,
+        filter,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    }),
 })
 
 export default ({ children }) => { return (

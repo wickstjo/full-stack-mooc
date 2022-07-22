@@ -7,6 +7,7 @@ import Cross from './close.png'
 import Login from './windows/login'
 import Register from './windows/register'
 import AddReview from './windows/add_review'
+import RemoveReview from './windows/remove_review'
 
 const Prompt = () => {
 
@@ -61,6 +62,7 @@ const Swapper = ({ window }) => {
         case 'login': { return <Login /> }
         case 'register': { return <Register /> }
         case 'add_review': { return <AddReview /> }
+        case 'remove_review': { return <RemoveReview /> }
         // case 'register': { return <Register /> }
         
         // OTHERWISE, RETURN NOTHING

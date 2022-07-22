@@ -1,18 +1,24 @@
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import styles from '../../styles/reviews'
 import Container from '../container'
 import Details from './details'
 import Buttons from './buttons'
 
-export default ({ item }) => { return (
+export default ({ item, refetch=false }) => { return (
     <Container>
         <Details item={ item } />
-        <Text style={ styles.description }>
-            { item.text }
-        </Text>
-        <Buttons
-            user={ item.ownerName }
-            active={ true }
-        />
+        { item.text ?
+            <View>
+                <Text style={ styles.description }>
+                    { item.text }
+                </Text>
+            </View>
+        : null }
+        { refetch &&
+            <Buttons
+                item={ item }
+                refetch={ refetch }
+            />
+        }
     </Container>
 )}

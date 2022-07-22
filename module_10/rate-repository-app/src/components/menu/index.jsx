@@ -47,8 +47,12 @@ const Swapper = () => {
 
         case true: { return (
             <Fragment>
+                <Item
+                    label={ 'My Reviews' }
+                    destination={ '/reviews' }
+                />
                 <Trigger
-                    label={ `Review` }
+                    label={ `Create Review` }
                     func={() => {
                         dispatch({
                             type: 'prompts/open',

@@ -23,7 +23,30 @@ const format_date = (date) => {
     return [day, month, year].join('-');
 }
 
+const apply_filter = (dataset, filter) => {
+    let temp = [...dataset]
+
+    // SORT BY REVIEWS
+    if (filter.tag === 'reviews') {
+        temp = temp.sort((a, b) => b.reviewCount - a.reviewCount)
+
+    // SORT BY AVG RATING
+    } else if (filter.tag === 'rating') {
+        temp = temp.sort((a, b) => b.ratingAverage - a.ratingAverage)
+    
+    // SORT BY LATEST
+    } else if (filter.tag === 'latest') {
+        temp = temp.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    }
+
+    // FILTER BY KEYWORD
+    temp = temp.filter(item => item.fullName.includes(filter.keyword))
+
+    return temp
+}
+
 export {
     shorten,
-    format_date
+    format_date,
+    apply_filter
 }

@@ -12,8 +12,8 @@ import Notifications from './components/notifications/'
 import Pages from './pages/'
 
 export default () => { return (
-    <Apollo>
-        <Redux>
+    <Redux>
+        <Apollo>
             <NativeRouter>
                 <View style={ styles.body }>
                     <Init />
@@ -25,6 +25,6 @@ export default () => { return (
                 <Prompts />
                 <Notifications />
             </NativeRouter>
-        </Redux>
-    </Apollo>
+        </Apollo>
+    </Redux>
 )}

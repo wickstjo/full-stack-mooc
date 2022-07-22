@@ -8,8 +8,6 @@ export default StyleSheet.create({
         marginBottom: '5px',
         borderRadius: 5,
         // outlineStyle: 'none',
-        borderColor: 'background: rgba(0, 0, 0, 0.259);',
-        borderWidth: 1,
         ...fonts,
     },
     button: {
