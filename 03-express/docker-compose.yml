@@ -1,0 +1,47 @@
+version: '3.4'
+services:
+
+    # MONGO DB
+    mongo_db:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+
+    # REACT FRONTEND
+    frontend:
+        image: node:latest
+        restart: always
+        depends_on:
+            - "backend"
+        volumes:
+            - ./frontend/:/frontend
+        working_dir: /frontend
+        command: bash -c "npm install && npm start"
+        ports:
+            - 3000:3000
+
+    # MONGO BACKEND
+    backend:
+        image: node:latest
+        restart: always
+        depends_on:
+            - "mongo_db"
+        volumes:
+            - ./mongo_api/:/backend
+        working_dir: /backend
+        command: bash -c "npm install && npm start"
+        ports:
+            - 3001:3001
+
+    # # JSON BACKEND
+    # backend:
+    #     image: node:latest
+    #     restart: always
+    #     volumes:
+    #             - ./json_api/:/backend
+    #     working_dir: /backend
+    #     command: bash -c "npm install && npm start"
+    #     ports:
+    #             - 3001:3001

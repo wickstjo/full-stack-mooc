@@ -1,0 +1,22 @@
+[
+    {
+        "id": "677397b0-0a7a-11ed-b54f-bd928069cc4c",
+        "name": "Arto Hellas", 
+        "number": "040-123456"
+    },
+    {
+        "id": "6ef71d90-0a7a-11ed-af8d-1d5c50ff86f1",
+        "name": "Ada Lovelace", 
+        "number": "39-44-5323523"
+    },
+    {
+        "id": "72dfa261-0a7a-11ed-b2bf-2105d2d92ed7",
+        "name": "Dan Abramov", 
+        "number": "12-43-234345"
+    },
+    {
+        "id": "76030272-0a7a-11ed-9da8-eb5f263bcafd",
+        "name": "Mary Poppendieck", 
+        "number": "39-23-6423122"
+    }
+]
