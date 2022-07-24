@@ -1,0 +1,13 @@
+{
+    "name": "my_first_tests",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "clear && jest --verbose"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "jest": "^28.1.3"
+    }
+}
