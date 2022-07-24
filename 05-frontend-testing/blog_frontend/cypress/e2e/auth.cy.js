@@ -37,8 +37,6 @@ describe('Authentication', () => {
 
     it('Login succeeds correctly for registed user', () => {
         cy.login(test_user)
-
-        // CHECK NOTIFICATIONS & CLOSE THE PROMPT
-        cy.notification('User successfully logged in!')
+        cy.notification('Successfully logged in')
     })
 })

@@ -77,6 +77,15 @@ const useAuth = ({ url }) => {
         try {
             return await query
         } catch (error) {
+
+            // RENDER AXIOS ERRORS
+            if (error.message) {
+                dispatch({
+                    type: 'notifications/negative',
+                    message: error.message
+                })
+            }
+
             return error.response
         }
     }

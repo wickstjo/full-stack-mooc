@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 const Button = ({ label, required=false, func=false }) => {
 
@@ -30,9 +31,17 @@ const Button = ({ label, required=false, func=false }) => {
             value={ label }
             type={ 'submit' }
             className={ 'button' }
+            id={ 'trigger' }
             onClick={ func ? () => func() : null }
             disabled={ status }
         />
     )
 }
+
+Button.propTypes = {
+    label: PropTypes.string.isRequired,
+    required: PropTypes.array,
+    func: PropTypes.func,
+}
+
 export default Button

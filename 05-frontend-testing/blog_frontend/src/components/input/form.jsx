@@ -1,4 +1,5 @@
 import Button from './button'
+import PropTypes from 'prop-types'
 
 const Form = ({ header, func, fields, required, button=false }) => {
 
@@ -40,6 +41,14 @@ const Form = ({ header, func, fields, required, button=false }) => {
             </form>
         </div>
     )
+}
+
+Form.propTypes = {
+    header: PropTypes.string.isRequired,
+    fields: PropTypes.array.isRequired,
+    func: PropTypes.func.isRequired,
+    required: PropTypes.array,
+    button: PropTypes.string,
 }
 
 export default Form

@@ -1,5 +1,5 @@
 describe('Without user session', () => {
-    
+
     // FIRST, INITIALIZE
     before(() => {
         cy.init()

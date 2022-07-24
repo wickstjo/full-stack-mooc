@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const Entry = ({ item }) => {
 
@@ -23,6 +24,10 @@ const Entry = ({ item }) => {
             </div>
         </div>
     )
+}
+
+Entry.propTypes = {
+    item: PropTypes.object.isRequired,
 }
 
 export default Entry

@@ -38,57 +38,112 @@ a:hover {
 
     #container {
         width: 100%;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
         height: 100%;
         overflow: auto;
 
-        #wrapper {
-            transition: transform 0.2s;
-            background: white;
-            padding: 3px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.164);
+        #inner {
             width: 100%;
-        
-            #header {
-                text-transform: uppercase;
-                background: #414141c5;
-                border-bottom: 2px solid #2c2c2c52;
-                padding: 6px;
-                padding-left: 10px;
-                padding-right: 10px;
-                color: #F1F1F1;
-                text-shadow: 1px 1px #242424;
-            }
-        
-            #content {
-                >div {
-                    background: #2d618b33;
+            min-width: 350px;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+
+            #wrapper {
+                transition: transform 0.2s;
+                background: white;
+                padding: 3px;
+                margin-bottom: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.164);
+                width: 100%;
+            
+                #header {
+                    text-transform: uppercase;
+                    background: #414141c5;
+                    border-bottom: 2px solid #2c2c2c52;
+                    padding: 6px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    color: #F1F1F1;
+                    text-shadow: 1px 1px #242424;
                     display: flex;
-                    padding: 6px 8px;
-                    border-bottom: 2px solid #3f79a83d;
-                    margin-top: 3px;
     
-                    >div:nth-child(2) {
-                        text-align: right;
+                    >div {
+                        color: #F1F1F1;
+                        cursor: pointer;
+                    }
+            
+                    > div:first-child {
                         flex: 1;
                     }
-    
-                    >div:nth-child(3) {
-                        padding-left: 10px;
+            
+                    >div:last-child {
+                        text-align: right;
+                        text-transform: uppercase;
                     }
-    
-                    #action {
-                        cursor: pointer;
-                        color: rgb(21, 58, 92);
-                        transition: color 0.2s;
+                }
+            
+                #content {
+                    >div {
+                        background: #2d618b33;
+                        display: flex;
+                        padding: 6px 8px;
+                        border-bottom: 2px solid #3f79a83d;
+                        margin-top: 3px;
+        
+                        >div:nth-child(2) {
+                            text-align: right;
+                            flex: 1;
+                        }
+        
+                        >div:nth-child(3) {
+                            padding-left: 10px;
+                        }
+        
+                        #action {
+                            cursor: pointer;
+                            color: rgb(21, 58, 92);
+                            transition: color 0.2s;
+                        }
+                        
+                        #action:hover {
+                            color: rgb(104, 29, 29);
+                            text-decoration: underline;
+                        }
                     }
-                    
-                    #action:hover {
-                        color: rgb(104, 29, 29);
-                        text-decoration: underline;
+
+                    #actions {
+                        padding: 0px;
+                        display: flex;
+                        border-bottom: 0px;
+                        background: none;
+                        
+                        .action {
+                            background: white;
+                            flex: 1;
+                            padding: 4px;
+                            text-transform: uppercase;
+                            border-bottom: 2px solid #3636363d;
+                            text-align: center;
+                            cursor: pointer;
+                            margin-right: 3px;
+                        }
+            
+                        .action:last-child {
+                            margin: 0px;
+                        }
+                        
+                        #like {
+                            background: rgba(0, 112, 0, 0.212);
+                        }
+
+                        #dislike {
+                            background: rgba(214, 1, 1, 0.164);
+                        }
+
+                        #remove, #update {
+                            background: rgba(176, 179, 46, 0.349);
+                        }
                     }
                 }
             }

@@ -29,6 +29,11 @@ const Swapper = () => {
         dispatch({
             type: 'auth/logout',
         })
+
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Successfully logged out'
+        })
     }
 
     switch (auth.session) {

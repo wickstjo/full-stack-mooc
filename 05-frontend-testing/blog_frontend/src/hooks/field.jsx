@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const useField = ({ type='text', default_value='', placeholder }) => {
+const useField = ({ type='text', default_value='', id='fallback', placeholder }) => {
 
     // LOCAL STATE
     const [value, set_value] = useState(default_value)
@@ -19,6 +19,7 @@ const useField = ({ type='text', default_value='', placeholder }) => {
         type,
         placeholder,
         value,
+        id,
         onChange,
         reset
     }

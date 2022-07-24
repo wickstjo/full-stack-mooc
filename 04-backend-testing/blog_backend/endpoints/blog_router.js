@@ -54,7 +54,7 @@ router.get('/:id', async (request, response) => {
 })
 
 // INCREMENT LIKES
-router.get('/:id/increment', async (request, response) => {
+router.get('/:id/like', async (request, response) => {
 
     // VERIFY BEARER TOKEN
     validate_token(request, response)
@@ -85,7 +85,7 @@ router.get('/:id/increment', async (request, response) => {
 })
 
 // DECREMENT LIKES
-router.get('/:id/decrement', async (request, response) => {
+router.get('/:id/dislike', async (request, response) => {
 
     // VERIFY BEARER TOKEN
     validate_token(request, response)

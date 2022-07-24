@@ -1,39 +1,78 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
-const useResource = ({ url, fetch_data=true }) => {
+const useResource = ({ url, resource_name, fetch_data=false }) => {
 
     // REDUX STATE
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
 
-    // RESOURCE STATE
-    const [resource, set_resource] = useState([])
-
     // ON LOAD, FETCH DATA FROM API
     useEffect(() => {
         if (fetch_data) {
-            axios.get(url).then(response => {
-                set_resource(response.data)
-
-                dispatch({
-                    type: 'notifications/positive',
-                    message: 'Dataset loaded'
-                })
-
-            }).catch(error => {
-                dispatch({
-                    type: 'notifications/negative',
-                    message: error.message
-                })
-            })
+            fetch_all()
         }
     }, [url, dispatch])
 
+    // FETCH ALL RESOURCES
+    const fetch_all = async () => {
+
+        const query = axios.get(url)
+        const response = await wrapper(query)
+
+        // CATCH UNEXPECTED STATUSES
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        dispatch({
+            type: 'resources/overwrite',
+            resource: resource_name,
+            payload: response.data
+        })
+
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Dataset successfully retrieved'
+        })
+    }
+
+    // FETCH ONE RESOURCE ENTRY
+    const fetch_one = async (id) => {
+
+        const adjusted_url = `${ url }/${ id }`
+        const query = axios.get(adjusted_url)
+        const response = await wrapper(query)
+
+        // CATCH UNEXPECTED STATUSES
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // PUSH TO STATE
+        dispatch({
+            type: 'resources/create',
+            resource: resource_name,
+            entry: response.data
+        })
+
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Entry successfully retrieved'
+        })
+    }
+
+    // CREATE RESOURCE ENTRY
     const create = async (payload) => {
 
-        const query = axios.post(url, payload)
+        const query = axios.post(url, payload, auth.header)
         const response = await wrapper(query)
 
         // CATCH UNEXPECTED STATUSES
@@ -45,23 +84,25 @@ const useResource = ({ url, fetch_data=true }) => {
         }
 
         // PUSH TO STATE
-        set_resource([
-            ...resource,
-            response.data
-        ])
+        dispatch({
+            type: 'resources/create',
+            resource: resource_name,
+            entry: response.data
+        })
 
         dispatch({
             type: 'notifications/positive',
             message: 'Entry successfully added'
         })
 
-        dispatch({ type: 'promps/hide' })
+        dispatch({ type: 'prompts/hide' })
     }
 
-    const update = async (id, payload) => {
+    // UPDATE EXISTING ENTRY
+    const update = async (payload) => {
 
-        const adjusted_url = `${ url }/${ id }`
-        const query = axios.put(adjusted_url, payload)
+        const adjusted_url = `${ url }/${ payload.id }`
+        const query = axios.put(adjusted_url, payload, auth.header)
         const response = await wrapper(query)
 
         // CATCH UNEXPECTED STATUSES
@@ -72,47 +113,115 @@ const useResource = ({ url, fetch_data=true }) => {
             })
         }
 
-        // FIND & MODIFY THE ENTRY
-        const cloned = [...resource]
-        const target = resource.findIndex(entry => entry.id === id)
-        cloned[target] = payload
-
-        // UPDATE STATE
-        set_resource(cloned)
+        // PUSH TO STATE
+        dispatch({
+            type: 'resources/update',
+            resource: resource_name,
+            entry: payload
+        })
 
         dispatch({
             type: 'notifications/positive',
             message: 'Entry successfully updated'
         })
 
-        dispatch({ type: 'promps/hide' })
+        dispatch({ type: 'prompts/hide' })
     }
 
-    // REMOVE ENTRY FROM STATE
+    // REMOVE RESOURCE ENTRY
     const remove = async (id) => {
 
         const adjusted_url = `${ url }/${ id }`
-        const query = axios.delete(adjusted_url)
+        const query = axios.delete(adjusted_url, auth.header)
         const response = await wrapper(query)
 
         // CATCH UNEXPECTED STATUSES
-        if (response.status !== 200) {
+        if (response.status !== 204) {
             return dispatch({
                 type: 'notifications/negative',
-                message: `COULD NOT REMOVE ENTRY FROM DB: ${ response.status }`
+                message: response.data.errors
             })
         }
 
-        // UPDATE STATE
-        const cloned = [...resource].filter(entry => entry.id !== id)
-        set_resource(cloned)
+        // PUSH TO STATE
+        dispatch({
+            type: 'resources/remove',
+            resource: resource_name,
+            id
+        })
 
         dispatch({
             type: 'notifications/positive',
             message: 'Entry successfully removed'
         })
 
-        dispatch({ type: 'promps/hide' })
+        dispatch({ type: 'prompts/hide' })
+    }
+
+    // LIKE RESOURCE ENTRY
+    const like = async (id) => {
+
+        const adjusted_url = `${ url }/${ id }/like`
+        const query = axios.get(adjusted_url, auth.header)
+        const response = await wrapper(query)
+
+        // CATCH UNEXPECTED STATUSES
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // PUSH TO STATE
+        dispatch({
+            type: 'resources/update',
+            resource: resource_name,
+            entry: {
+                id,
+                likes: response.data.likes
+            }
+        })
+
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Liked entry'
+        })
+
+        dispatch({ type: 'prompts/hide' })
+    }
+
+    // DISLIKE RESOURCE ENTRY
+    const dislike = async (id) => {
+
+        const adjusted_url = `${ url }/${ id }/dislike`
+        const query = axios.get(adjusted_url, auth.header)
+        const response = await wrapper(query)
+
+        // CATCH UNEXPECTED STATUSES
+        if (response.status !== 200) {
+            return dispatch({
+                type: 'notifications/negative',
+                message: response.data.errors
+            })
+        }
+
+        // PUSH TO STATE
+        dispatch({
+            type: 'resources/update',
+            resource: resource_name,
+            entry: {
+                id,
+                likes: response.data.likes
+            }
+        })
+
+        dispatch({
+            type: 'notifications/positive',
+            message: 'Disliked entry'
+        })
+
+        dispatch({ type: 'prompts/hide' })
     }
 
     // QUERY WRAPPER
@@ -120,15 +229,28 @@ const useResource = ({ url, fetch_data=true }) => {
         try {
             return await query
         } catch (error) {
+
+            // RENDER AXIOS ERRORS
+            if (error.message) {
+                dispatch({
+                    type: 'notifications/negative',
+                    message: error.message
+                })
+            }
+
             return error.response
         }
     }
 
-    return [resource, {
+    return {
+        fetch_all,
+        fetch_one,
         create,
         update,
-        remove
-    }]
+        remove,
+        like,
+        dislike,
+    }
 }
 
 export default useResource

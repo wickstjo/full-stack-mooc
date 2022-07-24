@@ -6,6 +6,7 @@ const Init = () => {
     // REDUX DISPATCH
     const dispatch = useDispatch()
 
+    // CHECK LOCALSTORAGE FOR SESSION
     useEffect(() => {
         dispatch({
             type: 'auth/check'

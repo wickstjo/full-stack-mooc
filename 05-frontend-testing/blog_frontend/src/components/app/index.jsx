@@ -2,7 +2,7 @@ import './general.scss'
 
 import Redux from '../../redux'
 import Menu from '../menu'
-// import Blogs from '../blogs'
+import Blogs from '../blogs'
 
 import Init from '../init'
 import Prompt from '../prompt'
@@ -13,9 +13,10 @@ const App = () => { return (
         <div id={ 'main' }>
             <Menu />
             <div id={ 'container' }>
-                Foo
+                <div id={ 'inner' }>
+                    <Blogs />
+                </div>
             </div>
-            {/* <Blogs /> */}
         </div>
         <Init />
         <Prompt />

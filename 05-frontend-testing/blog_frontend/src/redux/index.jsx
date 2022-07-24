@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import notifications from './notifications'
 import prompts from './prompts'
 import auth from './auth'
-import blogs from './blogs'
+import resources from './resources'
 
 // CREATE REDUX REDUCER STORE
 const store = configureStore({
@@ -13,7 +13,7 @@ const store = configureStore({
         notifications,
         prompts,
         auth,
-        blogs
+        resources
     },
 })
 
