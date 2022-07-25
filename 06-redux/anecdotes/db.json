@@ -1,0 +1,14 @@
+{
+  "anecdotes": [
+    {
+      "text": "If it hurts, do it more often",
+      "votes": 5,
+      "id": 1
+    },
+    {
+      "text": "Premature optimization is the root of all evil.",
+      "votes": 2,
+      "id": 2
+    }
+  ]
+}
