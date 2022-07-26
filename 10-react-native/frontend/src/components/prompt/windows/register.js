@@ -24,11 +24,13 @@ export default () => {
     // PASSWORD FIELD
     const password = useField({
         placeholder: 'What is your password?',
+        password: true,
     })
-
+    
     // PASSWORD FIELD
     const password_again = useField({
         placeholder: 'Write your password again?',
+        password: true,
     })
 
     // TRIGGER FORM

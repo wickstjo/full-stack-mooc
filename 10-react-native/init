@@ -1,5 +1,8 @@
-npm install --global expo-cli
+# INSTALL STUFF
+    # npm install --global expo-cli
+    # expo init rate-repository-app --template expo-template-blank@sdk-44 --npm
 
-expo init rate-repository-app --template expo-template-blank@sdk-44 --npm
 
-export NODE_OPTIONS=--openssl-legacy-provider
+# REQUIRED FOR EXPO WEB
+    # export NODE_OPTIONS=--openssl-legacy-provider
+    # PRINT TO TERMINAL WINDWO FIRST, THEN RUN NPM START

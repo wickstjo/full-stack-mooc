@@ -6,7 +6,7 @@ import Form from '../../inputs/form'
 import useField from '../../../hooks/field'
 import useStorage from '../../../hooks/storage'
 
-export default () => {
+export default ({ mock_trigger=false }) => {
 
     // AUXILLARY
     const dispatch = useDispatch()
@@ -23,11 +23,19 @@ export default () => {
     // PASSWORD FIELD
     const password = useField({
         placeholder: 'What is your password?',
-        type: 'password'
+        password: true
     })
 
     // TRIGGER FORM
     const trigger = async() => {
+
+        // ONLY FOR UNIT TESTING
+        if (mock_trigger) {
+            return mock_trigger({
+                username: username.value,
+                password: password.value,
+            })
+        }
 
         // CATCH VALIDATION ERRORS
         if (username.value === '' || password.value === '') {

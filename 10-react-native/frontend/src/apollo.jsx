@@ -1,11 +1,13 @@
-import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@apollo/client';
-import { relayStylePagination } from '@apollo/client/utilities';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@apollo/client'
+import { relayStylePagination } from '@apollo/client/utilities'
+import { setContext } from '@apollo/client/link/context'
 import { useSelector } from 'react-redux'
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'
+import fetch from 'cross-fetch'
 
 const httpLink = createHttpLink({
     uri: Constants.manifest.extra.APOLLO_URI,
+    fetch
 })
 
 const cache = new InMemoryCache({

@@ -36,9 +36,11 @@ export default StyleSheet.create({
     filter: {
         paddingLeft: '5px',
         paddingRight: '5px',
+        ...fonts,
     },
     search: {
         backgroundColor: 'white',
         marginTop: '5px',
+        ...fonts,
     },
 })

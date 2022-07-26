@@ -1,4 +1,5 @@
-import Repositories from '../components/repos/'
+import Context from '../context'
+import Repo from '../components/repos/'
 import { render } from '@testing-library/react-native'
 
 const dataset = [
@@ -28,12 +29,20 @@ const dataset = [
 
 describe('RepositoryList', () => {
 
-    // REPO COMPONENT
-    const foo = <Repositories data={ dataset } />
+    // WRAP REPO CONTAINER IN CONTEXTS
+    const Wrapper = () => { return (
+        <Context>
+            { dataset.map(item =>
+                <Repo
+                    key={ item.id }
+                    item={ item }
+                />
+            )}
+        </Context>
+    )}
 
     it('Renders full names correctly', () => {
-        const { getByText } = render(foo)
-        const bar = render(foo)
+        const { getByText } = render(<Wrapper />)
 
         dataset.map(item => {
             expect(getByText(item.fullName)).toBeDefined()
@@ -41,7 +50,7 @@ describe('RepositoryList', () => {
     })
 
     it('Renders languages correctly', () => {
-        const { getByText } = render(foo)
+        const { getByText } = render(<Wrapper />)
 
         dataset.map(item => {
             expect(getByText(item.language)).toBeDefined()
@@ -49,7 +58,7 @@ describe('RepositoryList', () => {
     })
 
     it('Renders rating labels correctly', () => {
-        const { getAllByText } = render(foo)
+        const { getAllByText } = render(<Wrapper />)
 
         expect(getAllByText('Reviews').length).toBe(2)
         expect(getAllByText('Stars').length).toBe(2)
@@ -58,7 +67,7 @@ describe('RepositoryList', () => {
     })
 
     it('Renders ratings for first card correctly', () => {
-        const { getByText } = render(foo)
+        const { getByText } = render(<Wrapper />)
 
         expect(getByText('1.6K')).toBeDefined()
         expect(getByText('21.9K')).toBeDefined()
@@ -67,7 +76,7 @@ describe('RepositoryList', () => {
     })
 
     it('Renders ratings for second card correctly', () => {
-        const { getByText } = render(foo)
+        const { getByText } = render(<Wrapper />)
 
         expect(getByText('69')).toBeDefined()
         expect(getByText('1.8K')).toBeDefined()

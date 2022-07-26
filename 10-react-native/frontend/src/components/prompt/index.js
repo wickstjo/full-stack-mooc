@@ -1,5 +1,5 @@
 import styles from '../../styles/prompt'
-import { View, Image, Text, Pressable } from 'react-native'
+import { View, Image, Pressable } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Cross from './close.png'

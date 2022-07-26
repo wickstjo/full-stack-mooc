@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default ({ type='text', default_value='', placeholder }) => {
+export default ({ password=false, default_value='', placeholder }) => {
 
     // LOCAL STATE
     const [value, set_value] = useState(default_value)
@@ -10,10 +10,12 @@ export default ({ type='text', default_value='', placeholder }) => {
         set_value(text)
     }
 
+    const secureTextEntry = password
+
     return {
-        type,
         placeholder,
         value,
+        secureTextEntry,
         onChangeText,
     }
 }
