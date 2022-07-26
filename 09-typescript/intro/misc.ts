@@ -15,12 +15,12 @@ const extract_args = (input: Input) => {
     // EXTRACT RELEVANT ARGS
     const args = process.argv.slice(2);
 
-    // VERIFY EXACT LENGTH WHEN PASSED
+    // ENFORCE MIN ARGS LENGTH
     if (minimum && args.length < minimum) {
         throw new Error(`Too few arguments given (min ${ minimum }, given ${ args.length })`);
     }
 
-    // VERIFY EXACT LENGTH WHEN PASSED
+    // ENFORCE EXACT LENGTH
     if (exactly && args.length !== exactly) {
         throw new Error(`Incorrect number of arguments (expected ${ exactly }, given ${ args.length })`);
     }
@@ -35,11 +35,6 @@ const extract_args = (input: Input) => {
     })
 }
 
-const log = (...args) => {
-    console.log(...args)
-}
-
 export {
     extract_args,
-    log
 }

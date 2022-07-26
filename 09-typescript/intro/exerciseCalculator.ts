@@ -1,4 +1,4 @@
-import { extract_args, log } from './misc';
+import { extract_args } from './misc';
 
 interface Input {
     target: number;
@@ -53,10 +53,14 @@ const calculateExercises = (input: Input): Result => {
     }
 }
 
-// const response = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
-// log(response)
+// console.log(
+//     calculateExercises({
+//         data: [3, 0, 2, 4.5, 0, 3, 1],
+//         target: 2
+//     })
+// )
 
 const args = extract_args({ minimum: 2 })
 const target = args.shift()
 const response = calculateExercises({ target, data: args })
-log(response)
+console.log(response)

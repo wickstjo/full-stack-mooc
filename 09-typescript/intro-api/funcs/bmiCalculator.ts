@@ -16,6 +16,6 @@ const calculateBmi = (input: Input): string => {
     else if (BMI < 24.9) { return 'Overweight I (At risk)'; }
     else if (BMI < 29.9) { return 'Overweight II (Moderately obese)'; }
     else { return 'Overweight III (Severely obese)'; }
-}
+};
 
 export default calculateBmi;

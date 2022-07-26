@@ -31,6 +31,7 @@ const Part = ({ details }: Props) => {
         case 'submission': { return (
             <p>
                 <div>{ details.name } ({ details.exerciseCount })</div>
+                <div>{ details.description }</div>
                 <div>Submit to: { details.exerciseSubmissionLink }</div>
             </p>
         )}
@@ -38,6 +39,7 @@ const Part = ({ details }: Props) => {
         case 'special': { return (
             <p>
                 <div>{ details.name } ({ details.exerciseCount })</div>
+                <div>{ details.description }</div>
                 <div>Requirements: { details.requirements.join(', ') }</div>
             </p>
         )}

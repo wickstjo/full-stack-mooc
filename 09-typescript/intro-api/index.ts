@@ -1,6 +1,6 @@
 import express from 'express';
-import bmi_calc from './bmiCalculator';
-import exercises_calc from './exerciseCalculator';
+import bmi_calc from './funcs/bmiCalculator';
+import exercises_calc from './funcs/exerciseCalculator';
 console.clear();
 
 // AUXILLARY
