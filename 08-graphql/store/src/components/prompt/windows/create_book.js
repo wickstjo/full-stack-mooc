@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useMutation } from '@apollo/client'
+import { useNavigate } from 'react-router-dom'
 
 import { CREATE } from '../../../gql/book'
 import { Form, useField } from '../../inputs'
@@ -9,6 +10,7 @@ const CreateBook = () => {
     // REDUX DISPATCH
     const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
+    const navigator = useNavigate()
 
     // CREATE BOOK
     const [createBook] = useMutation(CREATE, {
@@ -41,7 +43,7 @@ const CreateBook = () => {
 
         // ATTEMPT TO CREATE THE BOOK
         try {
-            await createBook({
+            const response = await createBook({
                 variables: {
                     title: title.value,
                     published: Number(published.value),
@@ -55,6 +57,9 @@ const CreateBook = () => {
                 type: 'notifications/positive',
                 message: 'Book created!'
             })
+
+            // REDIRECT TO BOOK PAGE
+            navigator(`/books/${ response.data.addBook.id }`)
 
             // REDIRECT TO BOOK PAGE & HIDE PROMPT
             dispatch({ type: 'prompts/hide' })

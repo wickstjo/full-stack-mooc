@@ -16,7 +16,7 @@ const Authors = () => {
             { authors.map(item =>
                 <div key={ item?.id }>
                     <div><Link to={ `/authors/${ item?.id }` }>{ item?.name }</Link></div>
-                    <div>{ item?.born }</div>
+                    <div>{ item?.books.length } Book</div>
                 </div>
             )}
         </Content>

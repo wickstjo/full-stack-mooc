@@ -56,7 +56,7 @@ const Books = () => {
                 { filtered.map(item =>
                     <div key={ item.id }>
                         <div><Link to={ `/books/${ item.id }` }>{ item.title }</Link></div>
-                        <div>{ item.published }</div>
+                        <div>Published { item.published }</div>
                     </div>
                 )}
             </Content>

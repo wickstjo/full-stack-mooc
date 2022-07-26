@@ -52,8 +52,8 @@ const typeDefs = gql`
 
         editAuthor(
             id: ID!
-            name: String!
-            born: Int!
+            name: String
+            born: Int
         ): Author
     }
 `
