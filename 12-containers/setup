@@ -1,0 +1,6 @@
+docker build -t todo_backend .
+
+docker run -it -p 3000:3000 todo_backend
+
+docker ps
+../../nuke.sh f691a722a908

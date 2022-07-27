@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+
+  frontend_production:
+    image: node:16
+    environment:
+      REACT_APP_BACKEND_URL: http://localhost:3001
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/service_files
+    working_dir: /service_files
+    command: bash -c
+        "
+            npm install -y &&
+            CI=true npm test &&
+            npm run build &&
+            npm install -g -y serve &&
+            serve build
+        "
+
+# clear && docker-compose -f docker-production.yml down && docker-compose -f docker-production.yml up --remove-orphans --no-recreate

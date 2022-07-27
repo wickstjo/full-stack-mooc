@@ -1,0 +1,57 @@
+Script started on 2022-07-27 18:58:00+03:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="108" LINES="53"]
+]0;wickstjo@desktop: ~/aalto/full-stack/12-containers/todo-app/todo-backend[01;32mwickstjo@desktop[00m:[01;34m~/aalto/full-stack/12-containers/todo-app/todo-backend[00m$ docker exec -it todo-backend_mongo_service_1 bash
+root@da95e09f73af:/# mongo --username root --password example
+MongoDB shell version v5.0.9
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("dfbf6222-02b7-4fd9-a987-22ae5b5cdcbe") }
+MongoDB server version: 5.0.9
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see
+	https://docs.mongodb.com/
+Questions? Try the MongoDB Developer Community Forums
+	https://community.mongodb.com
+---
+The server generated these startup warnings when booting: 
+        2022-07-27T15:57:50.769+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> use the_database[3G[Juse the_database[19G
+switched to db the_database
+> db.todos.find({})[3G[Jdb.todos.find({})[20G
+{ "_id" : ObjectId("62e1607d285fb7d6423923f9"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("62e1607d285fb7d6423923fa"), "text" : "Learn about containers", "done" : false }
+> db.todos.insertOne({ "text": "foo", "done": false })[3G[Jdb.todos.insertOne({ "text": "foo", "done": false })[55G
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("62e160ace01f3d9199e6fc01")
+}
+> db.todos.find({})[3G[Jdb.todos.find({})[20G
+{ "_id" : ObjectId("62e1607d285fb7d6423923f9"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("62e1607d285fb7d6423923fa"), "text" : "Learn about containers", "done" : false }
+{ "_id" : ObjectId("62e160ace01f3d9199e6fc01"), "text" : "foo", "done" : false }
+> exit[3G[Jexit[7G
+bye
+root@da95e09f73af:/# exit
+exit
+]0;wickstjo@desktop: ~/aalto/full-stack/12-containers/todo-app/todo-backend[01;32mwickstjo@desktop[00m:[01;34m~/aalto/full-stack/12-containers/todo-app/todo-backend[00m$ exit
+exit
+
+Script done on 2022-07-27 18:58:46+03:00 [COMMAND_EXIT_CODE="0"]

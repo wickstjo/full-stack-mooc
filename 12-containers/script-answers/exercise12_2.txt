@@ -1,0 +1,15 @@
+Script started on 2022-07-27 15:08:15+03:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="194" LINES="31"]
+]0;wickstjo@desktop: ~/aalto/full-stack/12-containers[01;32mwickstjo@desktop[00m:[01;34m~/aalto/full-stack/12-containers[00m$ docker run -it ubuntu bash
+[?2004h]0;root@efef32926900: /root@efef32926900:/# [K]0;root@efef32926900: /root@efef32926900:/# [7mmkdir /usr/src/app[27mmkdir /usr/src/app
+[?2004l[?2004h]0;root@efef32926900: /root@efef32926900:/# [7mtouch /usr/src/app/index.js[27mtouch /usr/src/app/index.js
+[?2004l[?2004h]0;root@efef32926900: /root@efef32926900:/# [K[7mls -la /usr/src/app[27mls -la /usr/src/app
+[?2004ltotal 8
+drwxr-xr-x 2 root root 4096 Jul 27 12:08 [0m[01;34m.[0m
+drwxr-xr-x 1 root root 4096 Jul 27 12:08 [01;34m..[0m
+-rw-r--r-- 1 root root    0 Jul 27 12:08 index.js
+[?2004h]0;root@efef32926900: /root@efef32926900:/# [7mexit[27mexit
+[?2004lexit
+]0;wickstjo@desktop: ~/aalto/full-stack/12-containers[01;32mwickstjo@desktop[00m:[01;34m~/aalto/full-stack/12-containers[00m$ exit
+exit
+
+Script done on 2022-07-27 15:08:43+03:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,10 @@
+docker exec -it todo-backend_mongo_service_1 bash
+
+mongo --username root --password example
+use the_database
+
+db.todos.find({})
+db.todos.insertOne({ "text": "foo", "done": false })
+db.todos.find({})
+
+exit

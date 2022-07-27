@@ -1,0 +1,14 @@
+docker run -it ubuntu bash
+
+apt-get update
+apt-get -y install nano curl
+
+curl -sL https://deb.nodesource.com/setup_16.x | bash
+apt install -y nodejs
+
+mkdir /usr/src/app
+nano /usr/src/app/index.js
+console.log('Hello World')
+
+node /usr/src/app/index.js
+exit
