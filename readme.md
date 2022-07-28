@@ -1,0 +1,1 @@
+Coursework for the [Full Stack MOOC](https://fullstackopen.com/) course of the University of Helsinki.
