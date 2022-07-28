@@ -3,17 +3,16 @@ import Todo from './Todo'
 
 const TodoList = ({ todos, deleteTodo, completeTodo }) => {
     return (
-        <Fragment>
-            { todos.map(todo => {
-                return (
-                    <Todo
-                        item={ todo }
-                        remove={ deleteTodo }
-                        complete={ completeTodo }
-                    />
-                )
-            }).reduce((acc, cur) => [...acc, <hr />, cur], [])}
-        </Fragment>
+        todos.map(todo =>
+            <Fragment key={ todo._id }>
+                <hr />
+                <Todo
+                    item={ todo }
+                    remove={ deleteTodo }
+                    complete={ completeTodo }
+                />
+            </Fragment>
+        )
     )
 }
 

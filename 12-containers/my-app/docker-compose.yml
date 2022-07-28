@@ -1,0 +1,57 @@
+version: '3.4'
+services:
+
+    # MONGO DB
+    mongo_db:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+
+    # MONGO BACKEND
+    backend:
+        image: node:latest
+        restart: always
+        depends_on:
+            - mongo_db
+        environment:
+            MONGO_URI: mongodb://root:example@mongo_db:27017
+            API_PORT: 3001
+        volumes:
+            - ./backend/:/backend
+        working_dir: /backend
+        command: bash -c "npm install && npm start"
+
+    # REACT FRONTEND
+    frontend:
+        image: node:latest
+        restart: always
+        depends_on:
+            - mongo_db
+            - backend
+        environment:
+            REACT_APP_BACKEND_URI: http://localhost:8080/api
+        volumes:
+            - ./frontend/:/frontend
+        working_dir: /frontend
+        command: bash -c
+            "
+                npm install -y &&
+                npm run build &&
+                npm install -g -y serve &&
+                serve build
+            "
+  
+    # REVERSE PROXY FOR FRONTEND & BACKEND
+    nginx:
+        image: nginx:1.20.1
+        depends_on:
+            - backend
+            - frontend
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - 8080:80
+
+# clear && docker-compose down && docker-compose up --remove-orphans --no-recreate

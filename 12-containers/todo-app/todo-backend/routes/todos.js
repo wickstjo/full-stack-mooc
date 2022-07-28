@@ -47,7 +47,12 @@ singleRouter.get('/', async (req, res) => {
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+
+    const result = await Todo.updateOne({
+        _id: req.todo._id
+    }, req.body)
+
+    res.send(result);
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
